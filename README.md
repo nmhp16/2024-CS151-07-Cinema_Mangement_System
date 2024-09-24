@@ -12,6 +12,7 @@ The project utilizes Object-Oriented Programming (OOP) principles and is designe
   - Add, update, and view customer profiles.
   - Validate phone numbers and manage transaction history.
   - Profile management allows updating name, email, and phone details.
+  - View current and past movie reservations with the ability to update and refund
 
 - **Movie Management**:
   - View available movies and showtimes for specific theaters.
