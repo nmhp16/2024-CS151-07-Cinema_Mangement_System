@@ -7,7 +7,9 @@ public class Ticket implements Reservable {
     private double price;
 
     // Constructor
-    public Ticket() {}
+    public Ticket() {
+        ticketId = 0;
+    }
 
     public Ticket(int ticketId, String seatType, String agePricing, int seatNumber) {
         this.ticketId = ticketId;
@@ -15,6 +17,15 @@ public class Ticket implements Reservable {
         this.agePricing = agePricing;
         this.seatNumber = seatNumber;
         this.reserved = false;
+    }
+
+    public Ticket(int ticketId, String seatType, String agePricing, int seatNumber, double price) {
+        this.ticketId = ticketId;
+        this.seatType = seatType;
+        this.agePricing = agePricing;
+        this.seatNumber = seatNumber;
+        this.reserved = false;
+        this.price = price;
     }
 
     // Implementing Reservable interface methods
@@ -48,6 +59,11 @@ public class Ticket implements Reservable {
 
     public boolean isReserved() {
         return reserved;
+    }
+
+    public int generateTicketId() {
+        ticketId++;
+        return ticketId;
     }
 
     // Getters and Setters

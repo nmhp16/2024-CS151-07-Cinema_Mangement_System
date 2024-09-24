@@ -32,6 +32,7 @@ public class Movie {
     }
 
     public void listShowtimes() {
+        System.out.println("\nShowtimes for " + this.title + ":");
         for (Showtime showtime : showtimes) {
             System.out.println("Showtime ID: " + showtime.getShowtimeId() + ", Time: " + showtime.getTime());
         }  
@@ -51,6 +52,8 @@ public class Movie {
             System.out.println("Showtime ID: " + showtime.getShowtimeId() + ", Available Seats: " + showtime.getAvailableSeats());
         };
     }
+
+
 
     // Getters and Setters
     public int getMovieId() { return movieId; }

@@ -3,8 +3,26 @@ public class Transaction implements Billable {
     private boolean holdStatus;
     private Ticket ticket;
     private Customer customer;
+    private Movie movie;
+    private Showtime showtime;
 
+    // Constructor
     public Transaction() {}
+
+    public Transaction(Customer customer, Movie movie, Showtime showtime, Ticket ticket) {
+        this.customer = customer;
+        this.ticket = ticket;
+        this.movie = movie;
+        this.showtime = showtime;
+
+    }
+    
+    public Transaction(Movie movie, Showtime showtime, Ticket ticket) {
+        this.ticket = ticket;
+        this.movie = movie;
+        this.showtime = showtime;
+
+    }
 
     // Implementing Billable interface methods
     @Override

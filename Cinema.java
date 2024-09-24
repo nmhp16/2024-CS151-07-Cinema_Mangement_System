@@ -4,6 +4,7 @@ import java.util.List;
 public class Cinema {
     private List<Theater> theaters;
 
+    // Constructor
     public Cinema() {
         this.theaters = new ArrayList<>();
     }
@@ -12,9 +13,12 @@ public class Cinema {
         this.theaters = theaters;
     }
 
+    // Methods
     public void listTheaters() {
         for (Theater theater : theaters) {
             System.out.println("Theater ID: " + theater.getTheaterId() + ", Address: " + theater.getAddress());
+            theater.showAllMovieInTheater();
+            System.out.println("");
         }
     }
 

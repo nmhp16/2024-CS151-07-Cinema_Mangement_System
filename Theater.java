@@ -8,6 +8,7 @@ public class Theater {
     private List<Ticket> tickets = new ArrayList<>();
     private List<FoodAndDrink> menu = new ArrayList<>();
 
+    // Constructor
     public Theater() {}
 
     public Theater(int theaterId, String address) {
@@ -48,6 +49,8 @@ public class Theater {
     }
 
     public void listMovies() {
+        
+        System.out.println("\nMovies in " + this.address + ":");
         for (Movie movie : movies) {
             System.out.println("Movie ID: " + movie.getMovieId() + ", Title: " + movie.getTitle());
         }
@@ -62,10 +65,19 @@ public class Theater {
         throw new MovieNotFoundException("Movie not found with ID: " + movieId);
     }
     
-
     public void listFoodAndDrink() {
         for (FoodAndDrink item : menu) {
             System.out.println("Food/Drink: " + item.getName() + ", Price: $" + item.getPrice());
+        }
+    }
+
+    public void showAllMovieInTheater () {
+        if (movies.isEmpty()) {
+            System.out.println("No movies currently available in this theater.");
+            return;
+        } 
+        for (Movie movie : movies) {
+            System.out.println("Movie ID: " + movie.getMovieId() + ", Title: " + movie.getTitle());
         }
     }
     

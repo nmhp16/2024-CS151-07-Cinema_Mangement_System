@@ -23,14 +23,14 @@ public class Main {
 
         // Sample food and drinks
         List<FoodAndDrink> menu1 = new ArrayList<>();
-        menu1.add(new FoodAndDrink("Popcorn", 5.00));
-        menu1.add(new FoodAndDrink("Soda", 3.00));
-        menu1.add(new FoodAndDrink("Nachos", 6.00));
+        menu1.add(new FoodAndDrink(1, "Popcorn", 5.00));
+        menu1.add(new FoodAndDrink(2, "Soda", 3.00));
+        menu1.add(new FoodAndDrink(3, "Nachos", 6.00));
 
         List<FoodAndDrink> menu2 = new ArrayList<>();
-        menu2.add(new FoodAndDrink("Hot Dog", 4.00));
-        menu2.add(new FoodAndDrink("Water", 2.00));
-        menu2.add(new FoodAndDrink("Candy", 2.50));
+        menu2.add(new FoodAndDrink(1, "Hot Dog", 4.00));
+        menu2.add(new FoodAndDrink(2, "Water", 2.00));
+        menu2.add(new FoodAndDrink(3, "Candy", 2.50));
 
         // Sample theaters with food and drink menu
         Theater theater1 = new Theater(1, "123 Main St", movies, menu1);
