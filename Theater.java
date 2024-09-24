@@ -9,14 +9,15 @@ public class Theater {
     private List<FoodAndDrink> menu = new ArrayList<>();
 
     // Constructor
-    public Theater() {}
+    public Theater() {
+    }
 
     public Theater(int theaterId, String address) {
         this.theaterId = theaterId;
         this.address = address;
         this.movies = new ArrayList<>();
     }
-    
+
     public Theater(int theaterId, String address, List<Movie> movies) {
         this.theaterId = theaterId;
         this.address = address;
@@ -27,7 +28,7 @@ public class Theater {
         }
         this.menu = new ArrayList<>(); // Initialize menu to avoid null
     }
-    
+
     public Theater(int theaterId, String address, List<Movie> movies, List<FoodAndDrink> menu) {
         this.theaterId = theaterId;
         this.address = address;
@@ -42,14 +43,13 @@ public class Theater {
             this.menu = menu;
         }
     }
-    
+
     // Methods
     public void addMovie(Movie movie) {
         movies.add(movie);
     }
 
     public void listMovies() {
-        
         System.out.println("\nMovies in " + this.address + ":");
         for (Movie movie : movies) {
             System.out.println("Movie ID: " + movie.getMovieId() + ", Title: " + movie.getTitle());
@@ -64,37 +64,61 @@ public class Theater {
         }
         throw new MovieNotFoundException("Movie not found with ID: " + movieId);
     }
-    
+
     public void listFoodAndDrink() {
         for (FoodAndDrink item : menu) {
             System.out.println("Food/Drink: " + item.getName() + ", Price: $" + item.getPrice());
         }
     }
 
-    public void showAllMovieInTheater () {
+    public void showAllMovieInTheater() {
         if (movies.isEmpty()) {
             System.out.println("No movies currently available in this theater.");
             return;
-        } 
+        }
         for (Movie movie : movies) {
             System.out.println("Movie ID: " + movie.getMovieId() + ", Title: " + movie.getTitle());
         }
     }
-    
 
     // Getter and Setter Methods
-    public int getTheaterId() { return theaterId; }
-    public void setTheaterId(int theaterId) { this.theaterId = theaterId; }
+    public int getTheaterId() {
+        return theaterId;
+    }
 
-    public String getAddress() { return address; }
-    public void setAddress(String address) { this.address = address; }
+    public void setTheaterId(int theaterId) {
+        this.theaterId = theaterId;
+    }
 
-    public List<Movie> getMovies() { return movies; }
-    public void setMovies(List<Movie> movies) { this.movies = movies; }
+    public String getAddress() {
+        return address;
+    }
 
-    public List<Ticket> getTickets() { return tickets; }
-    public void setTickets(List<Ticket> tickets) { this.tickets = tickets; }
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
-    public List<FoodAndDrink> getMenu() { return menu; }
-    public void setMenu(List<FoodAndDrink> menu) { this.menu = menu; }
+    public List<Movie> getMovies() {
+        return movies;
+    }
+
+    public void setMovies(List<Movie> movies) {
+        this.movies = movies;
+    }
+
+    public List<Ticket> getTickets() {
+        return tickets;
+    }
+
+    public void setTickets(List<Ticket> tickets) {
+        this.tickets = tickets;
+    }
+
+    public List<FoodAndDrink> getMenu() {
+        return menu;
+    }
+
+    public void setMenu(List<FoodAndDrink> menu) {
+        this.menu = menu;
+    }
 }

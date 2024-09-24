@@ -12,7 +12,9 @@ public class CinemaUI {
     private Customer customer;
 
     // Constructor
-    public CinemaUI() {}
+    public CinemaUI() {
+    }
+
     public CinemaUI(Cinema cinema) {
         this.cinema = cinema;
     }
@@ -20,9 +22,9 @@ public class CinemaUI {
     // Methods
     // INITIATE START
     public void start() {
-        displayMenu();  // Display the main menu
+        displayMenu(); // Display the main menu
     }
-    
+
     // DISPLAY MAIN MENU
     public void displayMenu() {
         System.out.println("----------------------------------------------");
@@ -45,17 +47,21 @@ public class CinemaUI {
 
     // SHOW THEATERS
     private void showTheaters() {
-        cinema.listTheaters();  // List all theaters
-        
+        // Show total of theater within cinema
+        System.out.println("THERE ARE " + cinema.getTotalTheaters() + " THEATERS IN OUR SYSTEM:");
+        System.out.println("");
+        cinema.listTheaters(); // List all theaters
+
         System.out.println("\nSelect a theater by ID or type '0' to exit:");
         int theaterId = scanner.nextInt();
         System.out.println("----------------------------------------------");
         System.out.println("----------------------------------------------");
-        if (theaterId == 0) return;
+        if (theaterId == 0)
+            return;
 
         try {
             // Select a theater
-            selectedTheater = cinema.selectTheater(theaterId);  
+            selectedTheater = cinema.selectTheater(theaterId);
             showMovies();
         } catch (TheaterNotFoundException e) {
             System.out.println(e.getMessage());
@@ -65,31 +71,30 @@ public class CinemaUI {
     // SHOW MOVIES
     private void showMovies() {
         // Get movies from the selected theater
-        selectedTheater.listMovies(); 
-        
+        selectedTheater.listMovies();
+
         System.out.println("\nSelect a movie by ID or type '0' to go back:");
-    
+
         int movieId = scanner.nextInt();
         if (movieId == 0) {
             selectedTheater = null; // Clear selected theater
             return;
         }
-    
+
         try {
-            selectedMovie = selectedTheater.selectMovie(movieId);  // Select a movie
+            selectedMovie = selectedTheater.selectMovie(movieId); // Select a movie
             showShowtimes();
         } catch (MovieNotFoundException e) {
             System.out.println(e.getMessage());
         }
     }
-    
-    
+
     // DISPLAY SHOW TIMES
     private void showShowtimes() {
         // List showtimes for the selected movie
         System.out.println("----------------------------------------------");
         System.out.println("----------------------------------------------");
-        selectedMovie.listShowtimes();  
+        selectedMovie.listShowtimes();
         System.out.println("\nSelect a showtime by ID or type '0' to go back:");
 
         int showtimeId = scanner.nextInt();
@@ -102,8 +107,8 @@ public class CinemaUI {
         }
 
         try {
-            selectedShowtime = selectedMovie.selectShowtime(showtimeId);  // Select a showtime
-            selectSeatType();  // Ask for seat type first
+            selectedShowtime = selectedMovie.selectShowtime(showtimeId); // Select a showtime
+            selectSeatType(); // Ask for seat type first
         } catch (ShowtimeNotFoundException e) {
             System.out.println(e.getMessage());
         }
@@ -132,54 +137,55 @@ public class CinemaUI {
                 seatType = SeatType.REGULAR;
         }
 
-        showSeatAvailability(seatType);  // Show seat availability based on the selected seat type
+        showSeatAvailability(seatType); // Show seat availability based on the selected seat type
     }
 
     // SHOW SEAT AVAILABILITY
     private void showSeatAvailability(SeatType seatType) {
         System.out.println("\nAvailable Seats (" + seatType + "): Price: $" + seatType.getPrice());
-        displaySeatingChart(seatType.name());  // Show seating chart for the selected seat type
-    
+        displaySeatingChart(seatType.name()); // Show seating chart for the selected seat type
+
         System.out.println("\nSelect a seat by entering seat number or type '0' to go back:");
         String seatNumber = scanner.next();
         System.out.println("----------------------------------------------");
         System.out.println("----------------------------------------------");
-    
+
         if (seatNumber.equals("0")) {
-            showShowtimes();  // Go back to showtimes stage
+            showShowtimes(); // Go back to showtimes stage
             return;
         }
-    
+
         // Check if the seat number is valid
         if (isSeatAvailable(seatNumber, seatType.name())) {
             // Generate Ticket ID
             Ticket ticket = new Ticket();
-            int ticketId = ticket.generateTicketId(); 
+            int ticketId = ticket.generateTicketId();
 
             // Create the ticket
             selectedTicket = new Ticket(ticketId, seatType.name(), "Adult", Integer.parseInt(seatNumber));
-    
+
             // Now apply the age pricing (this will update the price of the ticket)
             String agePricing = selectAgePricing(seatType);
-    
+
             // After selecting age pricing, set the correct age category
-            selectedTicket.setAgePricing(agePricing);  // Update ticket's age pricing
-    
-            selectFoodAndDrinks();  // Proceed to food selection
-        } 
+            selectedTicket.setAgePricing(agePricing); // Update ticket's age pricing
+
+            selectFoodAndDrinks(); // Proceed to food selection
+        }
 
         else {
             System.out.println("Invalid or unavailable seat. Please try again.");
-            showSeatAvailability(seatType);  // Retry seat selection
+            showSeatAvailability(seatType); // Retry seat selection
         }
     }
-    
+
     // CHECK IF SEAT AVAILABLE
     private boolean isSeatAvailable(String seatNumber, String seatType) {
-        // Implement logic to check seat availability for the selected showtime and seat type
-        return true; 
+        // Implement logic to check seat availability for the selected showtime and seat
+        // type
+        return true;
     }
-    
+
     // DISPLAY SEATING CHART
     private void displaySeatingChart(String seatType) {
         // Display seating chart based on seat type
@@ -187,7 +193,7 @@ public class CinemaUI {
         int cols = 10;
         char startRow;
         char endRow;
-    
+
         // Determine the start and end rows based on seat type
         if (seatType.equals("VIP")) {
             startRow = 'H';
@@ -197,15 +203,15 @@ public class CinemaUI {
         else if (seatType.equals("PREMIUM")) {
             startRow = 'D';
             endRow = 'G';
-        } 
-        
-        else {  // Default to Regular seat type
+        }
+
+        else { // Default to Regular seat type
             startRow = 'A';
             endRow = 'C';
         }
-    
+
         for (char rowLetter = startRow; rowLetter <= endRow; rowLetter++) {
-            System.out.printf("%-2c ", rowLetter);  // Row label
+            System.out.printf("%-2c ", rowLetter); // Row label
             for (int col = 1; col <= cols; col++) {
                 boolean isReserved = isSeatReserved(rowLetter, col);
                 String seatLabel;
@@ -219,11 +225,11 @@ public class CinemaUI {
             System.out.println(); // New line
         }
     }
-    
+
     // CHECK IF SEAT IS RESERVED
     private boolean isSeatReserved(char row, int col) {
         // Implement logic to check if the seat is reserved
-        return false; 
+        return false;
     }
 
     // SELECT AGE PRICING
@@ -234,32 +240,32 @@ public class CinemaUI {
         System.out.println("3. Senior (20% discount)");
         int choice = scanner.nextInt();
 
-        double finalPrice = seatType.getPrice();  // Default price from SeatType
+        double finalPrice = seatType.getPrice(); // Default price from SeatType
         String ageCategory;
-        
+
         switch (choice) {
             case 2:
                 ageCategory = "Child";
-                finalPrice = applyDiscount(seatType.getPrice(), 20);  // 20% discount for children
+                finalPrice = applyDiscount(seatType.getPrice(), 20); // 20% discount for children
                 break;
             case 3:
                 ageCategory = "Senior";
-                finalPrice = applyDiscount(seatType.getPrice(), 20);  // 20% discount for seniors
+                finalPrice = applyDiscount(seatType.getPrice(), 20); // 20% discount for seniors
                 break;
             default:
                 ageCategory = "Adult";
                 break;
         }
-    
+
         // Now that the ticket has been created, you can set the final price
-        selectedTicket.setPrice(finalPrice);  // Update the ticket price based on age pricing
-    
+        selectedTicket.setPrice(finalPrice); // Update the ticket price based on age pricing
+
         System.out.printf("Selected %s ticket. Final price: $%.2f%n", ageCategory, finalPrice);
         System.out.println("----------------------------------------------");
         System.out.println("----------------------------------------------");
         return ageCategory;
     }
-    
+
     // APPLY DISCOUNT
     private double applyDiscount(double price, int discountPercentage) {
         return price - (price * discountPercentage / 100.0);
@@ -267,46 +273,47 @@ public class CinemaUI {
 
     // Currently having error for selecting with ItemId
     private void selectFoodAndDrinks() {
-        List<FoodAndDrink> foodAndDrinks = selectedTheater.getMenu(); // Get available food and drinks from the selected theater
+        List<FoodAndDrink> foodAndDrinks = selectedTheater.getMenu(); // Get available food and drinks from the selected
+                                                                      // theater
         System.out.println("\nAvailable Food and Drinks:");
-        
+
         // Display available items with ID
         for (FoodAndDrink item : foodAndDrinks) {
             System.out.printf("ID: %d, Item: %-10s, Price: $%.2f%n", item.getId(), item.getName(), item.getPrice());
         }
-        
+
         System.out.println("\nSelect food and drink by ID or type '0' to skip:");
-        
+
         int itemId;
-    
+
         while ((itemId = getValidItemId()) != 0) {
             FoodAndDrink selectedItem = findItemById(foodAndDrinks, itemId);
-    
+
             if (selectedItem != null) {
                 // Valid selection
                 selectedItems.add(selectedItem);
                 System.out.println("Added: " + selectedItem.getName());
                 System.out.println("----------------------------------------------");
                 System.out.println("----------------------------------------------");
-                
+
             } else {
                 // Invalid selection
                 System.out.println("Invalid ID. Please try again.");
             }
-    
+
             System.out.println("\nSelect more food and drinks by ID or type '0' to skip:");
         }
-    
+
         System.out.println("----------------------------------------------");
         System.out.println("----------------------------------------------");
-        
+
         // Collect customer information
         collectCustomerInfo();
-    
+
         // Complete transaction after food and drink selection
         completeTransaction();
     }
-    
+
     /**
      * Get valid item ID input from the user.
      */
@@ -319,7 +326,7 @@ public class CinemaUI {
         itemId = scanner.nextInt();
         return itemId;
     }
-    
+
     /**
      * Find a FoodAndDrink item by its ID.
      */
@@ -331,7 +338,6 @@ public class CinemaUI {
         }
         return null;
     }
-    
 
     // COLLECT CUSTOMER INFO
     private void collectCustomerInfo() {
@@ -374,10 +380,13 @@ public class CinemaUI {
 
     private void printReceipt() {
         System.out.println("\nReceipt:");
-        System.out.println("Customer: " + customer.getName() + ", Email: " + customer.getEmail() + ", Phone: " + customer.getPhone());
-        System.out.println("Showtime: ID: " + selectedShowtime.getShowtimeId() + ", Time: " + selectedShowtime.getTime());
+        System.out.println("Customer: " + customer.getName() + ", Email: " + customer.getEmail() + ", Phone: "
+                + customer.getPhone());
+        System.out
+                .println("Showtime: ID: " + selectedShowtime.getShowtimeId() + ", Time: " + selectedShowtime.getTime());
         System.out.println("Movie: " + selectedMovie.getTitle());
-        System.out.println("Seat: " + selectedTicket.getSeatNumber() + ", Type: " + selectedTicket.getSeatType() + ", Pricing: " + selectedTicket.getAgePricing());
+        System.out.println("Seat: " + selectedTicket.getSeatNumber() + ", Type: " + selectedTicket.getSeatType()
+                + ", Pricing: " + selectedTicket.getAgePricing());
 
         double totalCost = 0;
         System.out.println("\nSelected Food and Drinks:");
@@ -387,7 +396,7 @@ public class CinemaUI {
         }
 
         totalCost = totalCost + selectedTicket.getPrice();
-        
+
         System.out.printf("%nTotal Cost: $%.2f%n", totalCost);
         System.out.println("----------------------------------------------");
         System.out.println("----------------------------------------------");
@@ -399,9 +408,12 @@ public class CinemaUI {
         System.out.println("2. Credit Card");
         int choice = scanner.nextInt();
         switch (choice) {
-            case 1: return "Cash";
-            case 2: return "Credit Card";
-            default: return "Cash";
+            case 1:
+                return "Cash";
+            case 2:
+                return "Credit Card";
+            default:
+                return "Cash";
         }
     }
 
