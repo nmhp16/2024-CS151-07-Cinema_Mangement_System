@@ -67,16 +67,26 @@ public class Customer extends Person {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter customer name: ");
         String name = scanner.nextLine();
+
         System.out.println("Enter customer email: ");
         String email = scanner.nextLine();
+
         System.out.println("Enter customer phone number: ");
-        String phone = scanner.nextLine();
+
+        while (this.validatePhone() == false) {
+            String phone = scanner.nextLine();
+            this.phone = phone;
+
+            if (this.validatePhone() == false) {
+                System.out.println("Please enter phone number again with 10 digits:");
+            }
+        }
 
         this.name = name;
         this.email = email;
-        this.phone = phone;
 
         System.out.println("Customer added: " + this.name + ", " + this.email + ", " + this.phone);
+
     }
 
     // Getter and Setter Methods
