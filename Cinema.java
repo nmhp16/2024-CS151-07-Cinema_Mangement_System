@@ -44,4 +44,6 @@ public class Cinema {
     public int getTotalTheaters() {
         return theaters.size();
     }
+    // test
+    //
 }
