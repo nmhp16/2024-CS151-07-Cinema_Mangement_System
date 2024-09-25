@@ -9,7 +9,9 @@ public class Movie {
     private boolean isSoldOut;
 
     // Constructors
-    public Movie () {}
+    public Movie() {
+    }
+
     public Movie(int movieId, String title, String genre) {
         this.movieId = movieId;
         this.title = title;
@@ -35,7 +37,7 @@ public class Movie {
         System.out.println("\nShowtimes for " + this.title + ":");
         for (Showtime showtime : showtimes) {
             System.out.println("Showtime ID: " + showtime.getShowtimeId() + ", Time: " + showtime.getTime());
-        }  
+        }
     }
 
     public Showtime selectShowtime(int showtimeId) throws ShowtimeNotFoundException {
@@ -46,28 +48,53 @@ public class Movie {
         }
         throw new ShowtimeNotFoundException("Showtime not found with ID: " + showtimeId);
     }
-    
+
     public void checkSeatOccupancy() {
         for (Showtime showtime : showtimes) {
-            System.out.println("Showtime ID: " + showtime.getShowtimeId() + ", Available Seats: " + showtime.getAvailableSeats());
-        };
+            System.out.println(
+                    "Showtime ID: " + showtime.getShowtimeId() + ", Available Seats: " + showtime.getAvailableSeats());
+        }
+        ;
     }
 
-
-
     // Getters and Setters
-    public int getMovieId() { return movieId; }
-    public void setMovieId(int movieId) { this.movieId = movieId; }
+    public int getMovieId() {
+        return movieId;
+    }
 
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
+    public void setMovieId(int movieId) {
+        this.movieId = movieId;
+    }
 
-    public String getGenre() { return genre; }
-    public void setGenre(String genre) { this.genre = genre; }
+    public String getTitle() {
+        return title;
+    }
 
-    public List<Showtime> getShowtimes() { return showtimes; }
-    public void setShowtimes(List<Showtime> showtimes) { this.showtimes = showtimes; }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-    public boolean isSoldOut() {return isSoldOut;}
-    public void setSoldOut(boolean soldOut) {isSoldOut = soldOut;}
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public List<Showtime> getShowtimes() {
+        return showtimes;
+    }
+
+    public void setShowtimes(List<Showtime> showtimes) {
+        this.showtimes = showtimes;
+    }
+
+    public boolean isSoldOut() {
+        return isSoldOut;
+    }
+
+    public void setSoldOut(boolean soldOut) {
+        isSoldOut = soldOut;
+    }
 }
