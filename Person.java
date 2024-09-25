@@ -8,7 +8,7 @@ public abstract class Person {
         this.name = name;
         this.email = email;
     }
-
+// double check with the UML diagram
     // Abstract method to be implemented by subclasses
     public abstract void displayInfo();
 }
