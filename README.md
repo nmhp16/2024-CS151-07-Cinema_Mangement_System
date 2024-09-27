@@ -67,8 +67,8 @@ Additional classes and enums include:
 - **Person**: Abstract class that provides basic information like name and email for inheriting classes (such as `Customer`).
 - **SeatType**: Enum for managing seat categories (Regular, VIP, Premium) with associated prices.
 - **AgePricing**: Enum that defines age-based pricing (Adult, Child, Senior).
-- **Reservable**: Interface that enforces reservation-related methods (`reserve()` and `cancelReservation()`).
-- **Billable**: Interface that ensures items are billable (for food, drinks, and tickets).
+- **Reservable**: Interface that enforces reservation-related methods (`reserve()` and `cancelReservation()`) (for `Ticket`).
+- **Billable**: Interface that enforces billing-related methods (`processTransaction()` and `printReceipt()`) (for `Transaction`).
 
 ## Team Members
 
