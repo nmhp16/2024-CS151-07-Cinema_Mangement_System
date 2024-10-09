@@ -3,7 +3,7 @@ public class FoodAndDrink {
     private String name;
     private double price;
     
-    // Constructor'
+    // Constructor
     public FoodAndDrink() {}
     public FoodAndDrink(String name, double price) {
         this.name = name;
