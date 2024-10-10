@@ -2,10 +2,9 @@ public class FoodAndDrink {
     private int id; // Unique ID for the item
     private String name;
     private double price;
-
+    
     // Constructor
-    public FoodAndDrink() {
-    }
+    public FoodAndDrink() {}
 
     public FoodAndDrink(String name, double price) {
         this.name = name;
