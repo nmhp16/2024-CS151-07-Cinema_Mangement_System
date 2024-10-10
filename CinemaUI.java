@@ -271,7 +271,7 @@ public class CinemaUI {
         return price - (price * discountPercentage / 100.0);
     }
 
-    // Currently having error for selecting with ItemId
+    // SELECT FOOD AND
     private void selectFoodAndDrinks() {
         List<FoodAndDrink> foodAndDrinks = selectedTheater.getMenu(); // Get available food and drinks from the selected
                                                                       // theater

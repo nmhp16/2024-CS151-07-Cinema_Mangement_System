@@ -3,25 +3,18 @@ public class Transaction implements Billable {
     private boolean holdStatus;
     private Ticket ticket;
     private Customer customer;
-    private Movie movie;
-    private Showtime showtime;
 
     // Constructor
-    public Transaction() {}
+    public Transaction() {
+    }
 
     public Transaction(Customer customer, Movie movie, Showtime showtime, Ticket ticket) {
         this.customer = customer;
         this.ticket = ticket;
-        this.movie = movie;
-        this.showtime = showtime;
-
     }
-    
+
     public Transaction(Movie movie, Showtime showtime, Ticket ticket) {
         this.ticket = ticket;
-        this.movie = movie;
-        this.showtime = showtime;
-
     }
 
     // Implementing Billable interface methods
@@ -35,7 +28,8 @@ public class Transaction implements Billable {
     @Override
     public void printReceipt() {
         // Implement receipt printing logic
-        System.out.println("Customer: " + customer.getName() + ", Email: " + customer.getEmail() + ", Phone: " + customer.getPhone());
+        System.out.println("Customer: " + customer.getName() + ", Email: " + customer.getEmail() + ", Phone: "
+                + customer.getPhone());
         // Other receipt details
     }
 
@@ -44,13 +38,13 @@ public class Transaction implements Billable {
         // Implement logic to print receipt
         System.out.println("Receipt:");
         System.out.println("Customer: " + transaction.customer.getName() +
-                           ", Email: " + transaction.customer.getEmail() +
-                           ", Phone: " + transaction.customer.getPhone());
+                ", Email: " + transaction.customer.getEmail() +
+                ", Phone: " + transaction.customer.getPhone());
         System.out.println("Showtime: ID: " + transaction.ticket.getSeatNumber());
         System.out.println("Movie: " + transaction.ticket.getSeatType());
-        System.out.println("Seat: " + transaction.ticket.getSeatNumber() + 
-                           ", Type: " + transaction.ticket.getSeatType() +
-                           ", Pricing: " + transaction.ticket.getAgePricing());
+        System.out.println("Seat: " + transaction.ticket.getSeatNumber() +
+                ", Type: " + transaction.ticket.getSeatType() +
+                ", Pricing: " + transaction.ticket.getAgePricing());
         // Add additional receipt details and formatting here
     }
 
@@ -81,15 +75,35 @@ public class Transaction implements Billable {
     }
 
     // Getters and Setters
-    public Customer getCustomer() {return customer;}
-    public void setCustomer(Customer customer) {this.customer = customer;}
+    public Customer getCustomer() {
+        return customer;
+    }
 
-    public String getTransactionType() { return transactionType; }
-    public void setTransactionType(String transactionType) { this.transactionType = transactionType; }
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
 
-    public boolean isHoldStatus() { return holdStatus;}
-    public void setHoldStatus(boolean holdStatus) { this.holdStatus = holdStatus; }
+    public String getTransactionType() {
+        return transactionType;
+    }
 
-    public Ticket getTicket() { return ticket; }
-    public void setTicket(Ticket ticket) { this.ticket = ticket; }
+    public void setTransactionType(String transactionType) {
+        this.transactionType = transactionType;
+    }
+
+    public boolean isHoldStatus() {
+        return holdStatus;
+    }
+
+    public void setHoldStatus(boolean holdStatus) {
+        this.holdStatus = holdStatus;
+    }
+
+    public Ticket getTicket() {
+        return ticket;
+    }
+
+    public void setTicket(Ticket ticket) {
+        this.ticket = ticket;
+    }
 }

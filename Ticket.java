@@ -52,7 +52,7 @@ public class Ticket implements Reservable {
     public void reserve() {
         this.reserved = true;
     }
-// cancelReservation
+
     public void cancelReservation() {
         this.reserved = false;
     }
