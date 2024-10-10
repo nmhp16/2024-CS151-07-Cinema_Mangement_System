@@ -21,7 +21,7 @@ public class Movie {
         showtimes.add(showtime);
     }
 
-    public void listGenres() {
+    static public void listGenres() {
         // This could be replaced with a dynamic list if genres are managed separately
         System.out.println("Available genres: Action, Comedy, Drama, Sci-Fi, etc.");
     }
