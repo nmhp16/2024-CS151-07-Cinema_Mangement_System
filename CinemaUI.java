@@ -1,5 +1,10 @@
 import java.util.*;
 
+/**
+ * The CinemaUI class represents the user interface for cinema application
+ * functionality for display menu, select movies, showtimes, seat types
+ * customer information, manging transaction
+ */
 public class CinemaUI {
     private Scanner scanner = new Scanner(System.in);
     private Cinema cinema;
@@ -11,21 +16,43 @@ public class CinemaUI {
     private Transaction transaction = new Transaction();
     private Customer customer;
 
-    // Constructor
+    private Stack<Runnable> pageStack = new Stack<>(); // Tracks pages by pushing to a stack after every display
+                                                       // pops the page to go back when 0 is entered
+
+    private void previousPage() {
+        if (pageStack.isEmpty()) {
+            Runnable goBack = pageStack.pop();
+            goBack.run();
+        } else {
+            System.out.println("No previous page to go back to.");
+        }
+    }
+
+    /**
+     * Constructor that initializes the CinemaUI without a Cinema
+     */
     public CinemaUI() {
     }
 
+    /**
+     * Constructor that initializes the CinemaUI with specific cinema
+     * 
+     * @param cinema The cinema to be used in UI
+     */
     public CinemaUI(Cinema cinema) {
         this.cinema = cinema;
     }
 
-    // Methods
-    // INITIATE START
+    /**
+     * Starts the application by displaying main menu
+     */
     public void start() {
         displayMenu(); // Display the main menu
     }
 
-    // DISPLAY MAIN MENU
+    /**
+     * Displays the main menu options and processes user selection
+     */
     public void displayMenu() {
         System.out.println("----------------------------------------------");
         System.out.println("----------------------------------------------");
@@ -36,6 +63,9 @@ public class CinemaUI {
         System.out.println("----------------------------------------------");
         System.out.println("----------------------------------------------");
 
+        // Push the displayMenu onto the pageStack
+        pageStack.push(this::displayMenu);
+
         switch (chooseOption) {
             case 1:
                 showTheaters();
@@ -45,8 +75,13 @@ public class CinemaUI {
         }
     }
 
-    // SHOW THEATERS
+    /**
+     * Display the list of theaters and allows user to select one
+     */
     private void showTheaters() {
+        // Push the showTheaters onto the pageStack
+        pageStack.push(this::showTheaters);
+
         // Show total of theater within cinema
         System.out.println("THERE ARE " + cinema.getTotalTheaters() + " THEATERS IN OUR SYSTEM:");
         System.out.println("");
@@ -56,8 +91,11 @@ public class CinemaUI {
         int theaterId = scanner.nextInt();
         System.out.println("----------------------------------------------");
         System.out.println("----------------------------------------------");
-        if (theaterId == 0)
+
+        if (theaterId == 0) {
+            displayMenu(); // Return to main menu
             return;
+        }
 
         try {
             // Select a theater
@@ -69,8 +107,13 @@ public class CinemaUI {
         }
     }
 
-    // SHOW MOVIES
+    /**
+     * Displays list of movies for selected theater and allows user to select one
+     */
     private void showMovies() {
+        // Push the showMovies onto the pageStack
+        pageStack.push(this::showMovies);
+
         // Get movies from the selected theater
         selectedTheater.listMovies();
 
@@ -78,7 +121,8 @@ public class CinemaUI {
 
         int movieId = scanner.nextInt();
         if (movieId == 0) {
-            selectedTheater = null; // Clear selected theater
+            selectedTheater = null; // Clear selected Theater
+            showTheaters(); // Return to show theaters
             return;
         }
 
@@ -90,8 +134,13 @@ public class CinemaUI {
         }
     }
 
-    // DISPLAY SHOW TIMES
+    /**
+     * Displays the showtimes for selected movie and allow user to select one
+     */
     private void showShowtimes() {
+        // Push the showShowtimes onto the pageStack
+        pageStack.push(this::showShowtimes);
+
         // List showtimes for the selected movie
         System.out.println("----------------------------------------------");
         System.out.println("----------------------------------------------");
@@ -104,6 +153,7 @@ public class CinemaUI {
 
         if (showtimeId == 0) {
             selectedMovie = null; // Clear selected movie
+            showMovies(); // Return to show movie
             return;
         }
 
@@ -115,12 +165,16 @@ public class CinemaUI {
         }
     }
 
-    // SELECT SEAT TYPE
+    /**
+     * Allows user to select a seat type for ticket
+     */
     private void selectSeatType() {
         System.out.println("\nSelect Seat Type:");
         System.out.println("1. Regular ($" + SeatType.REGULAR.getPrice() + ")");
         System.out.println("2. Premium ($" + SeatType.PREMIUM.getPrice() + ")");
         System.out.println("3. VIP ($" + SeatType.VIP.getPrice() + ")");
+
+        System.out.println("\nSelect a seat type by ID or type '0' to go back:");
         int choice = scanner.nextInt();
 
         System.out.println("----------------------------------------------");
@@ -128,6 +182,9 @@ public class CinemaUI {
 
         SeatType seatType;
         switch (choice) {
+            case 1:
+                seatType = SeatType.REGULAR;
+                break;
             case 2:
                 seatType = SeatType.PREMIUM;
                 break;
@@ -135,13 +192,24 @@ public class CinemaUI {
                 seatType = SeatType.VIP;
                 break;
             default:
-                seatType = SeatType.REGULAR;
+                if (choice == 0) {
+                    seatType = null;
+                    showShowtimes();
+                } else {
+                    System.out.println("\nPlease select a correct option!");
+                    seatType = null;
+                    selectSeatType();
+                }
         }
 
         showSeatAvailability(seatType); // Show seat availability based on the selected seat type
     }
 
-    // SHOW SEAT AVAILABILITY
+    /**
+     * Displays the available seats based on selected seat type
+     * 
+     * @param seatType The type of seat selected by user
+     */
     private void showSeatAvailability(SeatType seatType) {
         System.out.println("\nAvailable Seats (" + seatType + "): Price: $" + seatType.getPrice());
         displaySeatingChart(seatType.name()); // Show seating chart for the selected seat type
@@ -180,7 +248,13 @@ public class CinemaUI {
         }
     }
 
-    // CHECK IF SEAT AVAILABLE
+    /**
+     * Checks if a seat is available based on the seat number and type
+     * 
+     * @param seatNumber The seat number to check
+     * @param seatType   The type of seat (Regular, Premium, VIP)
+     * @return True if the seat is available, false otherwise
+     */
     private boolean isSeatAvailable(String seatNumber, String seatType) {
         // Implement logic to check seat availability for the selected showtime and seat
         // type
@@ -350,6 +424,9 @@ public class CinemaUI {
 
     // COMPLETE TRANSACTION
     private void completeTransaction() {
+        // Push the completeTransaction method onto the pageStack
+        pageStack.push(this::showTheaters);
+
         System.out.println("\nSelection complete. Show receipt:");
 
         System.out.println("----------------------------------------------");
