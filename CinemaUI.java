@@ -16,18 +16,6 @@ public class CinemaUI {
     private Transaction transaction = new Transaction();
     private Customer customer;
 
-    private Stack<Runnable> pageStack = new Stack<>(); // Tracks pages by pushing to a stack after every display
-                                                       // pops the page to go back when 0 is entered
-
-    private void previousPage() {
-        if (pageStack.isEmpty()) {
-            Runnable goBack = pageStack.pop();
-            goBack.run();
-        } else {
-            System.out.println("No previous page to go back to.");
-        }
-    }
-
     /**
      * Constructor that initializes the CinemaUI without a Cinema
      */
@@ -63,9 +51,6 @@ public class CinemaUI {
         System.out.println("----------------------------------------------");
         System.out.println("----------------------------------------------");
 
-        // Push the displayMenu onto the pageStack
-        pageStack.push(this::displayMenu);
-
         switch (chooseOption) {
             case 1:
                 showTheaters();
@@ -79,8 +64,6 @@ public class CinemaUI {
      * Display the list of theaters and allows user to select one
      */
     private void showTheaters() {
-        // Push the showTheaters onto the pageStack
-        pageStack.push(this::showTheaters);
 
         // Show total of theater within cinema
         System.out.println("THERE ARE " + cinema.getTotalTheaters() + " THEATERS IN OUR SYSTEM:");
@@ -111,8 +94,6 @@ public class CinemaUI {
      * Displays list of movies for selected theater and allows user to select one
      */
     private void showMovies() {
-        // Push the showMovies onto the pageStack
-        pageStack.push(this::showMovies);
 
         // Get movies from the selected theater
         selectedTheater.listMovies();
@@ -138,8 +119,6 @@ public class CinemaUI {
      * Displays the showtimes for selected movie and allow user to select one
      */
     private void showShowtimes() {
-        // Push the showShowtimes onto the pageStack
-        pageStack.push(this::showShowtimes);
 
         // List showtimes for the selected movie
         System.out.println("----------------------------------------------");
@@ -297,13 +276,13 @@ public class CinemaUI {
             }
         }
 
-        // Uncomment and implement this method if you need to check if a seat is reserved
+        // Uncomment and implement this method if you need to check if a seat is
+        // reserved
         // private boolean isSeatReserved(int row) {
-        //     // Implement logic to check if the seat is reserved
-        //     return false;
+        // // Implement logic to check if the seat is reserved
+        // return false;
         // }
     }
-
 
     // SELECT AGE PRICING
     private String selectAgePricing(SeatType seatType) {
@@ -422,8 +401,6 @@ public class CinemaUI {
 
     // COMPLETE TRANSACTION
     private void completeTransaction() {
-        // Push the completeTransaction method onto the pageStack
-        pageStack.push(this::showTheaters);
 
         System.out.println("\nSelection complete. Show receipt:");
 
