@@ -62,6 +62,7 @@ public class CinemaUI {
         try {
             // Select a theater
             selectedTheater = cinema.selectTheater(theaterId);
+            // list the genres by the if statements
             showMovies();
         } catch (TheaterNotFoundException e) {
             System.out.println(e.getMessage());
