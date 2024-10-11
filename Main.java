@@ -11,8 +11,6 @@ public class Main {
         Movie movie1 = new Movie(1, "Movie A", "Action");
         Movie movie2 = new Movie(2, "Movie B", "Comedy");
 
-        
-
         // Sample showtimes
         Showtime showtime1 = new Showtime(1, "10:00 AM");
         Showtime showtime2 = new Showtime(2, "02:00 PM");
@@ -48,8 +46,5 @@ public class Main {
 
         // Display the menu to the user
         cinemaUI.displayMenu();
-
-        // Display all available movie Genres
-        Movie.listGenres();
     }
 }
