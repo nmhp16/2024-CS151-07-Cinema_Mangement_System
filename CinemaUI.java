@@ -300,12 +300,6 @@ public class CinemaUI {
         }
     }
 
-    // CHECK IF SEAT IS RESERVED
-    private boolean isSeatReserved(char row, int col) {
-        // Implement logic to check if the seat is reserved
-        return false;
-    }
-
     // SELECT AGE PRICING
     private String selectAgePricing(SeatType seatType) {
         System.out.println("\nSelect Age Pricing:");
