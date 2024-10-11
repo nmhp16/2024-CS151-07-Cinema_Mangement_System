@@ -57,7 +57,6 @@ public class Movie {
             System.out.println(
                     "Showtime ID: " + showtime.getShowtimeId() + ", Available Seats: " + showtime.isSeatAvailable());
         }
-        ;
     }
 
     // Getters and Setters

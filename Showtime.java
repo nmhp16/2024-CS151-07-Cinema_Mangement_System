@@ -1,10 +1,8 @@
-import java.util.Map;
-import java.util.HashMap;
 
 public class Showtime {
     private int showtimeId;
     private String time;
-    private boolean[] seatArray; 
+    private boolean[] seatArray;
 
     // Constructor
     public Showtime(int showtimeId, String time) {
