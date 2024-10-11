@@ -14,9 +14,8 @@ public class Main {
         
 
         // Sample showtimes
-        Showtime showtime1 = new Showtime(1, "10:00 AM", 50);
-        Showtime showtime2 = new Showtime(2, "02:00 PM", 30);
-
+        Showtime showtime1 = new Showtime(1, "10:00 AM");
+        Showtime showtime2 = new Showtime(2, "02:00 PM");
         movie1.addShowtime(showtime1);
         movie2.addShowtime(showtime2);
 
