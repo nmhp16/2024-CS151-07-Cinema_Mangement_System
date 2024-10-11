@@ -8,19 +8,19 @@ public class Showtime {
     public Showtime(int showtimeId, String time) {
         this.showtimeId = showtimeId;
         this.time = time;
-        this.seatArray = new boolean[30];
+        this.seatArray = new boolean[31];
 
         initializeSeatAvailability();
     }
 
     // Method
     public boolean isSeatAvailable(int seatNumber) {
-        return seatArray[seatNumber - 1];
+        return seatArray[seatNumber];
     }
 
     // Initialize seat availability for this showtime
     private void initializeSeatAvailability() {
-        for (int i = 1; i < 30; i++) { // This is now actual number, fix according to CinemaUI
+        for (int i = 1; i < seatArray.length; i++) { // This is now actual number, fix according to CinemaUI
             seatArray[i] = true; // All seats start as available
         }
     }
@@ -28,7 +28,7 @@ public class Showtime {
     // Method to reserve a seat
     public void reserveSeat(int seatNumber) {
         if (isSeatAvailable(seatNumber)) {
-            seatArray[seatNumber - 1] = false; // Mark the seat as reserved
+            seatArray[seatNumber] = false; // Mark the seat as reserved
             System.out.println("Seat " + seatNumber + " has been successfully reserved.");
         } else {
             System.out.println("Seat " + seatNumber + " is already reserved or invalid.");
