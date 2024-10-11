@@ -15,8 +15,6 @@ public class Showtime {
         initializeSeatAvailability();
     }
 
-    }
-
     // Method
     public boolean isSeatAvailable(int seatNumber) {
         return seatMap.getOrDefault(seatNumber, false); // True if available, false otherwise
