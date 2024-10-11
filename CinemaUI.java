@@ -265,47 +265,45 @@ public class CinemaUI {
     private void displaySeatingChart(String seatType) {
         // Display seating chart based on seat type
         System.out.println("Seating Chart:");
-        int cols = 10;
-        char startRow;
-        char endRow;
 
-        // Determine the start and end rows based on seat type
-        if (seatType.equals("VIP")) {
-            startRow = 'H';
-            endRow = 'J';
-        }
-        // If seat type is Premium
-        else if (seatType.equals("PREMIUM")) {
-            startRow = 'D';
-            endRow = 'G';
-        }
+        System.out.println("Seating Chart for " + seatType + " seats:");
 
-        else { // Default to Regular seat type
-            startRow = 'A';
-            endRow = 'C';
+        int startSeatNumber;
+        int endSeatNumber;
+
+        // Determine the seat number range based on seat type
+        if (seatType.equalsIgnoreCase("VIP")) { // Use equalsIgnoreCase for case-insensitive comparison
+            startSeatNumber = 1;
+            endSeatNumber = 10;
+        } else if (seatType.equalsIgnoreCase("PREMIUM")) { // Use equalsIgnoreCase
+            startSeatNumber = 11;
+            endSeatNumber = 20;
+        } else { // Default to Regular seat type
+            startSeatNumber = 21;
+            endSeatNumber = 30;
         }
 
-        for (char rowLetter = startRow; rowLetter <= endRow; rowLetter++) {
-            System.out.printf("%-2c ", rowLetter); // Row label
-            for (int col = 1; col <= cols; col++) {
-                boolean isReserved = isSeatReserved(rowLetter, col);
-                String seatLabel;
-                if (isReserved) {
-                    seatLabel = " x ";
-                } else {
-                    seatLabel = String.format("%2d", (rowLetter - startRow) * cols + col);
-                }
-                System.out.print(seatLabel + " ");
+        // Loop through the seat numbers and print them
+        for (int seatNumber = startSeatNumber; seatNumber <= endSeatNumber; seatNumber++) {
+            // Create the seat label without checking if it is reserved
+            String seatLabel = String.format("%2d", seatNumber);
+
+            // Print the seat label
+            System.out.print(seatLabel + " ");
+
+            // New line after every 5 seats for better readability
+            if ((seatNumber - startSeatNumber + 1) % 5 == 0) {
+                System.out.println(); // New line after every 5 seats
             }
-            System.out.println(); // New line
         }
+
+        // Uncomment and implement this method if you need to check if a seat is reserved
+        // private boolean isSeatReserved(int row) {
+        //     // Implement logic to check if the seat is reserved
+        //     return false;
+        // }
     }
 
-    // CHECK IF SEAT IS RESERVED
-    private boolean isSeatReserved(char row, int col) {
-        // Implement logic to check if the seat is reserved
-        return false;
-    }
 
     // SELECT AGE PRICING
     private String selectAgePricing(SeatType seatType) {
