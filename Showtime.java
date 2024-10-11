@@ -18,6 +18,17 @@ public class Showtime {
         return seatArray[seatNumber];
     }
 
+    public int isSeatAvailable() {
+        int count = 30;
+
+        for (int i = 1; i < 31; i++) {
+            if (seatArray[i] == false) {
+                count--;
+            }
+        }
+        return count;
+    }
+
     // Initialize seat availability for this showtime
     private void initializeSeatAvailability() {
         for (int i = 1; i < seatArray.length; i++) { // This is now actual number, fix according to CinemaUI
