@@ -20,6 +20,16 @@ public class Showtime {
         return seatMap.getOrDefault(seatNumber, false); // True if available, false otherwise
     }
 
+    public int getAvailableSeats() {
+        int result = 0;
+        for (Map.Entry<Integer, Boolean> curSeat : this.seatMap.entrySet()) {
+            if (curSeat.getValue() == true) {
+                result += 1;
+            }
+        }
+        return result;
+    }
+
     // Initialize seat availability for this showtime
     private void initializeSeatAvailability() {
         for (int i = 1; i < 30; i++) { // This is now actual number, fix according to CinemaUI
