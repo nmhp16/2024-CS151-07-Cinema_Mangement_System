@@ -77,8 +77,17 @@ public class Theater {
             return;
         }
         for (Movie movie : movies) {
-            System.out.println("Movie ID: " + movie.getMovieId() + ", Title: " + movie.getTitle());
+            System.out.println("    Movie ID: " + movie.getMovieId() + ", Title: " + movie.getTitle());
         }
+    }
+
+    public boolean isValidMovie(int movieId) {
+        for (Movie movie : movies) {
+            if (movie.getMovieId() == movieId) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // Getter and Setter Methods

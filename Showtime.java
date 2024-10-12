@@ -1,10 +1,8 @@
-import java.util.Map;
-import java.util.HashMap;
 
 public class Showtime {
     private int showtimeId;
     private String time;
-    private boolean[] seatArray; 
+    private boolean[] seatArray;
 
     // Constructor
     public Showtime(int showtimeId, String time) {
@@ -18,6 +16,17 @@ public class Showtime {
     // Method
     public boolean isSeatAvailable(int seatNumber) {
         return seatArray[seatNumber];
+    }
+
+    public int getAvailableSeats() {
+        int count = 30;
+
+        for (int i = 1; i < 31; i++) {
+            if (seatArray[i] == false) {
+                count--;
+            }
+        }
+        return count;
     }
 
     // Initialize seat availability for this showtime

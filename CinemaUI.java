@@ -16,18 +16,6 @@ public class CinemaUI {
     private Transaction transaction = new Transaction();
     private Customer customer;
 
-    private Stack<Runnable> pageStack = new Stack<>(); // Tracks pages by pushing to a stack after every display
-                                                       // pops the page to go back when 0 is entered
-
-    private void previousPage() {
-        if (pageStack.isEmpty()) {
-            Runnable goBack = pageStack.pop();
-            goBack.run();
-        } else {
-            System.out.println("No previous page to go back to.");
-        }
-    }
-
     /**
      * Constructor that initializes the CinemaUI without a Cinema
      */
@@ -63,15 +51,19 @@ public class CinemaUI {
         System.out.println("----------------------------------------------");
         System.out.println("----------------------------------------------");
 
-        // Push the displayMenu onto the pageStack
-        pageStack.push(this::displayMenu);
-
         switch (chooseOption) {
             case 1:
                 showTheaters();
                 break;
             default:
-                break;
+                System.out.println("Invalid option, Please select again: ");
+                chooseOption = scanner.nextInt();
+
+                while (chooseOption != 1) {
+                    System.out.println("Invalid option, Please select again: ");
+                    chooseOption = scanner.nextInt();
+                }
+                showTheaters();
         }
     }
 
@@ -79,8 +71,6 @@ public class CinemaUI {
      * Display the list of theaters and allows user to select one
      */
     private void showTheaters() {
-        // Push the showTheaters onto the pageStack
-        pageStack.push(this::showTheaters);
 
         // Show total of theater within cinema
         System.out.println("THERE ARE " + cinema.getTotalTheaters() + " THEATERS IN OUR SYSTEM:");
@@ -99,6 +89,10 @@ public class CinemaUI {
 
         try {
             // Select a theater
+            while (cinema.isValidTheater(theaterId) == false) {
+                System.out.println("Invalid option, Please select again: ");
+                theaterId = scanner.nextInt();
+            }
             selectedTheater = cinema.selectTheater(theaterId);
             // list the genres by the if statements
             showMovies();
@@ -111,8 +105,6 @@ public class CinemaUI {
      * Displays list of movies for selected theater and allows user to select one
      */
     private void showMovies() {
-        // Push the showMovies onto the pageStack
-        pageStack.push(this::showMovies);
 
         // Get movies from the selected theater
         selectedTheater.listMovies();
@@ -127,6 +119,10 @@ public class CinemaUI {
         }
 
         try {
+            while (selectedTheater.isValidMovie(movieId) == false) {
+                System.out.println("Invalid option, Please select again: ");
+                movieId = scanner.nextInt();
+            }
             selectedMovie = selectedTheater.selectMovie(movieId); // Select a movie
             showShowtimes();
         } catch (MovieNotFoundException e) {
@@ -138,8 +134,6 @@ public class CinemaUI {
      * Displays the showtimes for selected movie and allow user to select one
      */
     private void showShowtimes() {
-        // Push the showShowtimes onto the pageStack
-        pageStack.push(this::showShowtimes);
 
         // List showtimes for the selected movie
         System.out.println("----------------------------------------------");
@@ -158,6 +152,10 @@ public class CinemaUI {
         }
 
         try {
+            while (selectedMovie.isValidShowtime(showtimeId) == false) {
+                System.out.println("Invalid option, Please select again: ");
+                showtimeId = scanner.nextInt();
+            }
             selectedShowtime = selectedMovie.selectShowtime(showtimeId); // Select a showtime
             selectSeatType(); // Ask for seat type first
         } catch (ShowtimeNotFoundException e) {
@@ -180,26 +178,30 @@ public class CinemaUI {
         System.out.println("----------------------------------------------");
         System.out.println("----------------------------------------------");
 
-        SeatType seatType;
-        switch (choice) {
-            case 1:
-                seatType = SeatType.REGULAR;
-                break;
-            case 2:
-                seatType = SeatType.PREMIUM;
-                break;
-            case 3:
-                seatType = SeatType.VIP;
-                break;
-            default:
-                if (choice == 0) {
+        SeatType seatType = null;
+
+        while (seatType == null) {
+            switch (choice) {
+                case 1:
+                    seatType = SeatType.REGULAR;
+                    break;
+                case 2:
+                    seatType = SeatType.PREMIUM;
+                    break;
+                case 3:
+                    seatType = SeatType.VIP;
+                    break;
+                case 0:
                     seatType = null;
                     showShowtimes();
-                } else {
-                    System.out.println("\nPlease select a correct option!");
+                    break;
+                default:
+                    System.out.println("Invalid option, Please select again: ");
+                    choice = scanner.nextInt();
                     seatType = null;
-                    selectSeatType();
-                }
+                    break;
+
+            }
         }
 
         showSeatAvailability(seatType); // Show seat availability based on the selected seat type
@@ -220,18 +222,15 @@ public class CinemaUI {
         System.out.println("----------------------------------------------");
 
         if (seatNumber.equals("0")) {
-            showShowtimes(); // Go back to showtimes stage
+            selectSeatType(); // Go back to select seat
             return;
         }
 
         // Check if the seat number is valid
         if (isSeatAvailable(seatNumber, seatType.name())) {
-            // Generate Ticket ID
-            Ticket ticket = new Ticket();
-            int ticketId = ticket.generateTicketId();
 
             // Create the ticket
-            selectedTicket = new Ticket(ticketId, seatType.name(), "Adult", Integer.parseInt(seatNumber));
+            selectedTicket = new Ticket(seatType.name(), "Adult", Integer.parseInt(seatNumber));
 
             // Now apply the age pricing (this will update the price of the ticket)
             String agePricing = selectAgePricing(seatType);
@@ -296,6 +295,7 @@ public class CinemaUI {
                 System.out.println(); // New line after every 5 seats
             }
         }
+    }
 
     // SELECT AGE PRICING
     private String selectAgePricing(SeatType seatType) {
@@ -311,11 +311,11 @@ public class CinemaUI {
         switch (choice) {
             case 2:
                 ageCategory = "Child";
-                finalPrice = applyDiscount(seatType.getPrice(), 20); // 20% discount for children
+                finalPrice = selectedTicket.applyDiscount(seatType.getPrice(), 20); // 20% discount for children
                 break;
             case 3:
                 ageCategory = "Senior";
-                finalPrice = applyDiscount(seatType.getPrice(), 20); // 20% discount for seniors
+                finalPrice = selectedTicket.applyDiscount(seatType.getPrice(), 20); // 20% discount for seniors
                 break;
             default:
                 ageCategory = "Adult";
@@ -329,11 +329,6 @@ public class CinemaUI {
         System.out.println("----------------------------------------------");
         System.out.println("----------------------------------------------");
         return ageCategory;
-    }
-
-    // APPLY DISCOUNT
-    private double applyDiscount(double price, int discountPercentage) {
-        return price - (price * discountPercentage / 100.0);
     }
 
     // SELECT FOOD AND
@@ -414,26 +409,28 @@ public class CinemaUI {
 
     // COMPLETE TRANSACTION
     private void completeTransaction() {
-        // Push the completeTransaction method onto the pageStack
-        pageStack.push(this::showTheaters);
-
-        System.out.println("\nSelection complete. Show receipt:");
-
-        System.out.println("----------------------------------------------");
-        System.out.println("----------------------------------------------");
-
-        // Show receipt details before finalizing transaction
-        printReceipt();
+        String cardNumber;
+        boolean isValid = false;
 
         // Finalize transaction
         transaction.setTransactionType(selectTransactionType());
 
         if (transaction.getTransactionType() == "Cash") {
             transaction.remindCashTransaction();
+        } else if (transaction.getTransactionType() == "Credit Card") {
+            System.out.println("Please enter your card number: ");
+            while (isValid == false) {
+                cardNumber = scanner.next();
+                isValid = transaction.inputTransactionInfo(cardNumber);
+            }
         }
 
-        transaction.setTicket(selectedTicket);
-        transaction.setCustomer(customer);
+        System.out.println("\nSelection complete. Show receipt:");
+
+        System.out.println("----------------------------------------------");
+        System.out.println("----------------------------------------------");
+
+        transaction.processTransaction(customer, selectedMovie, selectedShowtime, selectedTicket, selectedItems);
         transaction.printReceipt();
 
         // Optionally clear selected items
@@ -444,30 +441,6 @@ public class CinemaUI {
         scanner.nextLine(); // Consume newline left-over
         scanner.nextLine(); // Wait for Enter key
         displayMenu();
-    }
-
-    private void printReceipt() {
-        System.out.println("\nReceipt:");
-        System.out.println("Customer: " + customer.getName() + ", Email: " + customer.getEmail() + ", Phone: "
-                + customer.getPhone());
-        System.out
-                .println("Showtime: ID: " + selectedShowtime.getShowtimeId() + ", Time: " + selectedShowtime.getTime());
-        System.out.println("Movie: " + selectedMovie.getTitle());
-        System.out.println("Seat: " + selectedTicket.getSeatNumber() + ", Type: " + selectedTicket.getSeatType()
-                + ", Pricing: " + selectedTicket.getAgePricing());
-
-        double totalCost = 0;
-        System.out.println("\nSelected Food and Drinks:");
-        for (FoodAndDrink item : selectedItems) {
-            System.out.printf("%-10s - $%.2f%n", item.getName(), item.getPrice());
-            totalCost += item.getPrice();
-        }
-
-        totalCost = totalCost + selectedTicket.getPrice();
-
-        System.out.printf("%nTotal Cost: $%.2f%n", totalCost);
-        System.out.println("----------------------------------------------");
-        System.out.println("----------------------------------------------");
     }
 
     private String selectTransactionType() {

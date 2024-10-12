@@ -25,21 +25,16 @@ public class Movie {
 
     // Implement into CinemaUI or Figure out better methods
     public void listGenres() {
-
-        // This could be replaced with a dynamic list if genres are managed separately
-        System.out.println("Available genres: Action, Comedy, Drama, Sci-Fi, etc.");
-    }
-
-    // Implement into CinemaUI or Figure out better methods
-    public void selectGenre(String genre) {
-        this.genre = genre;
-        System.out.println("Selected genre: " + genre);
+        System.out.println("Genre: " + this.genre);
     }
 
     public void listShowtimes() {
         System.out.println("\nShowtimes for " + this.title + ":");
+        listGenres();
         for (Showtime showtime : showtimes) {
-            System.out.println("Showtime ID: " + showtime.getShowtimeId() + ", Time: " + showtime.getTime());
+            checkSeatOccupancy(showtime);
+            System.out.println(
+                    "Showtime ID: " + showtime.getShowtimeId() + ", Time: " + showtime.getTime());
         }
     }
 
@@ -52,12 +47,17 @@ public class Movie {
         throw new ShowtimeNotFoundException("Showtime not found with ID: " + showtimeId);
     }
 
-    public void checkSeatOccupancy() {
+    public void checkSeatOccupancy(Showtime showtime) {
+        System.out.println("Available Seats: " + showtime.getAvailableSeats());
+    }
+
+    public boolean isValidShowtime(int showtimeId) {
         for (Showtime showtime : showtimes) {
-            System.out.println(
-                    "Showtime ID: " + showtime.getShowtimeId() + ", Available Seats: " + showtime.isSeatAvailable());
+            if (showtime.getShowtimeId() == showtimeId) {
+                return true;
+            }
         }
-        ;
+        return false;
     }
 
     // Getters and Setters

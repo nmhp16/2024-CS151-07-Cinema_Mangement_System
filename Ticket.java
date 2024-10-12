@@ -1,4 +1,5 @@
 public class Ticket implements Reservable {
+    private static int idCounter = 0;
     private int ticketId;
     private String seatType;
     private String agePricing;
@@ -8,24 +9,23 @@ public class Ticket implements Reservable {
 
     // Constructor
     public Ticket() {
-        ticketId = 0;
     }
 
-    public Ticket(int ticketId, String seatType, String agePricing, int seatNumber) {
-        this.ticketId = ticketId;
+    public Ticket(String seatType, String agePricing, int seatNumber) {
         this.seatType = seatType;
         this.agePricing = agePricing;
         this.seatNumber = seatNumber;
         this.reserved = false;
+        generateTicketId();
     }
 
-    public Ticket(int ticketId, String seatType, String agePricing, int seatNumber, double price) {
-        this.ticketId = ticketId;
+    public Ticket(String seatType, String agePricing, int seatNumber, double price) {
         this.seatType = seatType;
         this.agePricing = agePricing;
         this.seatNumber = seatNumber;
         this.reserved = false;
         this.price = price;
+        generateTicketId();
     }
 
     // Implementing Reservable interface methods
@@ -49,6 +49,17 @@ public class Ticket implements Reservable {
     }
 
     // Other methods
+    public double applyDiscount(double price, int discountPercentage) {
+        return price - (price * discountPercentage / 100.0);
+    }
+
+    public void getSummary() {
+        System.out.println("Ticket ID: " + getTicketId());
+        System.out.println("Seat: " + this.seatNumber + ", Type: " + this.seatType + ", Pricing: "
+                + this.agePricing);
+        System.out.println("\nTicket price: " + "$" + this.price);
+    }
+
     public void reserve() {
         this.reserved = true;
     }
@@ -62,28 +73,55 @@ public class Ticket implements Reservable {
     }
 
     public int generateTicketId() {
-        ticketId++;
+        idCounter++;
+        ticketId = idCounter;
         return ticketId;
     }
 
     // Getters and Setters
-    public double getPrice() {return price;}
-    public void setPrice(double price) {this.price = price;}
+    public double getPrice() {
+        return price;
+    }
 
-    public int getTicketId() { return ticketId; }
-    public void setTicketId(int ticketId) { this.ticketId = ticketId; }
+    public void setPrice(double price) {
+        this.price = price;
+    }
 
-    public String getSeatType() { return seatType; }
-    public void setSeatType(String seatType) { this.seatType = seatType; }
+    public int getTicketId() {
+        return ticketId;
+    }
 
-    public String getAgePricing() { return agePricing; }
-    public void setAgePricing(String agePricing) { this.agePricing = agePricing; }
+    public void setTicketId(int ticketId) {
+        this.ticketId = ticketId;
+    }
 
-    public int getSeatNumber() { return seatNumber; }
-    public void setSeatNumber(int seatNumber) { this.seatNumber = seatNumber; }
+    public String getSeatType() {
+        return seatType;
+    }
+
+    public void setSeatType(String seatType) {
+        this.seatType = seatType;
+    }
+
+    public String getAgePricing() {
+        return agePricing;
+    }
+
+    public void setAgePricing(String agePricing) {
+        this.agePricing = agePricing;
+    }
+
+    public int getSeatNumber() {
+        return seatNumber;
+    }
+
+    public void setSeatNumber(int seatNumber) {
+        this.seatNumber = seatNumber;
+    }
 
     @Override
     public String toString() {
-        return "Ticket ID: " + ticketId + ", Seat Number: " + seatNumber + ", Seat Type: " + seatType + ", Age Pricing: " + agePricing;
+        return "Ticket ID: " + ticketId + ", Seat Number: " + seatNumber + ", Seat Type: " + seatType
+                + ", Age Pricing: " + agePricing;
     }
 }
