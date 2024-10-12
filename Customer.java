@@ -86,7 +86,6 @@ public class Customer extends Person {
 
         this.name = name;
         this.email = email;
-        this.phone = phone;
 
         System.out.println("Customer added: " + this.name + ", " + this.email + ", " + this.phone);
 
