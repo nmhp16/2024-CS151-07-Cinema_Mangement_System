@@ -14,6 +14,7 @@ public class Main {
         // Sample showtimes
         Showtime showtime1 = new Showtime(1, "10:00 AM");
         Showtime showtime2 = new Showtime(2, "02:00 PM");
+
         movie1.addShowtime(showtime1);
         movie2.addShowtime(showtime2);
 
@@ -46,5 +47,13 @@ public class Main {
 
         // Display the menu to the user
         cinemaUI.displayMenu();
+
+        // Display all available movie Genres
+        movie1.listGenres();
+
+        // test getAvailableSeats function in Showtime class
+        System.out.println("Current availabale seat amount is " + showtime1.getAvailableSeats() + " should be " + 30);
+        showtime1.reserveSeat(1);
+        System.out.println("Current availabale seat amount is " + showtime1.getAvailableSeats() + " should be " + 29);
     }
 }
