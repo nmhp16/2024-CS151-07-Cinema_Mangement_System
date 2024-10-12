@@ -1,5 +1,9 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class Ticket implements Reservable {
     private static int idCounter = 0;
+    private static List<Ticket> tickets = new ArrayList<>();
     private int ticketId;
     private String seatType;
     private String agePricing;
@@ -16,16 +20,13 @@ public class Ticket implements Reservable {
         this.agePricing = agePricing;
         this.seatNumber = seatNumber;
         this.reserved = false;
-        generateTicketId();
+        this.ticketId = generateTicketId();
+        tickets.add(this);
     }
 
     public Ticket(String seatType, String agePricing, int seatNumber, double price) {
-        this.seatType = seatType;
-        this.agePricing = agePricing;
-        this.seatNumber = seatNumber;
-        this.reserved = false;
+        this(seatType, agePricing, seatNumber);
         this.price = price;
-        generateTicketId();
     }
 
     // Implementing Reservable interface methods
@@ -60,6 +61,25 @@ public class Ticket implements Reservable {
         System.out.println("\nTicket price: " + "$" + this.price);
     }
 
+    // Method to find ticket by its ID
+    public static Ticket findTicketById(int ticketId) {
+        for (Ticket ticket : tickets) {
+            if (ticket.getTicketId() == ticketId) {
+                return ticket;
+            }
+        }
+        return null;
+    }
+
+    public static boolean ticketIdExists(int ticketId) {
+        for (Ticket ticket : tickets) {
+            if (ticketId == ticket.getTicketId()) {
+                return true; // Ticket ID found
+            }
+        }
+        return false; // Ticket ID not found
+    }
+
     public void reserve() {
         this.reserved = true;
     }
@@ -69,11 +89,23 @@ public class Ticket implements Reservable {
     }
 
     public boolean isReserved() {
+        for (Ticket ticket : tickets) {
+            if (ticket.getTicketId() == this.ticketId) {
+                reserved = true;
+                return reserved;
+            }
+        }
+        reserved = false;
         return reserved;
     }
 
     public int generateTicketId() {
         idCounter++;
+        return idCounter;
+    }
+
+    public int removeTicketId() {
+        idCounter--;
         ticketId = idCounter;
         return ticketId;
     }
@@ -117,6 +149,10 @@ public class Ticket implements Reservable {
 
     public void setSeatNumber(int seatNumber) {
         this.seatNumber = seatNumber;
+    }
+
+    public static List<Ticket> getTickets() {
+        return tickets;
     }
 
     @Override
