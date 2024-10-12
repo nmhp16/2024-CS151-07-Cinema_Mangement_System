@@ -16,6 +16,7 @@ public class Ticket implements Reservable {
         this.agePricing = agePricing;
         this.seatNumber = seatNumber;
         this.reserved = false;
+        generateTicketId();
     }
 
     public Ticket(String seatType, String agePricing, int seatNumber, double price) {
@@ -24,6 +25,7 @@ public class Ticket implements Reservable {
         this.seatNumber = seatNumber;
         this.reserved = false;
         this.price = price;
+        generateTicketId();
     }
 
     // Implementing Reservable interface methods

@@ -81,19 +81,23 @@ public class Transaction implements Billable {
         System.out.println("Selected transaction type: " + type);
     }
 
-    public void inputTransactionInfo(int cardNumber) {
+    public boolean inputTransactionInfo(String cardNumber) {
+        this.cardNumber = cardNumber;
+
         // Input relevant transaction information
         System.out.println("Processing your transaction information for type: " + transactionType);
         validateCard();
         if (holdStatus == true) {
-            System.out.println("Please enter your card info again: ");
-        } else {
-            System.out.println("Account number: " + cardNumber + " processed successfully.");
+            System.out.println("Please enter your card info again with 10 digits: \n");
+            return false;
         }
+        System.out.println("Account number: " + cardNumber + " processed successfully.");
+        return true;
+
     }
 
     public void validateCard() {
-        if (!cardNumber.matches("\\d{10}")) {
+        if (cardNumber == null || !cardNumber.matches("\\d{10}")) {
             addHoldStatus();
         } else {
             holdStatus = false;

@@ -228,6 +228,7 @@ public class CinemaUI {
 
         // Check if the seat number is valid
         if (isSeatAvailable(seatNumber, seatType.name())) {
+
             // Create the ticket
             selectedTicket = new Ticket(seatType.name(), "Adult", Integer.parseInt(seatNumber));
 
@@ -408,12 +409,20 @@ public class CinemaUI {
 
     // COMPLETE TRANSACTION
     private void completeTransaction() {
+        String cardNumber;
+        boolean isValid = false;
 
         // Finalize transaction
         transaction.setTransactionType(selectTransactionType());
 
         if (transaction.getTransactionType() == "Cash") {
             transaction.remindCashTransaction();
+        } else if (transaction.getTransactionType() == "Credit Card") {
+            System.out.println("Please enter your card number: ");
+            while (isValid == false) {
+                cardNumber = scanner.next();
+                isValid = transaction.inputTransactionInfo(cardNumber);
+            }
         }
 
         System.out.println("\nSelection complete. Show receipt:");
