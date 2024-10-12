@@ -30,7 +30,7 @@ public class Customer extends Person {
     }
 
     // Validate the phone number
-    public boolean validatePhone() {
+    public boolean validatePhone(String phone) {
         return phone != null && phone.matches("\\d{10}");
     }
 
@@ -74,17 +74,21 @@ public class Customer extends Person {
         System.out.println("Enter customer phone number: ");
         String phone = scanner.nextLine();
 
-        while (this.validatePhone() == false) {
-            phone = scanner.nextLine();
-            this.phone = phone;
+        String phone = "";
+        boolean isValid = false;
 
-            if (this.validatePhone() == false) {
+        while (!isValid) {
+            phone = scanner.nextLine();
+            if (validatePhone(phone)) {
+                isValid = true;
+            } else {
                 System.out.println("Please enter phone number again with 10 digits:");
             }
         }
 
         this.name = name;
         this.email = email;
+        this.phone = phone;
 
         System.out.println("Customer added: " + this.name + ", " + this.email + ", " + this.phone);
 
