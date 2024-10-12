@@ -62,9 +62,9 @@ public class Customer extends Person {
     }
 
     // Scanner still in use, no close() statement
-    @SuppressWarnings("resource")
-    public void addCustomer() {
-        Scanner scanner = new Scanner(System.in);
+    public void addCustomer(Scanner scanner) {
+        scanner.nextLine(); // Clear Input Buffer
+
         System.out.println("Enter customer name: ");
         String name = scanner.nextLine();
 
@@ -73,22 +73,19 @@ public class Customer extends Person {
 
         System.out.println("Enter customer phone number: ");
 
-        String phone = "";
         boolean isValid = false;
 
         while (!isValid) {
             phone = scanner.nextLine();
             if (validatePhone(phone)) {
                 isValid = true;
-            }
-            else {
+            } else {
                 System.out.println("Please enter phone number again with 10 digits:");
             }
         }
 
         this.name = name;
         this.email = email;
-        this.phone = phone;
 
         System.out.println("Customer added: " + this.name + ", " + this.email + ", " + this.phone);
 

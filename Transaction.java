@@ -1,3 +1,5 @@
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class Transaction implements Billable {
@@ -9,17 +11,17 @@ public class Transaction implements Billable {
     private Showtime showtime;
     private String cardNumber;
     private List<FoodAndDrink> selectedItems;
+    private LocalDateTime transactionTime;
 
     // Constructor
     public Transaction() {
+        this.transactionTime = LocalDateTime.now();
     }
 
-    public Transaction(Customer customer, Movie movie, Showtime showtime, Ticket ticket,
+    public Transaction(Movie movie, Showtime showtime, Ticket ticket, Customer customer,
             List<FoodAndDrink> selectedItems) {
+        this(movie, showtime, ticket);
         this.customer = customer;
-        this.ticket = ticket;
-        this.movie = movie;
-        this.showtime = showtime;
         this.selectedItems = selectedItems;
     }
 
@@ -27,6 +29,7 @@ public class Transaction implements Billable {
         this.ticket = ticket;
         this.movie = movie;
         this.showtime = showtime;
+        this.transactionTime = LocalDateTime.now();
     }
 
     // Implementing Billable interface methods
@@ -43,7 +46,8 @@ public class Transaction implements Billable {
     @Override
     public void printReceipt() {
         // Print customer details
-        System.out.println("Customer: " + customer.getName() + ", Email: " + customer.getEmail() + ", Phone: "
+        System.out.println("Transaction completed on: " + getFormattedTransactionTime());
+        System.out.println("\nCustomer: " + customer.getName() + ", Email: " + customer.getEmail() + ", Phone: "
                 + customer.getPhone());
         // Print showtime details
         System.out.println("Showtime: ID: " + showtime.getShowtimeId() + ", Time: " + showtime.getTime());
@@ -52,15 +56,13 @@ public class Transaction implements Billable {
         ticket.getSummary();
 
         // Print selected food and drinks
-        double totalCost = 0;
         System.out.println("\nYou selected " + getTotalItems() + " items:");
         for (FoodAndDrink item : selectedItems) {
             System.out.printf("%-10s - $%.2f%n", item.getName(), item.getPrice());
-            totalCost += item.getPrice();
         }
 
-        // Add ticket price to total cost
-        totalCost += ticket.getPrice();
+        // Get total cost
+        double totalCost = calculateTotalCost();
 
         System.out.printf("%nTotal Cost: $%.2f%n", totalCost);
         System.out.println("----------------------------------------------");
@@ -70,6 +72,17 @@ public class Transaction implements Billable {
     public void listTransactionTypes() {
         // List available transaction types
         System.out.println("Transaction types: ID: 1, Card; ID: 2, Cash");
+    }
+
+    public double calculateTotalCost() {
+        double totalCost = ticket.getPrice(); // Start with ticket price
+
+        // Add the price of each selected food and drink item
+        for (FoodAndDrink item : selectedItems) {
+            totalCost += item.getPrice();
+        }
+
+        return totalCost;
     }
 
     public int getTotalItems() {
@@ -94,6 +107,21 @@ public class Transaction implements Billable {
         System.out.println("Account number: " + cardNumber + " processed successfully.");
         return true;
 
+    }
+
+    public String getFormattedTransactionTime() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
+        return transactionTime.format(formatter);
+    }
+
+    public void processRefund() {
+        if (ticket.isReserved()) {
+            if (transactionType == "Credit Card") {
+                System.out.println("Refunding transaction for ticket " + ticket.getTicketId());
+            } else {
+                System.out.println("Cannot refund. Transaction not completed.");
+            }
+        }
     }
 
     public void validateCard() {
@@ -177,5 +205,9 @@ public class Transaction implements Billable {
 
     public void setMovie(Movie movie) {
         this.movie = movie;
+    }
+
+    public LocalDateTime getTransactionTime() {
+        return transactionTime;
     }
 }
