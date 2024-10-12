@@ -47,13 +47,5 @@ public class Main {
 
         // Display the menu to the user
         cinemaUI.displayMenu();
-
-        // Display all available movie Genres
-        movie1.listGenres();
-
-        // test getAvailableSeats function in Showtime class
-        System.out.println("Current availabale seat amount is " + showtime1.getAvailableSeats() + " should be " + 30);
-        showtime1.reserveSeat(1);
-        System.out.println("Current availabale seat amount is " + showtime1.getAvailableSeats() + " should be " + 29);
     }
 }
