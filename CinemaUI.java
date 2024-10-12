@@ -45,7 +45,8 @@ public class CinemaUI {
         System.out.println("----------------------------------------------");
         System.out.println("----------------------------------------------");
         System.out.println("\nWELCOME TO ASAN CINEMA!!");
-        System.out.println("\n1: Show all theaters");
+        System.out.println("\n1: Reserve a ticket");
+        System.out.println("2: Cancel a reservation");
         System.out.println("\nPlease select the options:");
         int chooseOption = scanner.nextInt();
         System.out.println("----------------------------------------------");
@@ -54,6 +55,9 @@ public class CinemaUI {
         switch (chooseOption) {
             case 1:
                 showTheaters();
+                break;
+            case 2:
+                cancelTicketReservation();
                 break;
             default:
                 System.out.println("Invalid option, Please select again: ");
@@ -236,6 +240,13 @@ public class CinemaUI {
 
             // After selecting age pricing, set the correct age category
             selectedTicket.setAgePricing(agePricing); // Update ticket's age pricing
+
+            // Try to reserve the ticket
+            try {
+                selectedTicket.reserveTicket(selectedTicket);
+            } catch (ReservationException e) {
+                System.out.println("Reservation failed: " + e.getMessage());
+            }
 
             selectFoodAndDrinks(); // Proceed to food selection
         } else {
@@ -456,6 +467,29 @@ public class CinemaUI {
                 return "Credit Card";
             default:
                 return "Cash";
+        }
+    }
+
+    private void cancelTicketReservation() {
+        boolean condition = false;
+
+        System.out.println("Enter the ticket ID to cancel the reservation or '0' to go back: ");
+
+        while (!condition) {
+            int ticketId = scanner.nextInt();
+
+            Ticket ticketToCancel = Ticket.findTicketById(ticketId);
+
+            if (ticketToCancel != null) {
+                ticketToCancel.cancelReservation(ticketToCancel);
+            } else if (ticketId == 0) {
+                condition = true;
+                displayMenu();
+            } else {
+                System.out.println("Ticket with ID " + ticketId + " not found.");
+                System.out.println("Please enter valid ID or '0' to go back:");
+            }
+
         }
     }
 
