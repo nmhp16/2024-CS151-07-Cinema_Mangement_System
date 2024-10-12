@@ -303,7 +303,22 @@ public class CinemaUI {
         System.out.println("1. Adult");
         System.out.println("2. Child (20% discount)");
         System.out.println("3. Senior (20% discount)");
-        int choice = scanner.nextInt();
+        
+        int choice = 0;
+
+        while (choice < 1 || choice > 3) {
+            if (scanner.hasNextInt()) {
+                choice = scanner.nextInt();
+                if (choice < 1 || choice > 3) {
+                    System.out.println("Please choose 1 for Adult, 2 for Child, or 3 for Senior.");
+                }
+            }
+            else {
+                System.out.println("Invalid input. Please choose 1 for Adult, 2 for Child, or 3 for Senior.");
+                scanner.next();
+            }
+
+        }
 
         double finalPrice = seatType.getPrice(); // Default price from SeatType
         String ageCategory;
