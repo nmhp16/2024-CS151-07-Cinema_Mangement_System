@@ -56,7 +56,14 @@ public class CinemaUI {
                 showTheaters();
                 break;
             default:
-                break;
+                System.out.println("Invalid option, Please select again: ");
+                chooseOption = scanner.nextInt();
+
+                while (chooseOption != 1) {
+                    System.out.println("Invalid option, Please select again: ");
+                    chooseOption = scanner.nextInt();
+                }
+                showTheaters();
         }
     }
 
@@ -200,7 +207,7 @@ public class CinemaUI {
         System.out.println("----------------------------------------------");
 
         if (seatNumber.equals("0")) {
-            showShowtimes(); // Go back to showtimes stage
+            selectSeatType(); // Go back to select seat
             return;
         }
 
