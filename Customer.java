@@ -72,9 +72,7 @@ public class Customer extends Person {
         String email = scanner.nextLine();
 
         System.out.println("Enter customer phone number: ");
-        String phone = scanner.nextLine();
 
-        String phone = "";
         boolean isValid = false;
 
         while (!isValid) {
