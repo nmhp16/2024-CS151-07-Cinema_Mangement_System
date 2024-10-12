@@ -1,5 +1,9 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class Ticket implements Reservable {
     private static int idCounter = 0;
+    private static List<Ticket> tickets = new ArrayList<>();
     private int ticketId;
     private String seatType;
     private String agePricing;
@@ -17,15 +21,15 @@ public class Ticket implements Reservable {
         this.seatNumber = seatNumber;
         this.reserved = false;
         generateTicketId();
+        tickets.add(this);
     }
 
     public Ticket(String seatType, String agePricing, int seatNumber, double price) {
-        this.seatType = seatType;
-        this.agePricing = agePricing;
-        this.seatNumber = seatNumber;
+        this(seatType, agePricing, seatNumber);
         this.reserved = false;
         this.price = price;
         generateTicketId();
+        tickets.add(this);
     }
 
     // Implementing Reservable interface methods
@@ -60,15 +64,33 @@ public class Ticket implements Reservable {
         System.out.println("\nTicket price: " + "$" + this.price);
     }
 
+    public static boolean ticketIdExists(int ticketId) {
+        for (Ticket ticket : tickets) {
+            if (ticketId == ticket.getTicketId()) {
+                return true; // Ticket ID found
+            }
+        }
+        return false; // Ticket ID not found
+    }
+
     public void reserve() {
         this.reserved = true;
+        tickets.add(this);
     }
 
     public void cancelReservation() {
         this.reserved = false;
+        tickets.remove(this);
     }
 
     public boolean isReserved() {
+        for (Ticket ticket : tickets) {
+            if (ticket.getTicketId() == this.ticketId) {
+                reserved = true;
+                return reserved;
+            }
+        }
+        reserved = false;
         return reserved;
     }
 
