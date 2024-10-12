@@ -425,14 +425,6 @@ public class CinemaUI {
     // COMPLETE TRANSACTION
     private void completeTransaction() {
 
-        System.out.println("\nSelection complete. Show receipt:");
-
-        System.out.println("----------------------------------------------");
-        System.out.println("----------------------------------------------");
-
-        // Show receipt details before finalizing transaction
-        printReceipt();
-
         // Finalize transaction
         transaction.setTransactionType(selectTransactionType());
 
@@ -440,8 +432,12 @@ public class CinemaUI {
             transaction.remindCashTransaction();
         }
 
-        transaction.setTicket(selectedTicket);
-        transaction.setCustomer(customer);
+        System.out.println("\nSelection complete. Show receipt:");
+
+        System.out.println("----------------------------------------------");
+        System.out.println("----------------------------------------------");
+
+        transaction.processTransaction(customer, selectedMovie, selectedShowtime, selectedTicket, selectedItems);
         transaction.printReceipt();
 
         // Optionally clear selected items
@@ -452,30 +448,6 @@ public class CinemaUI {
         scanner.nextLine(); // Consume newline left-over
         scanner.nextLine(); // Wait for Enter key
         displayMenu();
-    }
-
-    private void printReceipt() {
-        System.out.println("\nReceipt:");
-        System.out.println("Customer: " + customer.getName() + ", Email: " + customer.getEmail() + ", Phone: "
-                + customer.getPhone());
-        System.out
-                .println("Showtime: ID: " + selectedShowtime.getShowtimeId() + ", Time: " + selectedShowtime.getTime());
-        System.out.println("Movie: " + selectedMovie.getTitle());
-        System.out.println("Seat: " + selectedTicket.getSeatNumber() + ", Type: " + selectedTicket.getSeatType()
-                + ", Pricing: " + selectedTicket.getAgePricing());
-
-        double totalCost = 0;
-        System.out.println("\nSelected Food and Drinks:");
-        for (FoodAndDrink item : selectedItems) {
-            System.out.printf("%-10s - $%.2f%n", item.getName(), item.getPrice());
-            totalCost += item.getPrice();
-        }
-
-        totalCost = totalCost + selectedTicket.getPrice();
-
-        System.out.printf("%nTotal Cost: $%.2f%n", totalCost);
-        System.out.println("----------------------------------------------");
-        System.out.println("----------------------------------------------");
     }
 
     private String selectTransactionType() {
