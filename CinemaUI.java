@@ -227,8 +227,10 @@ public class CinemaUI {
         }
 
         // Check if the seat number is valid
-        if (isSeatAvailable(seatNumber, seatType.name())) {
-
+        if (selectedShowtime.isSeatAvailable(Integer.parseInt(seatNumber))) { 
+            // Reserves seat
+            selectedShowtime.reserveSeat(Integer.parseInt(seatNumber)); // Reserve the seat
+            
             // Create the ticket
             selectedTicket = new Ticket(seatType.name(), "Adult", Integer.parseInt(seatNumber));
 
@@ -245,19 +247,6 @@ public class CinemaUI {
             System.out.println("Invalid or unavailable seat. Please try again.");
             showSeatAvailability(seatType); // Retry seat selection
         }
-    }
-
-    /**
-     * Checks if a seat is available based on the seat number and type
-     * 
-     * @param seatNumber The seat number to check
-     * @param seatType   The type of seat (Regular, Premium, VIP)
-     * @return True if the seat is available, false otherwise
-     */
-    private boolean isSeatAvailable(String seatNumber, String seatType) {
-        // Implement logic to check seat availability for the selected showtime and seat
-        // type
-        return true;
     }
 
     // DISPLAY SEATING CHART
