@@ -70,6 +70,25 @@ public class Showtime {
         return true;
     }
 
+    // Method to display all reserved seats
+    public void displayReservedSeats() {
+        System.out.print("Reserved Seats: ");
+        boolean hasReservedSeats = false;
+
+        for (int i = 1; i < seatArray.length; i++) {
+            if (!seatArray[i]) { // If the seat is taken
+                System.out.print(i + " ");
+                hasReservedSeats = true;
+            }
+        }
+
+        if (!hasReservedSeats) {
+            System.out.println("None");
+        } else {
+            System.out.println(); // Move to next line after printing reserved seats
+        }
+    }
+
     // Getters and Setters
     public int getShowtimeId() {
         return showtimeId;
