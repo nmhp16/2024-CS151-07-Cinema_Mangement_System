@@ -416,7 +416,7 @@ public class CinemaUI {
         if (this.customer == null) {
             this.customer = new Customer();
         }
-        customer.addCustomer();
+        customer.addCustomer(scanner);
     }
 
     // COMPLETE TRANSACTION
@@ -482,6 +482,7 @@ public class CinemaUI {
 
             if (ticketToCancel != null) {
                 ticketToCancel.cancelReservation(ticketToCancel);
+                transaction.processRefund();
             } else if (ticketId == 0) {
                 condition = true;
                 displayMenu();

@@ -62,9 +62,9 @@ public class Customer extends Person {
     }
 
     // Scanner still in use, no close() statement
-    @SuppressWarnings("resource")
-    public void addCustomer() {
-        Scanner scanner = new Scanner(System.in);
+    public void addCustomer(Scanner scanner) {
+        scanner.nextLine(); // Clear Input Buffer
+
         System.out.println("Enter customer name: ");
         String name = scanner.nextLine();
 
@@ -72,9 +72,10 @@ public class Customer extends Person {
         String email = scanner.nextLine();
 
         System.out.println("Enter customer phone number: ");
+        String phone = scanner.nextLine();
 
         while (this.validatePhone() == false) {
-            String phone = scanner.nextLine();
+            phone = scanner.nextLine();
             this.phone = phone;
 
             if (this.validatePhone() == false) {
