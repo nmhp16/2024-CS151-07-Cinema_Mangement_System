@@ -228,12 +228,8 @@ public class CinemaUI {
 
         // Check if the seat number is valid
         if (isSeatAvailable(seatNumber, seatType.name())) {
-            // Generate Ticket ID
-            Ticket ticket = new Ticket();
-            int ticketId = ticket.generateTicketId();
-
             // Create the ticket
-            selectedTicket = new Ticket(ticketId, seatType.name(), "Adult", Integer.parseInt(seatNumber));
+            selectedTicket = new Ticket(seatType.name(), "Adult", Integer.parseInt(seatNumber));
 
             // Now apply the age pricing (this will update the price of the ticket)
             String agePricing = selectAgePricing(seatType);
@@ -298,13 +294,6 @@ public class CinemaUI {
                 System.out.println(); // New line after every 5 seats
             }
         }
-
-        // Uncomment and implement this method if you need to check if a seat is
-        // reserved
-        // private boolean isSeatReserved(int row) {
-        // // Implement logic to check if the seat is reserved
-        // return false;
-        // }
     }
 
     // SELECT AGE PRICING
@@ -321,11 +310,11 @@ public class CinemaUI {
         switch (choice) {
             case 2:
                 ageCategory = "Child";
-                finalPrice = applyDiscount(seatType.getPrice(), 20); // 20% discount for children
+                finalPrice = selectedTicket.applyDiscount(seatType.getPrice(), 20); // 20% discount for children
                 break;
             case 3:
                 ageCategory = "Senior";
-                finalPrice = applyDiscount(seatType.getPrice(), 20); // 20% discount for seniors
+                finalPrice = selectedTicket.applyDiscount(seatType.getPrice(), 20); // 20% discount for seniors
                 break;
             default:
                 ageCategory = "Adult";
@@ -339,11 +328,6 @@ public class CinemaUI {
         System.out.println("----------------------------------------------");
         System.out.println("----------------------------------------------");
         return ageCategory;
-    }
-
-    // APPLY DISCOUNT
-    private double applyDiscount(double price, int discountPercentage) {
-        return price - (price * discountPercentage / 100.0);
     }
 
     // SELECT FOOD AND

@@ -7,6 +7,7 @@ public class Transaction implements Billable {
     private Customer customer;
     private Movie movie;
     private Showtime showtime;
+    private String cardNumber;
     private List<FoodAndDrink> selectedItems;
 
     // Constructor
@@ -48,13 +49,11 @@ public class Transaction implements Billable {
         System.out.println("Showtime: ID: " + showtime.getShowtimeId() + ", Time: " + showtime.getTime());
         // Print movie and ticket details
         System.out.println("Movie: " + movie.getTitle());
-        System.out.println("Seat: " + ticket.getSeatNumber() + ", Type: " + ticket.getSeatType() + ", Pricing: "
-                + ticket.getAgePricing());
-        System.out.println("\nTicket price: " + "$" + ticket.getPrice());
+        ticket.getSummary();
 
         // Print selected food and drinks
         double totalCost = 0;
-        System.out.println("\nSelected Food and Drinks:");
+        System.out.println("\nYou selected " + getTotalItems() + " items:");
         for (FoodAndDrink item : selectedItems) {
             System.out.printf("%-10s - $%.2f%n", item.getName(), item.getPrice());
             totalCost += item.getPrice();
@@ -73,14 +72,32 @@ public class Transaction implements Billable {
         System.out.println("Transaction types: ID: 1, Card; ID: 2, Cash");
     }
 
+    public int getTotalItems() {
+        return selectedItems.size();
+    }
+
     public void selectTransactionType(String type) {
         this.transactionType = type;
         System.out.println("Selected transaction type: " + type);
     }
 
-    public void inputTransactionInfo() {
+    public void inputTransactionInfo(int cardNumber) {
         // Input relevant transaction information
-        System.out.println("Inputting transaction information for type: " + transactionType);
+        System.out.println("Processing your transaction information for type: " + transactionType);
+        validateCard();
+        if (holdStatus == true) {
+            System.out.println("Please enter your card info again: ");
+        } else {
+            System.out.println("Account number: " + cardNumber + " processed successfully.");
+        }
+    }
+
+    public void validateCard() {
+        if (!cardNumber.matches("\\d{10}")) {
+            addHoldStatus();
+        } else {
+            holdStatus = false;
+        }
     }
 
     public void remindCashTransaction() {
@@ -124,6 +141,14 @@ public class Transaction implements Billable {
 
     public void setTicket(Ticket ticket) {
         this.ticket = ticket;
+    }
+
+    public String getCard() {
+        return cardNumber;
+    }
+
+    public void setCard(String cardNumber) {
+        this.cardNumber = cardNumber;
     }
 
     public Showtime getShowtime() {
