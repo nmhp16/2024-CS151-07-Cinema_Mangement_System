@@ -228,7 +228,6 @@ public class CinemaUI {
 
         // Check if the seat number is valid
         if (selectedShowtime.selectSeat(seatNumber, seatType.name())) {
-
             // Create the ticket
             selectedTicket = new Ticket(seatType.name(), "Adult", seatNumber);
 
