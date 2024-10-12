@@ -247,8 +247,7 @@ public class CinemaUI {
     // DISPLAY SEATING CHART
     private void displaySeatingChart(String seatType) {
         // Display seating chart based on seat type
-        System.out.println("Seating Chart:");
-
+        selectedShowtime.displayReservedSeats();
         System.out.println("Seating Chart for " + seatType + " seats:");
 
         int startSeatNumber;
