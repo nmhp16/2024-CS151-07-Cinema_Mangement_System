@@ -18,7 +18,7 @@ public class Showtime {
         return seatArray[seatNumber];
     }
 
-    public int isSeatAvailable() {
+    public int getAvailableSeats() {
         int count = 30;
 
         for (int i = 1; i < 31; i++) {
@@ -27,16 +27,6 @@ public class Showtime {
             }
         }
         return count;
-    }
-
-    public int getAvailableSeats() {
-        int result = 0;
-        for (Map.Entry<Integer, Boolean> curSeat : this.seatMap.entrySet()) {
-            if (curSeat.getValue() == true) {
-                result += 1;
-            }
-        }
-        return result;
     }
 
     // Initialize seat availability for this showtime

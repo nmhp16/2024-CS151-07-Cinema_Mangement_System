@@ -47,7 +47,7 @@ public class Movie {
     public void checkSeatOccupancy() {
         for (Showtime showtime : showtimes) {
             System.out.println(
-                    "Showtime ID: " + showtime.getShowtimeId() + ", Available Seats: " + showtime.isSeatAvailable());
+                    "Showtime ID: " + showtime.getShowtimeId() + ", Available Seats: " + showtime.getAvailableSeats());
         }
     }
 
