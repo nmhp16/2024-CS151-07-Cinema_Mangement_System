@@ -59,6 +59,15 @@ public class Movie {
         }
     }
 
+    public boolean isValidShowtime(int showtimeId) {
+        for (Showtime showtime : showtimes) {
+            if (showtime.getShowtimeId() == showtimeId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // Getters and Setters
     public int getMovieId() {
         return movieId;

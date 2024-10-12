@@ -31,6 +31,8 @@ public class Transaction implements Billable {
         System.out.println("Customer: " + customer.getName() + ", Email: " + customer.getEmail() + ", Phone: "
                 + customer.getPhone());
         // Other receipt details
+        inputTransactionInfo();
+        addHoldStatus();
     }
 
     @Override

@@ -33,15 +33,27 @@ public class Cinema {
     }
 
     public Theater selectTheater(int theaterId) throws TheaterNotFoundException {
+
         for (Theater theater : theaters) {
             if (theater.getTheaterId() == theaterId) {
                 return theater;
             }
         }
+
         throw new TheaterNotFoundException("Theater not found with ID: " + theaterId);
     }
 
     public int getTotalTheaters() {
         return theaters.size();
     }
+
+    public boolean isValidTheater(int theaterId) {
+        for (Theater theater : theaters) {
+            if (theater.getTheaterId() == theaterId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
