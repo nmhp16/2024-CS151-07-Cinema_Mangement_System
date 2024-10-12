@@ -1,5 +1,8 @@
+import java.util.List;
+
 public interface Billable {
-    void processTransaction(Transaction transaction);
-    void printReceipt(Transaction transaction);
+    void processTransaction(Customer customer, Movie movie, Showtime showtime, Ticket ticket,
+            List<FoodAndDrink> selectedItems);
+
     void printReceipt();
 }

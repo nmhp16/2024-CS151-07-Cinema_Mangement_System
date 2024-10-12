@@ -228,12 +228,9 @@ public class CinemaUI {
 
         // Check if the seat number is valid
         if (isSeatAvailable(seatNumber, seatType.name())) {
-            // Generate Ticket ID
-            Ticket ticket = new Ticket();
-            int ticketId = ticket.generateTicketId();
 
             // Create the ticket
-            selectedTicket = new Ticket(ticketId, seatType.name(), "Adult", Integer.parseInt(seatNumber));
+            selectedTicket = new Ticket(seatType.name(), "Adult", Integer.parseInt(seatNumber));
 
             // Now apply the age pricing (this will update the price of the ticket)
             String agePricing = selectAgePricing(seatType);
@@ -298,13 +295,6 @@ public class CinemaUI {
                 System.out.println(); // New line after every 5 seats
             }
         }
-
-        // Uncomment and implement this method if you need to check if a seat is
-        // reserved
-        // private boolean isSeatReserved(int row) {
-        // // Implement logic to check if the seat is reserved
-        // return false;
-        // }
     }
 
     // SELECT AGE PRICING
@@ -321,11 +311,11 @@ public class CinemaUI {
         switch (choice) {
             case 2:
                 ageCategory = "Child";
-                finalPrice = applyDiscount(seatType.getPrice(), 20); // 20% discount for children
+                finalPrice = selectedTicket.applyDiscount(seatType.getPrice(), 20); // 20% discount for children
                 break;
             case 3:
                 ageCategory = "Senior";
-                finalPrice = applyDiscount(seatType.getPrice(), 20); // 20% discount for seniors
+                finalPrice = selectedTicket.applyDiscount(seatType.getPrice(), 20); // 20% discount for seniors
                 break;
             default:
                 ageCategory = "Adult";
@@ -339,11 +329,6 @@ public class CinemaUI {
         System.out.println("----------------------------------------------");
         System.out.println("----------------------------------------------");
         return ageCategory;
-    }
-
-    // APPLY DISCOUNT
-    private double applyDiscount(double price, int discountPercentage) {
-        return price - (price * discountPercentage / 100.0);
     }
 
     // SELECT FOOD AND
@@ -424,24 +409,28 @@ public class CinemaUI {
 
     // COMPLETE TRANSACTION
     private void completeTransaction() {
-
-        System.out.println("\nSelection complete. Show receipt:");
-
-        System.out.println("----------------------------------------------");
-        System.out.println("----------------------------------------------");
-
-        // Show receipt details before finalizing transaction
-        printReceipt();
+        String cardNumber;
+        boolean isValid = false;
 
         // Finalize transaction
         transaction.setTransactionType(selectTransactionType());
 
         if (transaction.getTransactionType() == "Cash") {
             transaction.remindCashTransaction();
+        } else if (transaction.getTransactionType() == "Credit Card") {
+            System.out.println("Please enter your card number: ");
+            while (isValid == false) {
+                cardNumber = scanner.next();
+                isValid = transaction.inputTransactionInfo(cardNumber);
+            }
         }
 
-        transaction.setTicket(selectedTicket);
-        transaction.setCustomer(customer);
+        System.out.println("\nSelection complete. Show receipt:");
+
+        System.out.println("----------------------------------------------");
+        System.out.println("----------------------------------------------");
+
+        transaction.processTransaction(customer, selectedMovie, selectedShowtime, selectedTicket, selectedItems);
         transaction.printReceipt();
 
         // Optionally clear selected items
@@ -452,30 +441,6 @@ public class CinemaUI {
         scanner.nextLine(); // Consume newline left-over
         scanner.nextLine(); // Wait for Enter key
         displayMenu();
-    }
-
-    private void printReceipt() {
-        System.out.println("\nReceipt:");
-        System.out.println("Customer: " + customer.getName() + ", Email: " + customer.getEmail() + ", Phone: "
-                + customer.getPhone());
-        System.out
-                .println("Showtime: ID: " + selectedShowtime.getShowtimeId() + ", Time: " + selectedShowtime.getTime());
-        System.out.println("Movie: " + selectedMovie.getTitle());
-        System.out.println("Seat: " + selectedTicket.getSeatNumber() + ", Type: " + selectedTicket.getSeatType()
-                + ", Pricing: " + selectedTicket.getAgePricing());
-
-        double totalCost = 0;
-        System.out.println("\nSelected Food and Drinks:");
-        for (FoodAndDrink item : selectedItems) {
-            System.out.printf("%-10s - $%.2f%n", item.getName(), item.getPrice());
-            totalCost += item.getPrice();
-        }
-
-        totalCost = totalCost + selectedTicket.getPrice();
-
-        System.out.printf("%nTotal Cost: $%.2f%n", totalCost);
-        System.out.println("----------------------------------------------");
-        System.out.println("----------------------------------------------");
     }
 
     private String selectTransactionType() {
