@@ -217,20 +217,20 @@ public class CinemaUI {
         displaySeatingChart(seatType.name()); // Show seating chart for the selected seat type
 
         System.out.println("\nSelect a seat by entering seat number or type '0' to go back:");
-        String seatNumber = scanner.next();
+        int seatNumber = scanner.nextInt();
         System.out.println("----------------------------------------------");
         System.out.println("----------------------------------------------");
 
-        if (seatNumber.equals("0")) {
+        if (seatNumber == 0) {
             selectSeatType(); // Go back to select seat
             return;
         }
 
         // Check if the seat number is valid
-        if (isSeatAvailable(seatNumber, seatType.name())) {
+        if (selectedShowtime.selectSeat(seatNumber, seatType.name())) {
 
             // Create the ticket
-            selectedTicket = new Ticket(seatType.name(), "Adult", Integer.parseInt(seatNumber));
+            selectedTicket = new Ticket(seatType.name(), "Adult", seatNumber);
 
             // Now apply the age pricing (this will update the price of the ticket)
             String agePricing = selectAgePricing(seatType);
@@ -239,25 +239,10 @@ public class CinemaUI {
             selectedTicket.setAgePricing(agePricing); // Update ticket's age pricing
 
             selectFoodAndDrinks(); // Proceed to food selection
-        }
-
-        else {
+        } else {
             System.out.println("Invalid or unavailable seat. Please try again.");
             showSeatAvailability(seatType); // Retry seat selection
         }
-    }
-
-    /**
-     * Checks if a seat is available based on the seat number and type
-     * 
-     * @param seatNumber The seat number to check
-     * @param seatType   The type of seat (Regular, Premium, VIP)
-     * @return True if the seat is available, false otherwise
-     */
-    private boolean isSeatAvailable(String seatNumber, String seatType) {
-        // Implement logic to check seat availability for the selected showtime and seat
-        // type
-        return true;
     }
 
     // DISPLAY SEATING CHART
@@ -286,7 +271,11 @@ public class CinemaUI {
         for (int seatNumber = startSeatNumber; seatNumber <= endSeatNumber; seatNumber++) {
             // Create the seat label without checking if it is reserved
             String seatLabel = String.format("%2d", seatNumber);
-
+            if (selectedShowtime.isSeatTaken(seatNumber, seatType)) {
+                seatLabel = String.format("%2s", "X"); // Mark as taken
+            } else {
+                seatLabel = String.format("%2d", seatNumber);
+            }
             // Print the seat label
             System.out.print(seatLabel + " ");
 
@@ -303,7 +292,7 @@ public class CinemaUI {
         System.out.println("1. Adult");
         System.out.println("2. Child (20% discount)");
         System.out.println("3. Senior (20% discount)");
-        
+
         int choice = 0;
 
         while (choice < 1 || choice > 3) {
@@ -312,8 +301,7 @@ public class CinemaUI {
                 if (choice < 1 || choice > 3) {
                     System.out.println("Please choose 1 for Adult, 2 for Child, or 3 for Senior.");
                 }
-            }
-            else {
+            } else {
                 System.out.println("Invalid input. Please choose 1 for Adult, 2 for Child, or 3 for Senior.");
                 scanner.next();
             }

@@ -14,10 +14,6 @@ public class Showtime {
     }
 
     // Method
-    public boolean isSeatAvailable(int seatNumber) {
-        return seatArray[seatNumber];
-    }
-
     public int getAvailableSeats() {
         int count = 30;
 
@@ -29,6 +25,14 @@ public class Showtime {
         return count;
     }
 
+    public boolean isSeatTaken(int seatNumber, String seatType) {
+        if (seatArray[seatNumber] == false) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     // Initialize seat availability for this showtime
     private void initializeSeatAvailability() {
         for (int i = 1; i < seatArray.length; i++) { // This is now actual number, fix according to CinemaUI
@@ -36,15 +40,34 @@ public class Showtime {
         }
     }
 
-    // Method to reserve a seat
-    public void reserveSeat(int seatNumber) {
-        if (isSeatAvailable(seatNumber)) {
-            seatArray[seatNumber] = false; // Mark the seat as reserved
-            System.out.println("Seat " + seatNumber + " has been successfully reserved.");
-        } else {
-            System.out.println("Seat " + seatNumber + " is already reserved or invalid.");
+    // Method to check if a seat number is valid for the selected seat type
+    public boolean selectSeat(int seatNumber, String category) {
+        if (seatNumber < 1 || seatNumber > 30) {
+            System.out.println("Invalid seat number. Please select a seat between 1 and 30");
+            return false;
         }
 
+        // Check for category-based seat selection
+        if (category.equalsIgnoreCase("VIP") && (seatNumber < 1 || seatNumber > 10)) {
+            System.out.println("VIP seats can only be selected from 1 to 10.");
+            return false;
+        } else if (category.equalsIgnoreCase("Premium") && (seatNumber < 11 || seatNumber > 20)) {
+            System.out.println("Premium seats can only be selected from 11 to 20.");
+            return false;
+        } else if (category.equalsIgnoreCase("Regular") && (seatNumber < 21 || seatNumber > 30)) {
+            System.out.println("Regular seats can only be selected from 21 to 30.");
+            return false;
+        }
+        // Check if the seat is already taken
+        if (seatArray[seatNumber] == false) {
+            System.out.println("Seat " + seatNumber + " is already taken.");
+            return false;
+        }
+
+        // Mark the seat as taken
+        seatArray[seatNumber] = false;
+        System.out.println("Seat " + seatNumber + " has been successfully reserved.");
+        return true;
     }
 
     // Getters and Setters
