@@ -55,9 +55,17 @@ public class Movie {
     public void checkSeatOccupancy() {
         for (Showtime showtime : showtimes) {
             System.out.println(
-                    "Showtime ID: " + showtime.getShowtimeId() + ", Available Seats: " + showtime.getAvailableSeats());
+                    "Showtime ID: " + showtime.getShowtimeId() + ", Available Seats: " + showtime.isSeatAvailable());
         }
-        ;
+    }
+
+    public boolean isValidShowtime(int showtimeId) {
+        for (Showtime showtime : showtimes) {
+            if (showtime.getShowtimeId() == showtimeId) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // Getters and Setters

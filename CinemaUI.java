@@ -16,18 +16,6 @@ public class CinemaUI {
     private Transaction transaction = new Transaction();
     private Customer customer;
 
-    private Stack<Runnable> pageStack = new Stack<>(); // Tracks pages by pushing to a stack after every display
-                                                       // pops the page to go back when 0 is entered
-
-    private void previousPage() {
-        if (pageStack.isEmpty()) {
-            Runnable goBack = pageStack.pop();
-            goBack.run();
-        } else {
-            System.out.println("No previous page to go back to.");
-        }
-    }
-
     /**
      * Constructor that initializes the CinemaUI without a Cinema
      */
@@ -63,15 +51,19 @@ public class CinemaUI {
         System.out.println("----------------------------------------------");
         System.out.println("----------------------------------------------");
 
-        // Push the displayMenu onto the pageStack
-        pageStack.push(this::displayMenu);
-
         switch (chooseOption) {
             case 1:
                 showTheaters();
                 break;
             default:
-                break;
+                System.out.println("Invalid option, Please select again: ");
+                chooseOption = scanner.nextInt();
+
+                while (chooseOption != 1) {
+                    System.out.println("Invalid option, Please select again: ");
+                    chooseOption = scanner.nextInt();
+                }
+                showTheaters();
         }
     }
 
@@ -79,8 +71,6 @@ public class CinemaUI {
      * Display the list of theaters and allows user to select one
      */
     private void showTheaters() {
-        // Push the showTheaters onto the pageStack
-        pageStack.push(this::showTheaters);
 
         // Show total of theater within cinema
         System.out.println("THERE ARE " + cinema.getTotalTheaters() + " THEATERS IN OUR SYSTEM:");
@@ -99,6 +89,10 @@ public class CinemaUI {
 
         try {
             // Select a theater
+            while (cinema.isValidTheater(theaterId) == false) {
+                System.out.println("Invalid option, Please select again: ");
+                theaterId = scanner.nextInt();
+            }
             selectedTheater = cinema.selectTheater(theaterId);
             // list the genres by the if statements
             showMovies();
@@ -111,8 +105,6 @@ public class CinemaUI {
      * Displays list of movies for selected theater and allows user to select one
      */
     private void showMovies() {
-        // Push the showMovies onto the pageStack
-        pageStack.push(this::showMovies);
 
         // Get movies from the selected theater
         selectedTheater.listMovies();
@@ -127,6 +119,10 @@ public class CinemaUI {
         }
 
         try {
+            while (selectedTheater.isValidMovie(movieId) == false) {
+                System.out.println("Invalid option, Please select again: ");
+                movieId = scanner.nextInt();
+            }
             selectedMovie = selectedTheater.selectMovie(movieId); // Select a movie
             showShowtimes();
         } catch (MovieNotFoundException e) {
@@ -138,13 +134,12 @@ public class CinemaUI {
      * Displays the showtimes for selected movie and allow user to select one
      */
     private void showShowtimes() {
-        // Push the showShowtimes onto the pageStack
-        pageStack.push(this::showShowtimes);
 
         // List showtimes for the selected movie
         System.out.println("----------------------------------------------");
         System.out.println("----------------------------------------------");
         selectedMovie.listShowtimes();
+        selectedMovie.checkSeatOccupancy();
         System.out.println("\nSelect a showtime by ID or type '0' to go back:");
 
         int showtimeId = scanner.nextInt();
@@ -158,6 +153,10 @@ public class CinemaUI {
         }
 
         try {
+            while (selectedMovie.isValidShowtime(showtimeId) == false) {
+                System.out.println("Invalid option, Please select again: ");
+                showtimeId = scanner.nextInt();
+            }
             selectedShowtime = selectedMovie.selectShowtime(showtimeId); // Select a showtime
             selectSeatType(); // Ask for seat type first
         } catch (ShowtimeNotFoundException e) {
@@ -180,26 +179,30 @@ public class CinemaUI {
         System.out.println("----------------------------------------------");
         System.out.println("----------------------------------------------");
 
-        SeatType seatType;
-        switch (choice) {
-            case 1:
-                seatType = SeatType.REGULAR;
-                break;
-            case 2:
-                seatType = SeatType.PREMIUM;
-                break;
-            case 3:
-                seatType = SeatType.VIP;
-                break;
-            default:
-                if (choice == 0) {
+        SeatType seatType = null;
+
+        while (seatType == null) {
+            switch (choice) {
+                case 1:
+                    seatType = SeatType.REGULAR;
+                    break;
+                case 2:
+                    seatType = SeatType.PREMIUM;
+                    break;
+                case 3:
+                    seatType = SeatType.VIP;
+                    break;
+                case 0:
                     seatType = null;
                     showShowtimes();
-                } else {
-                    System.out.println("\nPlease select a correct option!");
+                    break;
+                default:
+                    System.out.println("Invalid option, Please select again: ");
+                    choice = scanner.nextInt();
                     seatType = null;
-                    selectSeatType();
-                }
+                    break;
+
+            }
         }
 
         showSeatAvailability(seatType); // Show seat availability based on the selected seat type
@@ -220,7 +223,7 @@ public class CinemaUI {
         System.out.println("----------------------------------------------");
 
         if (seatNumber.equals("0")) {
-            showShowtimes(); // Go back to showtimes stage
+            selectSeatType(); // Go back to select seat
             return;
         }
 
@@ -265,46 +268,44 @@ public class CinemaUI {
     private void displaySeatingChart(String seatType) {
         // Display seating chart based on seat type
         System.out.println("Seating Chart:");
-        int cols = 10;
-        char startRow;
-        char endRow;
 
-        // Determine the start and end rows based on seat type
-        if (seatType.equals("VIP")) {
-            startRow = 'H';
-            endRow = 'J';
-        }
-        // If seat type is Premium
-        else if (seatType.equals("PREMIUM")) {
-            startRow = 'D';
-            endRow = 'G';
-        }
+        System.out.println("Seating Chart for " + seatType + " seats:");
 
-        else { // Default to Regular seat type
-            startRow = 'A';
-            endRow = 'C';
+        int startSeatNumber;
+        int endSeatNumber;
+
+        // Determine the seat number range based on seat type
+        if (seatType.equalsIgnoreCase("VIP")) { // Use equalsIgnoreCase for case-insensitive comparison
+            startSeatNumber = 1;
+            endSeatNumber = 10;
+        } else if (seatType.equalsIgnoreCase("PREMIUM")) { // Use equalsIgnoreCase
+            startSeatNumber = 11;
+            endSeatNumber = 20;
+        } else { // Default to Regular seat type
+            startSeatNumber = 21;
+            endSeatNumber = 30;
         }
 
-        for (char rowLetter = startRow; rowLetter <= endRow; rowLetter++) {
-            System.out.printf("%-2c ", rowLetter); // Row label
-            for (int col = 1; col <= cols; col++) {
-                boolean isReserved = isSeatReserved(rowLetter, col);
-                String seatLabel;
-                if (isReserved) {
-                    seatLabel = " x ";
-                } else {
-                    seatLabel = String.format("%2d", (rowLetter - startRow) * cols + col);
-                }
-                System.out.print(seatLabel + " ");
+        // Loop through the seat numbers and print them
+        for (int seatNumber = startSeatNumber; seatNumber <= endSeatNumber; seatNumber++) {
+            // Create the seat label without checking if it is reserved
+            String seatLabel = String.format("%2d", seatNumber);
+
+            // Print the seat label
+            System.out.print(seatLabel + " ");
+
+            // New line after every 5 seats for better readability
+            if ((seatNumber - startSeatNumber + 1) % 5 == 0) {
+                System.out.println(); // New line after every 5 seats
             }
-            System.out.println(); // New line
         }
-    }
 
-    // CHECK IF SEAT IS RESERVED
-    private boolean isSeatReserved(char row, int col) {
-        // Implement logic to check if the seat is reserved
-        return false;
+        // Uncomment and implement this method if you need to check if a seat is
+        // reserved
+        // private boolean isSeatReserved(int row) {
+        // // Implement logic to check if the seat is reserved
+        // return false;
+        // }
     }
 
     // SELECT AGE PRICING
@@ -424,8 +425,6 @@ public class CinemaUI {
 
     // COMPLETE TRANSACTION
     private void completeTransaction() {
-        // Push the completeTransaction method onto the pageStack
-        pageStack.push(this::showTheaters);
 
         System.out.println("\nSelection complete. Show receipt:");
 
