@@ -89,6 +89,10 @@ public class CinemaUI {
 
         try {
             // Select a theater
+            while (cinema.isValidTheater(theaterId) == false) {
+                System.out.println("Invalid option, Please select again: ");
+                theaterId = scanner.nextInt();
+            }
             selectedTheater = cinema.selectTheater(theaterId);
             // list the genres by the if statements
             showMovies();
@@ -115,6 +119,10 @@ public class CinemaUI {
         }
 
         try {
+            while (selectedTheater.isValidMovie(movieId) == false) {
+                System.out.println("Invalid option, Please select again: ");
+                movieId = scanner.nextInt();
+            }
             selectedMovie = selectedTheater.selectMovie(movieId); // Select a movie
             showShowtimes();
         } catch (MovieNotFoundException e) {
@@ -145,6 +153,10 @@ public class CinemaUI {
         }
 
         try {
+            while (selectedMovie.isValidShowtime(showtimeId) == false) {
+                System.out.println("Invalid option, Please select again: ");
+                showtimeId = scanner.nextInt();
+            }
             selectedShowtime = selectedMovie.selectShowtime(showtimeId); // Select a showtime
             selectSeatType(); // Ask for seat type first
         } catch (ShowtimeNotFoundException e) {
@@ -167,26 +179,30 @@ public class CinemaUI {
         System.out.println("----------------------------------------------");
         System.out.println("----------------------------------------------");
 
-        SeatType seatType;
-        switch (choice) {
-            case 1:
-                seatType = SeatType.REGULAR;
-                break;
-            case 2:
-                seatType = SeatType.PREMIUM;
-                break;
-            case 3:
-                seatType = SeatType.VIP;
-                break;
-            default:
-                if (choice == 0) {
+        SeatType seatType = null;
+
+        while (seatType == null) {
+            switch (choice) {
+                case 1:
+                    seatType = SeatType.REGULAR;
+                    break;
+                case 2:
+                    seatType = SeatType.PREMIUM;
+                    break;
+                case 3:
+                    seatType = SeatType.VIP;
+                    break;
+                case 0:
                     seatType = null;
                     showShowtimes();
-                } else {
-                    System.out.println("\nPlease select a correct option!");
+                    break;
+                default:
+                    System.out.println("Invalid option, Please select again: ");
+                    choice = scanner.nextInt();
                     seatType = null;
-                    selectSeatType();
-                }
+                    break;
+
+            }
         }
 
         showSeatAvailability(seatType); // Show seat availability based on the selected seat type

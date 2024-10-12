@@ -81,6 +81,15 @@ public class Theater {
         }
     }
 
+    public boolean isValidMovie(int movieId) {
+        for (Movie movie : movies) {
+            if (movie.getMovieId() == movieId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // Getter and Setter Methods
     public int getTheaterId() {
         return theaterId;
