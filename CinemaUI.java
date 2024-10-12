@@ -139,7 +139,7 @@ public class CinemaUI {
         System.out.println("----------------------------------------------");
         System.out.println("----------------------------------------------");
         selectedMovie.listShowtimes();
-        selectedMovie.checkSeatOccupancy();
+        selectedMovie.checkSeatOccupancy(selectedShowtime);
         System.out.println("\nSelect a showtime by ID or type '0' to go back:");
 
         int showtimeId = scanner.nextInt();

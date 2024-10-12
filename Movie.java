@@ -30,8 +30,11 @@ public class Movie {
 
     public void listShowtimes() {
         System.out.println("\nShowtimes for " + this.title + ":");
+        listGenres();
         for (Showtime showtime : showtimes) {
-            System.out.println("Showtime ID: " + showtime.getShowtimeId() + ", Time: " + showtime.getTime());
+            checkSeatOccupancy(showtime);
+            System.out.println(
+                    "Showtime ID: " + showtime.getShowtimeId() + ", Time: " + showtime.getTime());
         }
     }
 
@@ -44,11 +47,8 @@ public class Movie {
         throw new ShowtimeNotFoundException("Showtime not found with ID: " + showtimeId);
     }
 
-    public void checkSeatOccupancy() {
-        for (Showtime showtime : showtimes) {
-            System.out.println(
-                    "Showtime ID: " + showtime.getShowtimeId() + ", Available Seats: " + showtime.getAvailableSeats());
-        }
+    public void checkSeatOccupancy(Showtime showtime) {
+        System.out.println("Available Seats: " + showtime.getAvailableSeats());
     }
 
     public boolean isValidShowtime(int showtimeId) {
