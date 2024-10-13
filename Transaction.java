@@ -1,5 +1,6 @@
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Transaction implements Billable {
@@ -16,13 +17,14 @@ public class Transaction implements Billable {
     // Constructor
     public Transaction() {
         this.transactionTime = LocalDateTime.now();
+        this.selectedItems = new ArrayList<>();
     }
 
     public Transaction(Movie movie, Showtime showtime, Ticket ticket, Customer customer,
             List<FoodAndDrink> selectedItems) {
         this(movie, showtime, ticket);
         this.customer = customer;
-        this.selectedItems = selectedItems;
+        this.selectedItems = new ArrayList<>(selectedItems);
     }
 
     public Transaction(Movie movie, Showtime showtime, Ticket ticket) {
@@ -40,7 +42,15 @@ public class Transaction implements Billable {
         this.movie = movie;
         this.showtime = showtime;
         this.ticket = ticket;
-        this.selectedItems = selectedItems;
+        this.selectedItems = new ArrayList<>(selectedItems);
+
+        System.out.println("Transaction processed successfuly.");
+
+        if (transactionType == "Cash") {
+            remindCashTransaction();
+        } else {
+            System.out.println("Card: " + cardNumber);
+        }
     }
 
     @Override
@@ -119,7 +129,7 @@ public class Transaction implements Billable {
             if (transactionType == "Credit Card") {
                 System.out.println("Refunding transaction for ticket " + ticket.getTicketId());
             } else {
-                System.out.println("Cannot refund. Transaction not completed.");
+                System.out.println("Cannot refund. Cash transaction was not collected.");
             }
         }
     }

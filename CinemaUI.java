@@ -15,6 +15,8 @@ public class CinemaUI {
     private List<FoodAndDrink> selectedItems = new ArrayList<>();
     private Transaction transaction = new Transaction();
     private Customer customer;
+    // Map to store customer, this keep multiple customer with same phone number
+    private Map<String, List<Customer>> customerMap = new HashMap<>();
 
     /**
      * Constructor that initializes the CinemaUI without a Cinema
@@ -47,6 +49,8 @@ public class CinemaUI {
         System.out.println("\nWELCOME TO ASAN CINEMA!!");
         System.out.println("\n1: Reserve a ticket");
         System.out.println("2: Cancel a reservation");
+        System.out.println("3: View Customer Information");
+        System.out.println("4: Exit");
         System.out.println("\nPlease select the options:");
         int chooseOption = scanner.nextInt();
         System.out.println("----------------------------------------------");
@@ -58,6 +62,12 @@ public class CinemaUI {
                 break;
             case 2:
                 cancelTicketReservation();
+                break;
+            case 3:
+                viewCustomerInfo();
+                break;
+            case 4:
+                System.out.println("Exiting...Thanks for visiting ASAN Cinema!");
                 break;
             default:
                 System.out.println("Invalid option, Please select again: ");
@@ -413,10 +423,16 @@ public class CinemaUI {
 
     // COLLECT CUSTOMER INFO
     private void collectCustomerInfo() {
-        if (this.customer == null) {
-            this.customer = new Customer();
-        }
+        System.out.println("Please enter customer information.");
+
+        // Create a new customer instance
+        Customer customer = new Customer();
+
+        // Add customer using the scanner input from Customer class
         customer.addCustomer(scanner);
+
+        this.customer = customer;
+        System.out.println("Customer information recorded succesfully.");
     }
 
     // COMPLETE TRANSACTION
@@ -429,10 +445,13 @@ public class CinemaUI {
 
         if (transaction.getTransactionType() == "Cash") {
             transaction.remindCashTransaction();
+
         } else if (transaction.getTransactionType() == "Credit Card") {
             System.out.println("Please enter your card number: ");
+
             while (isValid == false) {
                 cardNumber = scanner.next();
+
                 isValid = transaction.inputTransactionInfo(cardNumber);
             }
         }
@@ -443,6 +462,12 @@ public class CinemaUI {
         System.out.println("----------------------------------------------");
 
         transaction.processTransaction(customer, selectedMovie, selectedShowtime, selectedTicket, selectedItems);
+        customer.addTransaction(transaction);
+
+        // Check if the customer phone exists; if so add to the list
+        customerMap.putIfAbsent(customer.getPhone(), new ArrayList<>());
+        customerMap.get(customer.getPhone()).add(customer);
+
         transaction.printReceipt();
 
         // Optionally clear selected items
@@ -483,6 +508,7 @@ public class CinemaUI {
             if (ticketToCancel != null) {
                 ticketToCancel.cancelReservation(ticketToCancel);
                 transaction.processRefund();
+                displayMenu();
             } else if (ticketId == 0) {
                 condition = true;
                 displayMenu();
@@ -491,6 +517,26 @@ public class CinemaUI {
                 System.out.println("Please enter valid ID or '0' to go back:");
             }
 
+        }
+    }
+
+    private void viewCustomerInfo() {
+        scanner.nextLine();
+
+        System.out.println("Please enter customer phone number: ");
+        String phone = scanner.nextLine();
+
+        if (customerMap.get(phone) != null) {
+            System.out.println("\nDisplaying customer info: ");
+
+            for (Customer customer : customerMap.get(phone)) {
+                customer.searchTransactionHistory();
+            }
+
+            displayMenu();
+        } else {
+            System.out.println("No customer information available.");
+            displayMenu();
         }
     }
 
