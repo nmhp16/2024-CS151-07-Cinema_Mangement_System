@@ -1,3 +1,5 @@
+package src;
+
 public enum SeatType {
     REGULAR(10.0), PREMIUM(20.0), VIP(30.0);
 
