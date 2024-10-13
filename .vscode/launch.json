@@ -8,6 +8,13 @@
             "type": "java",
             "name": "Main",
             "request": "launch",
+            "mainClass": "src.Main",
+            "projectName": "test_68482af4"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
             "mainClass": "Main",
             "projectName": "test_8fe62ef0"
         },
@@ -17,6 +24,18 @@
             "request": "launch",
             "mainClass": "Main",
             "projectName": "test_fc3b4ca8"
+        },
+        {
+            "type": "java",
+            "name": "Run JUnit Test",
+            "request": "launch",
+            "mainClass": "org.junit.platform.console.ConsoleLauncher",
+            "args": [
+                "testCases.*"
+            ],
+            "classPaths": [
+                "lib/*"
+            ]
         }
     ]
 }
