@@ -21,7 +21,6 @@ public class Ticket implements Reservable {
         this.seatNumber = seatNumber;
         this.reserved = false;
         this.ticketId = generateTicketId();
-        tickets.add(this);
     }
 
     public Ticket(String seatType, String agePricing, int seatNumber, double price) {
@@ -82,15 +81,17 @@ public class Ticket implements Reservable {
 
     public void reserve() {
         this.reserved = true;
+        tickets.add(this);
     }
 
     public void cancelReservation() {
         this.reserved = false;
+        tickets.remove(this);
     }
 
     public boolean isReserved() {
         for (Ticket ticket : tickets) {
-            if (ticket.getTicketId() == this.ticketId) {
+            if (ticketId == ticket.getTicketId()) {
                 reserved = true;
                 return reserved;
             }
