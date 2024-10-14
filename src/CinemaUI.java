@@ -274,6 +274,7 @@ public class CinemaUI {
         // List showtimes for the selected movie
         System.out.println("----------------------------------------------");
         System.out.println("----------------------------------------------");
+        selectedMovie.isShowtimeSoldOut(); // Check if showtime is sold out
         selectedMovie.listShowtimes();
         System.out.println("\nSelect a showtime by ID or type '0' to go back:");
 
