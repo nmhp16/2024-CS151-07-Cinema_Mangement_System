@@ -26,7 +26,6 @@ public class Movie {
     }
 
     // Implement into CinemaUI or Figure out better methods
-<<<<<<< HEAD:Movie.java
     public static void listGenres() {
 
         // This could be replaced with a dynamic list if genres are managed separately
@@ -37,10 +36,6 @@ public class Movie {
     public void selectGenre(String genre) {
         this.genre = genre;
         System.out.println("Selected genre: " + genre);
-=======
-    public void listGenres() {
-        System.out.println("Genre: " + this.genre);
->>>>>>> dce1abc353637f9236d3e7104f7130c6241a0f2d:src/Movie.java
     }
 
     public void listShowtimes() {
