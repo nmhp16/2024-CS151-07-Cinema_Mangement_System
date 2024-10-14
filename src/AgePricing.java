@@ -1,3 +1,5 @@
+package src;
+
 public enum AgePricing {
     ADULT(1), CHILD(2), SENIOR(3);
 

@@ -1,5 +1,9 @@
+package src;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Theater {
     private int theaterId;
@@ -51,8 +55,10 @@ public class Theater {
 
     public void listMovies() {
         System.out.println("\nMovies in " + this.address + ":");
+        System.out.println();
         for (Movie movie : movies) {
-            System.out.println("Movie ID: " + movie.getMovieId() + ", Title: " + movie.getTitle());
+            System.out.println("Movie ID: " + movie.getMovieId() + ", Title: " + movie.getTitle() + ", Genre: "
+                    + movie.getGenre());
         }
     }
 
@@ -77,8 +83,46 @@ public class Theater {
             return;
         }
         for (Movie movie : movies) {
-            System.out.println("Movie ID: " + movie.getMovieId() + ", Title: " + movie.getTitle());
+            System.out.println("    Movie ID: " + movie.getMovieId() + ", Title: " + movie.getTitle() + ", Genre: "
+                    + movie.getGenre());
         }
+    }
+
+    public void showAllMovieInTheater(String genre) {
+        for (Movie movie : movies) {
+            if (movie.getGenre().equalsIgnoreCase(genre)) {
+                System.out.println("    Movie ID: " + movie.getMovieId() + ", Title: " + movie.getTitle() + ", Genre: "
+                        + movie.getGenre());
+            }
+        }
+    }
+
+    public boolean isValidMovie(int movieId) {
+        for (Movie movie : movies) {
+            if (movie.getMovieId() == movieId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Check if there is Movie with specified Genre
+    public boolean isMovieShowing(String genre) {
+        for (Movie movie : movies) {
+            if (movie.getGenre().equalsIgnoreCase(genre)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Set<String> availableGenresInTheater() {
+        Set<String> genres = new HashSet<>();
+
+        for (Movie movie : movies) {
+            genres.add(movie.getGenre().trim()); // Set will handle duplicates
+        }
+        return genres;
     }
 
     // Getter and Setter Methods

@@ -1,14 +1,15 @@
+package src;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Customer extends Person {
     private String phone;
-    private List<Transaction> transactionHistory;
+    private List<Transaction> transactionHistory = new ArrayList<>();
 
     // Constructor
     public Customer() {
-        this.transactionHistory = new ArrayList<>();
     }
 
     public Customer(String name, String email, String phone) {
@@ -30,7 +31,7 @@ public class Customer extends Person {
     }
 
     // Validate the phone number
-    public boolean validatePhone() {
+    public boolean validatePhone(String phone) {
         return phone != null && phone.matches("\\d{10}");
     }
 
@@ -38,33 +39,50 @@ public class Customer extends Person {
         this.name = newName;
         this.email = newEmail;
         this.phone = newPhone;
+        System.out.println("Profile updated successfully.");
     }
 
-    public List<Transaction> viewTransactionHistory() {
-        return transactionHistory;
+    public void searchTransactionHistory() {
+        displayInfo();
+
+        System.out.println();
+        displayReservedTickets();
+
+        displayTransactionHistory();
     }
 
-    public void purchaseTicket(Movie movie, Showtime showtime, Ticket ticket) {
-        // Implement purchase logic
-        Transaction transaction = new Transaction(movie, showtime, ticket);
-        transactionHistory.add(transaction);
-        ticket.reserve(); // Reserve the ticket
-        System.out.println("Ticket purchased successfully!");
-    }
+    public void displayTransactionHistory() {
+        if (transactionHistory.isEmpty()) {
+            System.out.println("No transaction history available.");
+            return;
+        }
 
-    public void cancelReservation(Ticket ticket) {
-        if (ticket.isReserved()) {
-            ticket.cancelReservation(); // Cancel the reservation
-            System.out.println("Reservation canceled successfully!");
-        } else {
-            System.out.println("No reservation found for this ticket.");
+        System.out.println(transactionHistory.size() + " Transaction History: ");
+        System.out.println("\nCustomer receipt: ");
+        for (Transaction transaction : transactionHistory) {
+            transaction.printReceipt();
         }
     }
 
-    // Scanner still in use, no close() statement
-    @SuppressWarnings("resource")
-    public void addCustomer() {
-        Scanner scanner = new Scanner(System.in);
+    // Method to check reserved tickets
+    public void displayReservedTickets() {
+        for (Transaction transaction : transactionHistory) {
+            Ticket ticket = transaction.getTicket();
+
+            if (ticket.isReserved()) {
+                System.out.println("Reserved Ticket: ");
+                ticket.getSummary();
+            }
+        }
+    }
+
+    public void addTransaction(Transaction transaction) {
+        transactionHistory.add(transaction);
+    }
+
+    public void addCustomer(Scanner scanner) {
+        scanner.nextLine(); // Clear Input Buffer
+
         System.out.println("Enter customer name: ");
         String name = scanner.nextLine();
 
@@ -73,11 +91,13 @@ public class Customer extends Person {
 
         System.out.println("Enter customer phone number: ");
 
-        while (this.validatePhone() == false) {
-            String phone = scanner.nextLine();
-            this.phone = phone;
+        boolean isValid = false;
 
-            if (this.validatePhone() == false) {
+        while (!isValid) {
+            phone = scanner.nextLine();
+            if (validatePhone(phone)) {
+                isValid = true;
+            } else {
                 System.out.println("Please enter phone number again with 10 digits:");
             }
         }
