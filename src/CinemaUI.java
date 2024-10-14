@@ -50,37 +50,39 @@ public class CinemaUI {
         System.out.println("----------------------------------------------");
         System.out.println("----------------------------------------------");
         System.out.println("\nWELCOME TO ASAN CINEMA!!");
+
         System.out.println("\n1: Reserve a ticket");
         System.out.println("2: Cancel a reservation");
-        System.out.println("3: View Customer Information");
+        System.out.println("3: View transaction history");
         System.out.println("4: Exit");
-        System.out.println("\nPlease select the options:");
-        int chooseOption = scanner.nextInt();
-        System.out.println("----------------------------------------------");
-        System.out.println("----------------------------------------------");
+        System.out.println("\nPlease select an option:");
 
-        switch (chooseOption) {
-            case 1:
-                showTheaterOptions();
-                break;
-            case 2:
-                cancelTicketReservation();
-                break;
-            case 3:
-                viewCustomerInfo();
-                break;
-            case 4:
-                System.out.println("Exiting...Thanks for visiting ASAN Cinema!");
-                break;
-            default:
-                System.out.println("Invalid option, Please select again: ");
-                chooseOption = scanner.nextInt();
+        while (true) {
+            if (scanner.hasNextInt()) {
+                int chooseOption = scanner.nextInt();
+                System.out.println("----------------------------------------------");
+                System.out.println("----------------------------------------------");
 
-                while (chooseOption != 1) {
-                    System.out.println("Invalid option, Please select again: ");
-                    chooseOption = scanner.nextInt();
+                switch (chooseOption) {
+                    case 1:
+                        showTheaterOptions();
+                        return; // Exit the method after handling
+                    case 2:
+                        cancelTicketReservation();
+                        return; // Exit the method after handling
+                    case 3:
+                        viewCustomerInfo();
+                        return; // Exit the method after handling
+                    case 4:
+                        System.out.println("Exiting... Thanks for visiting ASAN Cinema!");
+                        return; // Exit the method
+                    default:
+                        System.out.println("Invalid option, please select again.");
                 }
-                showTheaterOptions();
+            } else {
+                System.out.println("Invalid input. Please enter a valid numeric option.");
+                scanner.next(); // Consume the invalid input
+            }
         }
     }
 
@@ -90,31 +92,38 @@ public class CinemaUI {
     private void showTheaterOptions() {
         int choice;
 
-        System.out.println("\nSelect an option by ID or type '0' to go back:");
-        System.out.println("\n1: Display all movies");
-        System.out.println("2: Show by Genre");
-        System.out.println("\nPlease select the options:");
+        while (true) {
+            System.out.println("\nSelect an option by ID or type '0' to go back:");
+            System.out.println("\n1: Display all movies");
+            System.out.println("2: Show by Genre");
+            System.out.println("\nPlease select the options:");
 
-        choice = scanner.nextInt();
+            // Check if input is an integer
+            if (scanner.hasNextInt()) {
+                choice = scanner.nextInt();
 
-        System.out.println("----------------------------------------------");
-        System.out.println("----------------------------------------------");
+                System.out.println("----------------------------------------------");
+                System.out.println("----------------------------------------------");
 
-        switch (choice) {
-            case 0:
-                displayMenu();
-                break;
-            case 1:
-                showTheaters();
-                break;
-            case 2:
-                genreOption = true;
-                showTheaterByGenre();
-                break;
-            default:
-                displayMenu();
-                break;
-
+                switch (choice) {
+                    case 0:
+                        displayMenu();
+                        return; // Exit the method
+                    case 1:
+                        showTheaters();
+                        return; // Exit the method
+                    case 2:
+                        genreOption = true;
+                        showTheaterByGenre();
+                        return; // Exit the method
+                    default:
+                        System.out.println("Invalid option. Please select a valid option.");
+                }
+            } else {
+                // If input is not an integer, show an error message
+                System.out.println("Invalid input. Please enter a valid numeric ID.");
+                scanner.next(); // Consume the invalid input
+            }
         }
     }
 
@@ -154,33 +163,41 @@ public class CinemaUI {
                 // Select Theater
                 System.out.println("\nSelect a theater by ID or type '0' to go back:");
 
-                int theaterId = scanner.nextInt();
+                int theaterId;
 
                 System.out.println("----------------------------------------------");
                 System.out.println("----------------------------------------------");
 
-                if (theaterId == 0) {
-                    showTheaterByGenre(); // Return to show theater options
-                    return;
-                }
-
-                try {
-                    // Select a theater
-                    while (cinema.isValidTheater(theaterId) == false) {
-                        System.out.println("Invalid option, Please select again: ");
+                while (true) {
+                    if (scanner.hasNextInt()) {
                         theaterId = scanner.nextInt();
+                        if (theaterId == 0) {
+                            showTheaterByGenre(); // Return to show theater options
+                            return;
+                        }
+
+                        try {
+                            // Select a theater
+                            while (cinema.isValidTheater(theaterId) == false) {
+                                System.out.println("Invalid option, Please select again: ");
+                                theaterId = scanner.nextInt();
+                            }
+                            selectedTheater = cinema.selectTheater(theaterId);
+                            // list the genres by the if statements
+                            showMovies();
+
+                        } catch (TheaterNotFoundException e) {
+                            System.out.println(e.getMessage());
+                        }
+
+                        System.out.println("----------------------------------------------");
+                        System.out.println("----------------------------------------------");
+                        break;
+                    } else {
+                        System.out.println("Invalid input. Please enter a valid numeric ID.");
+                        scanner.next(); // Consume the invalid input
                     }
-                    selectedTheater = cinema.selectTheater(theaterId);
-                    // list the genres by the if statements
-                    showMovies();
-
-                } catch (TheaterNotFoundException e) {
-                    System.out.println(e.getMessage());
                 }
-
-                System.out.println("----------------------------------------------");
-                System.out.println("----------------------------------------------");
-                break;
 
             } else {
                 if (genre.equalsIgnoreCase("0")) {
@@ -193,6 +210,7 @@ public class CinemaUI {
         }
     }
 
+    // TODO: Fix edge case for all methods from this with error when entered String
     /**
      * Display the list of theaters and allows user to select one
      */
@@ -619,47 +637,71 @@ public class CinemaUI {
     }
 
     private void cancelTicketReservation() {
-        boolean condition = false;
-
         System.out.println("Enter the ticket ID to cancel the reservation or '0' to go back: ");
 
-        while (!condition) {
-            int ticketId = scanner.nextInt();
+        while (true) {
+            try {
+                // Check if input is an integer
+                if (scanner.hasNextInt()) {
+                    int ticketId = scanner.nextInt();
+                    Ticket ticketToCancel = Ticket.findTicketById(ticketId);
 
-            Ticket ticketToCancel = Ticket.findTicketById(ticketId);
+                    if (ticketToCancel != null) {
+                        ticketToCancel.cancelReservation(ticketToCancel);
+                        transaction.processRefund();
+                        displayMenu();
+                        break;
 
-            if (ticketToCancel != null) {
-                ticketToCancel.cancelReservation(ticketToCancel);
-                transaction.processRefund();
-                displayMenu();
-            } else if (ticketId == 0) {
-                condition = true;
-                displayMenu();
-            } else {
-                System.out.println("Ticket with ID " + ticketId + " not found.");
-                System.out.println("Please enter valid ID or '0' to go back:");
+                    } else if (ticketId == 0) {
+                        displayMenu(); // Exit loop when user chooses to go back
+
+                    } else {
+                        System.out.println("Ticket with ID " + ticketId + " not found.");
+                        System.out.println("Please enter valid ID or '0' to go back:");
+                    }
+                } else {
+                    // If input is not an integer, show an error message
+                    System.out.println("Invalid input, Please enter a valid numeric ID or '0' to go back.");
+                    scanner.next(); // Consume the invalid input
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Please enter a valid number.");
+                scanner.next(); // Consume the invalid input
             }
-
         }
+
     }
 
     private void viewCustomerInfo() {
         scanner.nextLine();
 
-        System.out.println("Please enter customer phone number: ");
-        String phone = scanner.nextLine();
+        while (true) { // Loop until valid input or user decides to go back
+            System.out.println("Please enter customer phone number or '0' to go back: ");
+            String phone = scanner.nextLine();
 
-        if (customerMap.get(phone) != null) {
-            System.out.println("\nDisplaying customer info: ");
-
-            for (Customer customer : customerMap.get(phone)) {
-                customer.searchTransactionHistory();
+            // Check if the input is "0" to go back
+            if (phone.equals("0")) {
+                displayMenu();
+                return; // Exit the method after calling displayMenu
             }
 
-            displayMenu();
-        } else {
-            System.out.println("No customer information available.");
-            displayMenu();
+            // Check if the input is numeric using regex
+            if (phone.matches("\\d+")) { // Ensure the phone number is numeric
+                // If input is numeric, check for customer information
+                if (customerMap.get(phone) != null) {
+                    System.out.println("\nDisplaying customer info: ");
+                    for (Customer customer : customerMap.get(phone)) {
+                        customer.searchTransactionHistory();
+                    }
+                } else {
+                    System.out.println("No customer information available.");
+                    System.out.println("----------------------------------------------");
+                    System.out.println("----------------------------------------------");
+                }
+            } else {
+                System.out.println("Invalid phone number. Please enter a numeric phone number.");
+                System.out.println();
+            }
         }
     }
 
