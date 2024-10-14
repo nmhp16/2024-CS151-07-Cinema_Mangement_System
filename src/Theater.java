@@ -55,6 +55,7 @@ public class Theater {
 
     public void listMovies() {
         System.out.println("\nMovies in " + this.address + ":");
+        System.out.println();
         for (Movie movie : movies) {
             System.out.println("Movie ID: " + movie.getMovieId() + ", Title: " + movie.getTitle() + ", Genre: "
                     + movie.getGenre());
