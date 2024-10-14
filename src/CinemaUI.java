@@ -257,7 +257,6 @@ public class CinemaUI {
         }
     }
 
-    // TODO: Fix the rest edge cases with String input, start from here
     /**
      * Displays list of movies for selected theater and allows user to select one
      */
@@ -268,32 +267,39 @@ public class CinemaUI {
 
         System.out.println("\nSelect a movie by ID or type '0' to go back:");
 
-        int movieId = scanner.nextInt();
+        int movieId;
 
-        if (movieId == 0) {
-            if (genreOption == false) {
-                selectedTheater = null; // Clear selected Theater
-                showTheaters(); // Return to show theaters
-                return;
-
-            } else {
-                selectedTheater = null;
-                showTheaterByGenre();
-                return;
-            }
-        }
-
-        try
-
-        {
-            while (selectedTheater.isValidMovie(movieId) == false) {
-                System.out.println("Invalid option, Please select again: ");
+        while (true) {
+            if (scanner.hasNextInt()) {
                 movieId = scanner.nextInt();
+
+                if (movieId == 0) {
+                    if (genreOption == false) {
+                        selectedTheater = null; // Clear selected Theater
+                        showTheaters(); // Return to show theaters
+                        return;
+
+                    } else {
+                        selectedTheater = null;
+                        showTheaterByGenre();
+                        return;
+                    }
+                }
+
+                try {
+                    while (selectedTheater.isValidMovie(movieId) == false) {
+                        System.out.println("Invalid option, Please select again: ");
+                        movieId = scanner.nextInt();
+                    }
+                    selectedMovie = selectedTheater.selectMovie(movieId); // Select a movie
+                    showShowtimes();
+                } catch (MovieNotFoundException e) {
+                    System.out.println(e.getMessage());
+                }
+            } else {
+                System.out.println("Invalid input. Please enter a valid numeric ID.");
+                scanner.next(); // Consume the invalid input
             }
-            selectedMovie = selectedTheater.selectMovie(movieId); // Select a movie
-            showShowtimes();
-        } catch (MovieNotFoundException e) {
-            System.out.println(e.getMessage());
         }
     }
 
@@ -309,25 +315,34 @@ public class CinemaUI {
         selectedMovie.listShowtimes();
         System.out.println("\nSelect a showtime by ID or type '0' to go back:");
 
-        int showtimeId = scanner.nextInt();
+        int showtimeId;
         System.out.println("----------------------------------------------");
         System.out.println("----------------------------------------------");
 
-        if (showtimeId == 0) {
-            selectedMovie = null; // Clear selected movie
-            showMovies(); // Return to show movie
-            return;
-        }
-
-        try {
-            while (selectedMovie.isValidShowtime(showtimeId) == false) {
-                System.out.println("Invalid option, Please select again: ");
+        while (true) {
+            if (scanner.hasNextInt()) {
                 showtimeId = scanner.nextInt();
+
+                if (showtimeId == 0) {
+                    selectedMovie = null; // Clear selected movie
+                    showMovies(); // Return to show movie
+                    return;
+                }
+
+                try {
+                    while (selectedMovie.isValidShowtime(showtimeId) == false) {
+                        System.out.println("Invalid option, Please select again: ");
+                        showtimeId = scanner.nextInt();
+                    }
+                    selectedShowtime = selectedMovie.selectShowtime(showtimeId); // Select a showtime
+                    selectSeatType(); // Ask for seat type first
+                } catch (ShowtimeNotFoundException e) {
+                    System.out.println(e.getMessage());
+                }
+            } else {
+                System.out.println("Invalid input. Please enter a valid numeric ID");
+                scanner.next(); // Consume the invalid input
             }
-            selectedShowtime = selectedMovie.selectShowtime(showtimeId); // Select a showtime
-            selectSeatType(); // Ask for seat type first
-        } catch (ShowtimeNotFoundException e) {
-            System.out.println(e.getMessage());
         }
     }
 
@@ -341,7 +356,7 @@ public class CinemaUI {
         System.out.println("3. VIP ($" + SeatType.VIP.getPrice() + ")");
 
         System.out.println("\nSelect a seat type by ID or type '0' to go back:");
-        int choice = scanner.nextInt();
+        int choice;
 
         System.out.println("----------------------------------------------");
         System.out.println("----------------------------------------------");
@@ -349,26 +364,32 @@ public class CinemaUI {
         SeatType seatType = null;
 
         while (seatType == null) {
-            switch (choice) {
-                case 1:
-                    seatType = SeatType.REGULAR;
-                    break;
-                case 2:
-                    seatType = SeatType.PREMIUM;
-                    break;
-                case 3:
-                    seatType = SeatType.VIP;
-                    break;
-                case 0:
-                    seatType = null;
-                    showShowtimes();
-                    break;
-                default:
-                    System.out.println("Invalid option, Please select again: ");
-                    choice = scanner.nextInt();
-                    seatType = null;
-                    break;
+            if (scanner.hasNextInt()) {
+                choice = scanner.nextInt();
 
+                switch (choice) {
+                    case 1:
+                        seatType = SeatType.REGULAR;
+                        break;
+                    case 2:
+                        seatType = SeatType.PREMIUM;
+                        break;
+                    case 3:
+                        seatType = SeatType.VIP;
+                        break;
+                    case 0:
+                        seatType = null;
+                        showShowtimes();
+                        break;
+                    default:
+                        System.out.println("Invalid option, Please select again: ");
+                        seatType = null;
+                        break;
+
+                }
+            } else {
+                System.out.println("Invalid input. Please enter a valid numeric ID.");
+                scanner.next(); // Consume the invalid input
             }
         }
 
