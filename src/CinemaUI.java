@@ -171,6 +171,7 @@ public class CinemaUI {
                 while (true) {
                     if (scanner.hasNextInt()) {
                         theaterId = scanner.nextInt();
+
                         if (theaterId == 0) {
                             showTheaterByGenre(); // Return to show theater options
                             return;
@@ -210,7 +211,6 @@ public class CinemaUI {
         }
     }
 
-    // TODO: Fix edge case for all methods from this with error when entered String
     /**
      * Display the list of theaters and allows user to select one
      */
@@ -221,30 +221,43 @@ public class CinemaUI {
         System.out.println("");
         cinema.listTheaters(); // List all theaters
 
+        System.out.println("----------------------------------------------");
+        System.out.println("----------------------------------------------");
+
         System.out.println("\nSelect a theater by ID or type '0' to go back:");
-        int theaterId = scanner.nextInt();
-        System.out.println("----------------------------------------------");
-        System.out.println("----------------------------------------------");
 
-        if (theaterId == 0) {
-            showTheaterOptions(); // Return to show theater options
-            return;
-        }
+        int theaterId;
 
-        try {
-            // Select a theater
-            while (cinema.isValidTheater(theaterId) == false) {
-                System.out.println("Invalid option, Please select again: ");
+        while (true) {
+            if (scanner.hasNextInt()) {
                 theaterId = scanner.nextInt();
+
+                if (theaterId == 0) {
+                    showTheaterOptions(); // Return to show theater options
+                    return;
+                }
+
+                try {
+                    // Select a theater
+                    while (cinema.isValidTheater(theaterId) == false) {
+                        System.out.println("Invalid option, Please select again: ");
+                        theaterId = scanner.nextInt();
+                    }
+                    selectedTheater = cinema.selectTheater(theaterId);
+                    // list the genres by the if statements
+                    showMovies();
+
+                } catch (TheaterNotFoundException e) {
+                    System.out.println(e.getMessage());
+                }
+            } else {
+                System.out.println("Invalid input. Please enter a valid numeric ID.");
+                scanner.next(); // Consume invalid input
             }
-            selectedTheater = cinema.selectTheater(theaterId);
-            // list the genres by the if statements
-            showMovies();
-        } catch (TheaterNotFoundException e) {
-            System.out.println(e.getMessage());
         }
     }
 
+    // TODO: Fix the rest edge cases with String input, start from here
     /**
      * Displays list of movies for selected theater and allows user to select one
      */
