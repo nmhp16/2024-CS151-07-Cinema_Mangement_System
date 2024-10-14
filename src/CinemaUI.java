@@ -406,37 +406,47 @@ public class CinemaUI {
         displaySeatingChart(seatType.name()); // Show seating chart for the selected seat type
 
         System.out.println("\nSelect a seat by entering seat number or type '0' to go back:");
-        int seatNumber = scanner.nextInt();
+        int seatNumber;
         System.out.println("----------------------------------------------");
         System.out.println("----------------------------------------------");
 
-        if (seatNumber == 0) {
-            selectSeatType(); // Go back to select seat
-            return;
-        }
+        while (true) {
+            if (scanner.hasNextInt()) {
+                seatNumber = scanner.nextInt();
 
-        // Check if the seat number is valid
-        if (selectedShowtime.selectSeat(seatNumber, seatType.name())) {
-            // Create the ticket
-            selectedTicket = new Ticket(seatType.name(), "Adult", seatNumber);
+                if (seatNumber == 0) {
+                    selectSeatType(); // Go back to select seat
+                    return;
+                }
 
-            // Now apply the age pricing (this will update the price of the ticket)
-            String agePricing = selectAgePricing(seatType);
+                // Check if the seat number is valid
+                if (selectedShowtime.selectSeat(seatNumber, seatType.name())) {
+                    // Create the ticket
+                    selectedTicket = new Ticket(seatType.name(), "Adult", seatNumber);
 
-            // After selecting age pricing, set the correct age category
-            selectedTicket.setAgePricing(agePricing); // Update ticket's age pricing
+                    // Now apply the age pricing (this will update the price of the ticket)
+                    String agePricing = selectAgePricing(seatType);
 
-            // Try to reserve the ticket
-            try {
-                selectedTicket.reserveTicket(selectedTicket);
-            } catch (ReservationException e) {
-                System.out.println("Reservation failed: " + e.getMessage());
+                    // After selecting age pricing, set the correct age category
+                    selectedTicket.setAgePricing(agePricing); // Update ticket's age pricing
+
+                    // Try to reserve the ticket
+                    try {
+                        selectedTicket.reserveTicket(selectedTicket);
+                    } catch (ReservationException e) {
+                        System.out.println("Reservation failed: " + e.getMessage());
+                    }
+
+                    selectFoodAndDrinks(); // Proceed to food selection
+
+                } else {
+                    System.out.println("Invalid or unavailable seat. Please try again.");
+                    showSeatAvailability(seatType); // Retry seat selection
+                }
+            } else {
+                System.out.println("Invalid input. Please enter a valid numeric ID.");
+                scanner.next(); // Consume the invalid input
             }
-
-            selectFoodAndDrinks(); // Proceed to food selection
-        } else {
-            System.out.println("Invalid or unavailable seat. Please try again.");
-            showSeatAvailability(seatType); // Retry seat selection
         }
     }
 
@@ -627,8 +637,12 @@ public class CinemaUI {
             while (isValid == false) {
                 cardNumber = scanner.next();
 
+                System.out.println("----------------------------------------------");
+                System.out.println("----------------------------------------------");
+
                 isValid = transaction.inputTransactionInfo(cardNumber);
             }
+
         }
 
         System.out.println("\nSelection complete. Show receipt:");
@@ -659,14 +673,25 @@ public class CinemaUI {
         System.out.println("\nSelect Transaction Type:");
         System.out.println("1. Cash");
         System.out.println("2. Credit Card");
-        int choice = scanner.nextInt();
-        switch (choice) {
-            case 1:
-                return "Cash";
-            case 2:
-                return "Credit Card";
-            default:
-                return "Cash";
+        int choice;
+
+        while (true) {
+            if (scanner.hasNextInt()) {
+                choice = scanner.nextInt();
+
+                switch (choice) {
+                    case 1:
+                        return "Cash";
+                    case 2:
+                        return "Credit Card";
+                    default:
+                        System.out.println("Invalid input. Please select again: ");
+                        break;
+                }
+            } else {
+                System.out.println("Invalid input. Please enter a valid numeric ID.");
+                scanner.next(); // Consume the invalid input
+            }
         }
     }
 

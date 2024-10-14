@@ -78,6 +78,7 @@ public class Transaction implements Billable {
 
         System.out.printf("%nTotal Cost: $%.2f%n", totalCost);
         System.out.println("----------------------------------------------");
+        System.out.println("----------------------------------------------");
     }
 
     // Other methods
@@ -113,7 +114,7 @@ public class Transaction implements Billable {
         System.out.println("Processing your transaction information for type: " + transactionType);
         validateCard();
         if (holdStatus == true) {
-            System.out.println("Please enter your card info again with 10 digits: \n");
+            System.out.println("Please enter your card info again with 10 digits: ");
             return false;
         }
         System.out.println("Account number: " + cardNumber + " processed successfully.");
@@ -151,7 +152,9 @@ public class Transaction implements Billable {
 
     public void addHoldStatus() {
         holdStatus = true;
+        System.out.println("Invalid card number.");
         System.out.println("Transaction is on hold.");
+        System.out.println();
     }
 
     // Getters and Setters
