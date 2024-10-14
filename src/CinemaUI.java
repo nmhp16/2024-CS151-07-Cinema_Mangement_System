@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * The CinemaUI class represents the user interface for cinema application
  * functionality for display menu, select movies, showtimes, seat types
- * customer information, manging transaction
+ * customer information, managing transaction
  */
 public class CinemaUI {
     private Scanner scanner = new Scanner(System.in);
@@ -17,6 +17,7 @@ public class CinemaUI {
     private List<FoodAndDrink> selectedItems = new ArrayList<>();
     private Transaction transaction = new Transaction();
     private Customer customer;
+    private boolean genreOption = false;
     // Map to store customer, this keep multiple customer with same phone number
     private Map<String, List<Customer>> customerMap = new HashMap<>();
 
@@ -60,7 +61,7 @@ public class CinemaUI {
 
         switch (chooseOption) {
             case 1:
-                showTheaters();
+                showTheaterOptions();
                 break;
             case 2:
                 cancelTicketReservation();
@@ -79,7 +80,116 @@ public class CinemaUI {
                     System.out.println("Invalid option, Please select again: ");
                     chooseOption = scanner.nextInt();
                 }
+                showTheaterOptions();
+        }
+    }
+
+    /**
+     * Options to display all theaters or display by Genre
+     */
+    private void showTheaterOptions() {
+        int choice;
+
+        System.out.println("\nSelect an option by ID or type '0' to go back:");
+        System.out.println("\n1: Display all movies");
+        System.out.println("2: Show by Genre");
+        System.out.println("\nPlease select the options:");
+
+        choice = scanner.nextInt();
+
+        System.out.println("----------------------------------------------");
+        System.out.println("----------------------------------------------");
+
+        switch (choice) {
+            case 0:
+                displayMenu();
+                break;
+            case 1:
                 showTheaters();
+                break;
+            case 2:
+                genreOption = true;
+                showTheaterByGenre();
+                break;
+            default:
+                displayMenu();
+                break;
+
+        }
+    }
+
+    /**
+     * Display theater with genre
+     */
+    private void showTheaterByGenre() {
+        String genre;
+        Set<String> availableGenres = cinema.availableGenresInCinema();
+
+        scanner.nextLine(); // Clear input buffer
+
+        while (true) {
+            System.out.println("\nPlease select the genre available:");
+
+            for (String availableGenre : availableGenres) {
+                System.out.println(availableGenre);
+            }
+
+            System.out.println("\nPlease type your genre or '0' to go back: ");
+
+            genre = scanner.nextLine().trim(); // Avoid leading/trilling spaces
+
+            // Check if the input genre is valid
+            boolean isValidGenre = false;
+
+            for (String availableGenre : availableGenres) {
+                if (availableGenre.equalsIgnoreCase(genre)) {
+                    isValidGenre = true;
+                    break;
+                }
+            }
+
+            if (isValidGenre) {
+                cinema.findTheatersByMovieGenre(genre);
+
+                // Select Theater
+                System.out.println("\nSelect a theater by ID or type '0' to go back:");
+
+                int theaterId = scanner.nextInt();
+
+                System.out.println("----------------------------------------------");
+                System.out.println("----------------------------------------------");
+
+                if (theaterId == 0) {
+                    showTheaterByGenre(); // Return to show theater options
+                    return;
+                }
+
+                try {
+                    // Select a theater
+                    while (cinema.isValidTheater(theaterId) == false) {
+                        System.out.println("Invalid option, Please select again: ");
+                        theaterId = scanner.nextInt();
+                    }
+                    selectedTheater = cinema.selectTheater(theaterId);
+                    // list the genres by the if statements
+                    showMovies();
+
+                } catch (TheaterNotFoundException e) {
+                    System.out.println(e.getMessage());
+                }
+
+                System.out.println("----------------------------------------------");
+                System.out.println("----------------------------------------------");
+                break;
+
+            } else {
+                if (genre.equalsIgnoreCase("0")) {
+                    showTheaterOptions();
+                }
+                System.out.println("Invalid genre. Please try again.");
+                System.out.println("----------------------------------------------");
+                System.out.println("----------------------------------------------");
+            }
         }
     }
 
@@ -93,13 +203,13 @@ public class CinemaUI {
         System.out.println("");
         cinema.listTheaters(); // List all theaters
 
-        System.out.println("\nSelect a theater by ID or type '0' to exit:");
+        System.out.println("\nSelect a theater by ID or type '0' to go back:");
         int theaterId = scanner.nextInt();
         System.out.println("----------------------------------------------");
         System.out.println("----------------------------------------------");
 
         if (theaterId == 0) {
-            displayMenu(); // Return to main menu
+            showTheaterOptions(); // Return to show theater options
             return;
         }
 
@@ -128,13 +238,23 @@ public class CinemaUI {
         System.out.println("\nSelect a movie by ID or type '0' to go back:");
 
         int movieId = scanner.nextInt();
+
         if (movieId == 0) {
-            selectedTheater = null; // Clear selected Theater
-            showTheaters(); // Return to show theaters
-            return;
+            if (genreOption == false) {
+                selectedTheater = null; // Clear selected Theater
+                showTheaters(); // Return to show theaters
+                return;
+
+            } else {
+                selectedTheater = null;
+                showTheaterByGenre();
+                return;
+            }
         }
 
-        try {
+        try
+
+        {
             while (selectedTheater.isValidMovie(movieId) == false) {
                 System.out.println("Invalid option, Please select again: ");
                 movieId = scanner.nextInt();

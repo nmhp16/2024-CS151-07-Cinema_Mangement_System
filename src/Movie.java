@@ -33,10 +33,12 @@ public class Movie {
     public void listShowtimes() {
         System.out.println("\nShowtimes for " + this.title + ":");
         listGenres();
+        System.out.println();
         for (Showtime showtime : showtimes) {
             checkSeatOccupancy(showtime);
             System.out.println(
                     "Showtime ID: " + showtime.getShowtimeId() + ", Time: " + showtime.getTime());
+            System.out.println();
         }
     }
 
