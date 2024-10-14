@@ -403,19 +403,57 @@ public class CinemaUI {
         System.out.println("----------------------------------------------");
     }
 
+    // private String selectTransactionType() {
+    //     System.out.println("\nSelect Transaction Type:");
+    //     System.out.println("1. Cash");
+    //     System.out.println("2. Credit Card");
+    //     int choice = scanner.nextInt();
+    //     switch (choice) {
+    //         case 1:
+    //             return "Cash";
+    //         case 2:
+    //             return "Credit Card";
+    //         default:
+    //             return "Cash";
+    //     }
+    // }
+
     private String selectTransactionType() {
-        System.out.println("\nSelect Transaction Type:");
-        System.out.println("1. Cash");
-        System.out.println("2. Credit Card");
-        int choice = scanner.nextInt();
-        switch (choice) {
-            case 1:
-                return "Cash";
-            case 2:
-                return "Credit Card";
-            default:
-                return "Cash";
+    int choice = -1;
+
+    // Loop until the user enters a valid input (1 or 2)
+    while (true) {
+        try {
+            System.out.println("\nSelect Transaction Type:");
+            System.out.println("1. Cash");
+            System.out.println("2. Credit Card");
+            
+            // Get the next input
+            String input = scanner.nextLine();  // Use nextLine() to handle potential non-integer input
+
+            // Check for empty input
+            if (input.trim().isEmpty()) {
+                System.out.println("Input cannot be empty. Please enter 1 for Cash or 2 for Credit Card.");
+                continue; // Skip to the next iteration to ask for input again
+            }
+
+            // Try to parse the input into an integer
+            choice = Integer.parseInt(input);
+
+            // Check if the input is either 1 or 2
+            if (choice == 1 || choice == 2) {
+                break; // Valid input, exit the loop
+            } else {
+                System.out.println("Invalid choice. Please enter 1 for Cash or 2 for Credit Card.");
+            }
+        } catch (NumberFormatException e) {
+            // If input is not a valid number (e.g., a string), catch the exception
+            System.out.println("Invalid input. Please enter a number (1 or 2).");
         }
     }
+    // Return the appropriate transaction type based on the user's choice
+    return (choice == 1) ? "Cash" : "Credit Card";
+}
+
 
 }
