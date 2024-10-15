@@ -45,7 +45,13 @@ public class Cinema {
             theater.listMovies(); // Call listMovies for each theater
         }
     }
-    
+
+    /**
+     * Select and return Theater from list based on ID
+     * @param theaterId The ID for theater
+     * @return Theater matches with ID
+     * @throws TheaterNotFoundException
+     */
     public Theater selectTheater(int theaterId) throws TheaterNotFoundException {
 
         for (Theater theater : theaters) {
