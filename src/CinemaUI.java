@@ -20,6 +20,7 @@ public class CinemaUI {
     private boolean genreOption = false;
     // Map to store customer, this keep multiple customer with same phone number
     private Map<String, List<Customer>> customerMap = new HashMap<>();
+    private boolean exitRequest = false;
 
     /**
      * Constructor that initializes the CinemaUI without a Cinema
@@ -123,14 +124,16 @@ public class CinemaUI {
                 scanner.nextLine();
                 String input = scanner.nextLine();
                 if (input.equalsIgnoreCase("Exit")) {
-                    System.out.println("Exiting...");
-                    scanner.close();
+                    exitRequest = true;
                     break;
                 }
                 // If input is not an integer, show an error message
                 System.out.println("Invalid input. Please enter a valid numeric ID.");
                 scanner.next(); // Consume the invalid input
             }
+        }
+        if (exitRequest == true) {
+            exitProgram();
         }
     }
 
@@ -261,13 +264,15 @@ public class CinemaUI {
                 scanner.nextLine();
                 String input = scanner.nextLine();
                 if (input.equalsIgnoreCase("Exit")) {
-                    System.out.println("Exiting...");
-                    scanner.close();
+                    exitRequest = true;
                     break;
                 }
                 System.out.println("Invalid input. Please enter a valid numeric ID.");
                 scanner.next(); // Consume invalid input
             }
+        }
+        if (exitRequest = true) {
+            exitProgram();
         }
     }
 
@@ -776,6 +781,13 @@ public class CinemaUI {
                 System.out.println();
             }
         }
+    }
+    private void exitProgram() {
+        if (scanner != null) {
+            scanner.close();
+        }
+        System.out.println("Exiting... Thanks for visiting ASAN Cinema!");
+        System.exit(0);
     }
 
 }
