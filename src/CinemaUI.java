@@ -258,6 +258,13 @@ public class CinemaUI {
                     System.out.println(e.getMessage());
                 }
             } else {
+                scanner.nextLine();
+                String input = scanner.nextLine();
+                if (input.equalsIgnoreCase("Exit")) {
+                    System.out.println("Exiting...");
+                    scanner.close();
+                    break;
+                }
                 System.out.println("Invalid input. Please enter a valid numeric ID.");
                 scanner.next(); // Consume invalid input
             }
