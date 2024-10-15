@@ -489,9 +489,18 @@ public class CinemaUI {
                     showSeatAvailability(seatType); // Retry seat selection
                 }
             } else {
+                scanner.nextLine();
+                String input = scanner.nextLine();
+                if (input.equalsIgnoreCase("Exit")) {
+                    exitRequest = true;
+                    break;
+                }
                 System.out.println("Invalid input. Please enter a valid numeric ID.");
                 scanner.next(); // Consume the invalid input
             }
+        }
+        if (exitRequest == true) {
+            exitProgram();
         }
     }
 
