@@ -18,6 +18,9 @@ public class Cinema {
     }
 
     // Methods
+    /**
+     * Display theaters in cinema
+     */
     public void listTheaters() {
         for (Theater theater : theaters) {
             System.out.println("Theater ID: " + theater.getTheaterId() + ", Address: " + theater.getAddress());
@@ -26,16 +29,23 @@ public class Cinema {
         }
     }
 
+    /**
+     * Add theater to cinema
+     * @param theater Theater to add to cinema
+     */
     public void addTheater(Theater theater) {
         theaters.add(theater);
     }
 
+    /**
+     * Display all movies in all theater
+     */
     public void listMoviesInAllTheater() {
         for (Theater theater : theaters) {
             theater.listMovies(); // Call listMovies for each theater
         }
     }
-
+    
     public Theater selectTheater(int theaterId) throws TheaterNotFoundException {
 
         for (Theater theater : theaters) {
