@@ -489,9 +489,18 @@ public class CinemaUI {
                     showSeatAvailability(seatType); // Retry seat selection
                 }
             } else {
+                scanner.nextLine();
+                String input = scanner.nextLine();
+                if (input.equalsIgnoreCase("Exit")) {
+                    exitRequest = true;
+                    break;
+                }
                 System.out.println("Invalid input. Please enter a valid numeric ID.");
                 scanner.next(); // Consume the invalid input
             }
+        }
+        if (exitRequest == true) {
+            exitProgram();
         }
     }
 
@@ -551,12 +560,20 @@ public class CinemaUI {
                     System.out.println("Please choose 1 for Adult, 2 for Child, or 3 for Senior.");
                 }
             } else {
+                scanner.nextLine();
+                String input = scanner.nextLine();
+                if (input.equalsIgnoreCase("Exit")) {
+                    exitRequest = true;
+                    break;
+                }
                 System.out.println("Invalid input. Please choose 1 for Adult, 2 for Child, or 3 for Senior.");
                 scanner.next();
             }
 
         }
-
+        if (exitRequest == true) {
+            exitProgram();
+        }
         double finalPrice = seatType.getPrice(); // Default price from SeatType
         String ageCategory;
 
