@@ -120,6 +120,13 @@ public class CinemaUI {
                         System.out.println("Invalid option. Please select a valid option.");
                 }
             } else {
+                scanner.nextLine();
+                String input = scanner.nextLine();
+                if (input.equalsIgnoreCase("Exit")) {
+                    System.out.println("Exiting...");
+                    scanner.close();
+                    break;
+                }
                 // If input is not an integer, show an error message
                 System.out.println("Invalid input. Please enter a valid numeric ID.");
                 scanner.next(); // Consume the invalid input
