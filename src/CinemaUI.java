@@ -424,10 +424,18 @@ public class CinemaUI {
                         break;
 
                 }
-            } else {
+            } else {scanner.nextLine();
+                String input = scanner.nextLine();
+                if (input.equalsIgnoreCase("Exit")) {
+                    exitRequest = true;
+                    break;
+                }
                 System.out.println("Invalid input. Please enter a valid numeric ID.");
                 scanner.next(); // Consume the invalid input
             }
+        }
+        if (exitRequest == true) {
+            exitProgram();
         }
 
         showSeatAvailability(seatType); // Show seat availability based on the selected seat type
