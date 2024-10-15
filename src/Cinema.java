@@ -96,6 +96,10 @@ public class Cinema {
         }
     }
 
+    /**
+     * Get total number of theater inside a cinema
+     * @return Number of theaters
+     */
     public int getTotalTheaters() {
         return theaters.size();
     }
