@@ -75,8 +75,8 @@ public class CinemaUI {
                         viewCustomerInfo();
                         return; // Exit the method after handling
                     case 4:
-                        System.out.println("Exiting... Thanks for visiting ASAN Cinema!");
-                        return; // Exit the method
+                        exitRequest = true;
+                        exitProgram();
                     default:
                         System.out.println("Invalid option, please select again.");
                 }
