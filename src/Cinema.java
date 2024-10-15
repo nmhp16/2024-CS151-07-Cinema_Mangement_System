@@ -45,7 +45,13 @@ public class Cinema {
             theater.listMovies(); // Call listMovies for each theater
         }
     }
-    
+
+    /**
+     * Select and return Theater from list based on ID
+     * @param theaterId The ID for theater
+     * @return Theater matches with ID
+     * @throws TheaterNotFoundException
+     */
     public Theater selectTheater(int theaterId) throws TheaterNotFoundException {
 
         for (Theater theater : theaters) {
@@ -57,6 +63,10 @@ public class Cinema {
         throw new TheaterNotFoundException("Theater not found with ID: " + theaterId);
     }
 
+    /**
+     * Return all available genres in Cinema
+     * @return Set of genres available
+     */
     public Set<String> availableGenresInCinema() {
         Set<String> genres = new HashSet<>();
 
@@ -66,6 +76,10 @@ public class Cinema {
         return genres;
     }
 
+    /**
+     * Find all theaters with specified genre by customer
+     * @param genre Genre that the customer want
+     */
     public void findTheatersByMovieGenre(String genre) {
         List<Theater> theatersWithMovie = new ArrayList<>();
 
