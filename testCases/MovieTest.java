@@ -1,112 +1,147 @@
-// Use VS Code Terminal to run
-// Make sure in test folder
-// javac -cp "lib/*;." src/*.java testCases/*.java
-// java -cp "lib/*;.;src;testCases" org.junit.runner.JUnitCore testCases.CinemaTest
-
 package testCases;
 
 import org.junit.Before;
 import org.junit.Test;
-import src.Cinema;
-import src.Theater;
-import src.TheaterNotFoundException;
+import src.Movie;
+import src.Showtime;
+import src.ShowtimeNotFoundException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 import static org.junit.Assert.*;
 
-public class CinemaTest {
+public class MovieTest {
 
-    private Cinema cinema;
+    private Movie movie;
 
     @Before
     public void setUp() {
-        cinema = new Cinema(); // Initialize a new Cinema instance before each test
-        System.out.println("Cinema setup completed.");
+        movie = new Movie(1, "Inception", "Sci-Fi"); // Initialize a new Movie instance before each test
+        System.out.println("Movie setup completed.");
     }
 
     @Test
-    public void testAddTheater() {
-        Theater theater = new Theater(1, "123 Main St");
-        cinema.addTheater(theater);
-        assertEquals(1, cinema.getTotalTheaters()); // Ensure theater count is correct
-        System.out.println("Theater added successfully. Total theaters: " + cinema.getTotalTheaters());
+    public void testAddShowtime() {
+        Showtime showtime = new Showtime(1, "10:00 AM", 50); // Example showtime with available seats
+        movie.addShowtime(showtime);
+        assertEquals(1, movie.getShowtimes().size()); // Ensure showtime is added
+        System.out.println("Showtime added successfully. Total showtimes: " + movie.getShowtimes().size());
     }
 
     @Test
-    public void testSelectTheaterValid() throws TheaterNotFoundException {
-        Theater theater = new Theater(1, "123 Main St");
-        cinema.addTheater(theater);
-        Theater selected = cinema.selectTheater(1);
-        assertEquals(theater, selected); // Ensure the selected theater is the same
-        System.out.println("Theater selected successfully: " + selected.getTheaterId());
-    }
-
-    @Test(expected = TheaterNotFoundException.class)
-    public void testSelectTheaterInvalid() throws TheaterNotFoundException {
-        Theater theater = new Theater(1, "123 Main St");
-        cinema.addTheater(theater);
-        cinema.selectTheater(2); // Attempt to select a theater that does not exist
-    }
-
-    @Test
-    public void testGetTotalTheaters() {
-        assertEquals(0, cinema.getTotalTheaters()); // No theaters added yet
-        Theater theater1 = new Theater(1, "123 Main St");
-        Theater theater2 = new Theater(2, "456 Elm St");
-        cinema.addTheater(theater1);
-        cinema.addTheater(theater2);
-        assertEquals(2, cinema.getTotalTheaters()); // Two theaters should be added
-        System.out.println("Total theaters: " + cinema.getTotalTheaters());
-    }
-
-    @Test
-    public void testIsValidTheaterTrue() {
-        Theater theater = new Theater(1, "123 Main St");
-        cinema.addTheater(theater);
-        assertTrue(cinema.isValidTheater(1)); // Should return true for valid theater ID
-        System.out.println("Valid theater ID check passed for: " + theater.getTheaterId());
-    }
-
-    @Test
-    public void testIsValidTheaterFalse() {
-        Theater theater = new Theater(1, "123 Main St");
-        cinema.addTheater(theater);
-        assertFalse(cinema.isValidTheater(2)); // Should return false for invalid theater ID
-        System.out.println("Invalid theater ID check passed for ID: 2");
-    }
-
-    @Test
-    public void testListTheaters() {
+    public void testListGenres() {
         // Redirect output to a ByteArrayOutputStream to capture print statements
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         PrintStream originalOut = System.out; // Save original output stream
         System.setOut(new PrintStream(outContent)); // Redirect output
 
-        Theater theater1 = new Theater(1, "123 Main St");
-        Theater theater2 = new Theater(2, "456 Elm St");
-        cinema.addTheater(theater1);
-        cinema.addTheater(theater2);
-        cinema.listTheaters();
+        movie.listGenres(); // Test listing genres
 
         // Expected output
-        String expectedOutput = "Theater ID: 1, Address: 123 Main St\n" +
-                "No movies currently available in this theater.\n\n" +
-                "Theater ID: 2, Address: 456 Elm St\n" +
-                "No movies currently available in this theater.\n\n";
+        String expectedOutput = "Genre: Sci-Fi\n";
+        String actualOutput = outContent.toString();
 
-        String actualOutput = outContent.toString().replace("\r\n", "\n"); // Normalize line endings
-
-        // Debugging: Print both outputs for comparison
-        System.out.println("Expected Output:\n" + expectedOutput);
-        System.out.println("Actual Output:\n" + actualOutput);
-
-        // Trim both outputs to remove any leading/trailing whitespace and compare
-        assertEquals(expectedOutput.trim(), actualOutput.trim());
+        assertEquals(expectedOutput, actualOutput); // Check the output matches
 
         // Reset the output stream
         System.setOut(originalOut);
-        System.out.println("List theaters method tested successfully.");
+        System.out.println("List genres method tested successfully.");
+    }
+
+    @Test
+    public void testListShowtimes() {
+        // Redirect output to a ByteArrayOutputStream to capture print statements
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out; // Save original output stream
+        System.setOut(new PrintStream(outContent)); // Redirect output
+
+        Showtime showtime1 = new Showtime(1, "10:00 AM", 50);
+        Showtime showtime2 = new Showtime(2, "1:00 PM", 0); // Sold out showtime
+        movie.addShowtime(showtime1);
+        movie.addShowtime(showtime2);
+        movie.listShowtimes(); // List showtimes
+
+        // Expected output
+        String expectedOutput = "\nShowtimes for Inception:\n" +
+                "Genre: Sci-Fi\n\n" +
+                "Showtime ID: 1, Time: 10:00 AM\n\n" +
+                "Showtime ID: 2, Time: 1:00 PM\n\n";
+
+        String actualOutput = outContent.toString().replace("\r\n", "\n"); // Normalize line endings
+
+        assertEquals(expectedOutput.trim(), actualOutput.trim()); // Check the output matches
+
+        // Reset the output stream
+        System.setOut(originalOut);
+        System.out.println("List showtimes method tested successfully.");
+    }
+
+    @Test
+    public void testSelectShowtimeValid() throws ShowtimeNotFoundException {
+        Showtime showtime = new Showtime(1, "10:00 AM", 50);
+        movie.addShowtime(showtime);
+        Showtime selected = movie.selectShowtime(1);
+        assertEquals(showtime, selected); // Ensure the selected showtime is correct
+        System.out.println("Showtime selected successfully: " + selected.getShowtimeId());
+    }
+
+    @Test(expected = ShowtimeNotFoundException.class)
+    public void testSelectShowtimeInvalid() throws ShowtimeNotFoundException {
+        Showtime showtime = new Showtime(1, "10:00 AM", 50);
+        movie.addShowtime(showtime);
+        movie.selectShowtime(2); // Attempt to select a showtime that does not exist
+    }
+
+    @Test
+    public void testRemoveShowtime() throws ShowtimeNotFoundException {
+        Showtime showtime = new Showtime(1, "10:00 AM", 50);
+        movie.addShowtime(showtime);
+        movie.removeShowtime(1); // Remove the showtime
+        assertEquals(0, movie.getShowtimes().size()); // Ensure no showtimes remain
+        System.out.println("Showtime removed successfully. Total showtimes: " + movie.getShowtimes().size());
+    }
+
+    @Test(expected = ShowtimeNotFoundException.class)
+    public void testRemoveShowtimeInvalid() throws ShowtimeNotFoundException {
+        movie.removeShowtime(1); // Attempt to remove a showtime that does not exist
+    }
+
+    @Test
+    public void testIsValidShowtimeTrue() {
+        Showtime showtime = new Showtime(1, "10:00 AM", 50);
+        movie.addShowtime(showtime);
+        assertTrue(movie.isValidShowtime(1)); // Should return true for valid showtime ID
+        System.out.println("Valid showtime ID check passed for: " + showtime.getShowtimeId());
+    }
+
+    @Test
+    public void testIsValidShowtimeFalse() {
+        Showtime showtime = new Showtime(1, "10:00 AM", 50);
+        movie.addShowtime(showtime);
+        assertFalse(movie.isValidShowtime(2)); // Should return false for invalid showtime ID
+        System.out.println("Invalid showtime ID check passed for ID: 2");
+    }
+
+    @Test
+    public void testCheckSeatOccupancy() {
+        // Redirect output to a ByteArrayOutputStream to capture print statements
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out; // Save original output stream
+        System.setOut(new PrintStream(outContent)); // Redirect output
+
+        Showtime showtime = new Showtime(1, "10:00 AM", 50);
+        movie.addShowtime(showtime);
+        movie.checkSeatOccupancy(showtime); // Check seat occupancy
+
+        // Expected output
+        String expectedOutput = "Available Seats: 50\n";
+        String actualOutput = outContent.toString();
+
+        assertEquals(expectedOutput, actualOutput); // Check the output matches
+
+        // Reset the output stream
+        System.setOut(originalOut);
+        System.out.println("Check seat occupancy method tested successfully.");
     }
 }
