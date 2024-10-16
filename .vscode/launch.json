@@ -9,6 +9,13 @@
             "name": "Main",
             "request": "launch",
             "mainClass": "src.Main",
+            "projectName": "2024-CS151-07-Cinema_Mangement_System_79d7a446"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "src.Main",
             "projectName": "test_68482af4"
         },
         {
