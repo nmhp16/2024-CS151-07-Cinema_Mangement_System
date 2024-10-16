@@ -18,6 +18,9 @@ public class Cinema {
     }
 
     // Methods
+    /**
+     * Display theaters in cinema
+     */
     public void listTheaters() {
         for (Theater theater : theaters) {
             System.out.println("Theater ID: " + theater.getTheaterId() + ", Address: " + theater.getAddress());
@@ -26,16 +29,29 @@ public class Cinema {
         }
     }
 
+    /**
+     * Add theater to cinema
+     * @param theater Theater to add to cinema
+     */
     public void addTheater(Theater theater) {
         theaters.add(theater);
     }
 
+    /**
+     * Display all movies in all theater
+     */
     public void listMoviesInAllTheater() {
         for (Theater theater : theaters) {
             theater.listMovies(); // Call listMovies for each theater
         }
     }
 
+    /**
+     * Select and return Theater from list based on ID
+     * @param theaterId The ID for theater
+     * @return Theater matches with ID
+     * @throws TheaterNotFoundException
+     */
     public Theater selectTheater(int theaterId) throws TheaterNotFoundException {
 
         for (Theater theater : theaters) {
@@ -47,6 +63,10 @@ public class Cinema {
         throw new TheaterNotFoundException("Theater not found with ID: " + theaterId);
     }
 
+    /**
+     * Return all available genres in Cinema
+     * @return Set of genres available
+     */
     public Set<String> availableGenresInCinema() {
         Set<String> genres = new HashSet<>();
 
@@ -56,6 +76,10 @@ public class Cinema {
         return genres;
     }
 
+    /**
+     * Find all theaters with specified genre by customer
+     * @param genre Genre that the customer want
+     */
     public void findTheatersByMovieGenre(String genre) {
         List<Theater> theatersWithMovie = new ArrayList<>();
 
@@ -72,6 +96,10 @@ public class Cinema {
         }
     }
 
+    /**
+     * Get total number of theater inside a cinema
+     * @return Number of theaters
+     */
     public int getTotalTheaters() {
         return theaters.size();
     }
