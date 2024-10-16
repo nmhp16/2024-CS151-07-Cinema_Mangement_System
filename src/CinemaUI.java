@@ -157,6 +157,10 @@ public class CinemaUI {
 
             genre = scanner.nextLine().trim(); // Avoid leading/trilling spaces
 
+            if (genre.equalsIgnoreCase("Exit")) {
+                exitProgram();
+            }
+
             // Check if the input genre is valid
             boolean isValidGenre = false;
 
