@@ -55,8 +55,7 @@ public class CinemaUI {
         System.out.println("\n1: Reserve a ticket");
         System.out.println("2: Cancel a reservation");
         System.out.println("3: View transaction history");
-        System.out.println("4: Exit");
-        System.out.println("\nPlease select an option:");
+        System.out.println("\nPlease select an option or enter 'Exit' to exit:");
 
         while (true) {
             if (scanner.hasNextInt()) {
@@ -74,16 +73,20 @@ public class CinemaUI {
                     case 3:
                         viewCustomerInfo();
                         return; // Exit the method after handling
-                    case 4:
-                        exitRequest = true;
-                        exitProgram();
                     default:
                         System.out.println("Invalid option, please select again.");
                 }
             } else {
+                String input = scanner.next();
+                if (input.equalsIgnoreCase("Exit")) {
+                    exitRequest = true;
+                    break;
+                }
                 System.out.println("Invalid input. Please enter a valid numeric option.");
-                scanner.next(); // Consume the invalid input
             }
+        }
+        if (exitRequest == true) {
+            exitProgram();
         }
     }
 
@@ -91,7 +94,6 @@ public class CinemaUI {
      * Options to display all theaters or display by Genre
      */
     private void showTheaterOptions() {
-        int choice;
 
         while (true) {
             System.out.println("\nSelect an option by ID or type '0' to go back or 'Exit' to exit:");
@@ -101,7 +103,7 @@ public class CinemaUI {
 
             // Check if input is an integer
             if (scanner.hasNextInt()) {
-                choice = scanner.nextInt();
+                int choice = scanner.nextInt();
 
                 System.out.println("----------------------------------------------");
                 System.out.println("----------------------------------------------");
@@ -121,15 +123,14 @@ public class CinemaUI {
                         System.out.println("Invalid option. Please select a valid option.");
                 }
             } else {
-                scanner.nextLine();
-                String input = scanner.nextLine();
+                String input = scanner.next(); // Get the next input
                 if (input.equalsIgnoreCase("Exit")) {
                     exitRequest = true;
                     break;
                 }
+
                 // If input is not an integer, show an error message
                 System.out.println("Invalid input. Please enter a valid numeric ID.");
-                scanner.next(); // Consume the invalid input
             }
         }
         if (exitRequest == true) {
@@ -712,6 +713,7 @@ public class CinemaUI {
 
         }
 
+        selectedTicket.setTransaction(transaction);
         System.out.println("\nSelection complete. Show receipt:");
 
         System.out.println("----------------------------------------------");
@@ -774,7 +776,7 @@ public class CinemaUI {
 
                     if (ticketToCancel != null) {
                         ticketToCancel.cancelReservation(ticketToCancel);
-                        transaction.processRefund();
+                        ticketToCancel.getTransaction().processRefund();
                         displayMenu();
                         break;
 
