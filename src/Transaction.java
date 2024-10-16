@@ -46,7 +46,7 @@ public class Transaction implements Billable {
         this.ticket = ticket;
         this.selectedItems = new ArrayList<>(selectedItems);
 
-        System.out.println("Transaction processed successfuly.");
+        System.out.println("Transaction processed successfully.");
 
         if (transactionType == "Cash") {
             remindCashTransaction();
@@ -128,13 +128,13 @@ public class Transaction implements Billable {
     }
 
     public void processRefund() {
-        if (ticket.isReserved()) {
-            if (transactionType == "Credit Card") {
-                System.out.println("Refunding transaction for ticket " + ticket.getTicketId());
-            } else {
-                System.out.println("Cannot refund. Cash transaction was not collected.");
-            }
+        if (transactionType.equalsIgnoreCase("Credit Card")) {
+            System.out.println(
+                    "Refunding transaction for ticket " + ticket.getTicketId() + " to card number: " + cardNumber);
+        } else {
+            System.out.println("Cannot refund. Cash transaction was not collected.");
         }
+
     }
 
     public void validateCard() {

@@ -12,6 +12,7 @@ public class Ticket implements Reservable {
     private int seatNumber;
     private boolean reserved;
     private double price;
+    private Transaction transaction;
 
     // Constructor
     public Ticket() {
@@ -156,6 +157,14 @@ public class Ticket implements Reservable {
 
     public static List<Ticket> getTickets() {
         return tickets;
+    }
+
+    public Transaction getTransaction() {
+        return transaction;
+    }
+
+    public void setTransaction(Transaction transaction) {
+        this.transaction = transaction;
     }
 
     @Override
