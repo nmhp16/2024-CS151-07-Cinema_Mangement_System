@@ -781,6 +781,12 @@ public class CinemaUI {
                         System.out.println("Please enter valid ID or '0' to go back:");
                     }
                 } else {
+                    scanner.nextLine();
+                    String input = scanner.nextLine();
+                    if (input.equalsIgnoreCase("Exit")) {
+                        exitRequest = true;
+                        break;
+                }
                     // If input is not an integer, show an error message
                     System.out.println("Invalid input, Please enter a valid numeric ID or '0' to go back.");
                     scanner.next(); // Consume the invalid input
@@ -789,6 +795,9 @@ public class CinemaUI {
                 System.out.println("Please enter a valid number.");
                 scanner.next(); // Consume the invalid input
             }
+        }
+        if (exitRequest == true) {
+            exitProgram();
         }
 
     }
