@@ -765,17 +765,10 @@ public class CinemaUI {
                     Ticket ticketToCancel = Ticket.findTicketById(ticketId);
 
                     if (ticketToCancel != null) {
-                        // ticketToCancel.cancelReservation(ticketToCancel);
-                        // Transaction ticketTransaction = ticketToCancel.getTransaction();
-                        //  if (ticketTransaction != null) {
-                        //     ticketTransaction.processRefund();
-                        //  } else {
-                        //     System.out.println("No transaction found.");
-                        //  }
                         if (!ticketToCancel.isReserved()) {
                             System.out.println("Ticket with ID " + ticketId + " is already canceled.");
                         } else {
-                            ticketToCancel.cancelReservation();
+                            ticketToCancel.cancelReservation(ticketToCancel);
                             ticketToCancel.getTransaction().processRefund();
                         }
                         displayMenu();
@@ -842,6 +835,7 @@ public class CinemaUI {
             }
         }
     }
+
     private void exitProgram() {
         if (scanner != null) {
             scanner.close();

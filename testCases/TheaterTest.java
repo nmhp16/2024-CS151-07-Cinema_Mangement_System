@@ -1,3 +1,7 @@
+// Use VS Code Terminal to run
+// Make sure in test folder
+// javac -cp "lib/*;." src/*.java testCases/*.java
+// java -cp "lib/*;.;src;testCases" org.junit.runner.JUnitCore testCases.TheaterTest
 package testCases;
 
 import org.junit.Assert;

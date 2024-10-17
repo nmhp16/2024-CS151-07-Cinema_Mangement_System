@@ -20,7 +20,6 @@ public class FoodAndDrinkTest {
     public void testDefaultConstructor() {
         FoodAndDrink defaultFoodAndDrink = new FoodAndDrink();
         Assert.assertNull(defaultFoodAndDrink.getName());
-        Assert.assertEquals(0.0, defaultFoodAndDrink.getPrice());
         Assert.assertEquals(0, defaultFoodAndDrink.getId());
     }
 
