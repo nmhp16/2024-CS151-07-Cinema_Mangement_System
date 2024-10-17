@@ -41,6 +41,11 @@ public class Showtime {
         }
     }
 
+    // Method to release the seat
+    public void releaseSeat(int seatNumber) {
+        seatArray[seatNumber] = true;
+    }
+
     // Method to check if a seat number is valid for the selected seat type
     public boolean selectSeat(int seatNumber, String category) {
         if (seatNumber < 1 || seatNumber > 30) {
@@ -73,7 +78,7 @@ public class Showtime {
 
     // Method to display all reserved seats
     public void displayReservedSeats() {
-        System.out.print("Reserved Seats: ");
+        System.out.print("Reserved Seat: ");
         boolean hasReservedSeats = false;
 
         for (int i = 1; i < seatArray.length; i++) {

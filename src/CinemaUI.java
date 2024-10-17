@@ -21,6 +21,8 @@ public class CinemaUI {
     // Map to store customer, this keep multiple customer with same phone number
     private Map<String, List<Customer>> customerMap = new HashMap<>();
     private boolean exitRequest = false;
+    private int seatNum;
+    private SeatType userChoice = null;
 
     /**
      * Constructor that initializes the CinemaUI without a Cinema
@@ -74,7 +76,7 @@ public class CinemaUI {
                         viewCustomerInfo();
                         return; // Exit the method after handling
                     default:
-                        System.out.println("Invalid option, please select again.");
+                        System.out.println("Invalid option, please select again or enter 'Exit' to exit: ");
                 }
             } else {
                 String input = scanner.next();
@@ -82,7 +84,7 @@ public class CinemaUI {
                     exitRequest = true;
                     break;
                 }
-                System.out.println("Invalid input. Please enter a valid numeric option.");
+                System.out.println("Invalid input. Please enter a valid numeric option or enter 'Exit' to exit: ");
             }
         }
         if (exitRequest == true) {
@@ -96,7 +98,7 @@ public class CinemaUI {
     private void showTheaterOptions() {
 
         while (true) {
-            System.out.println("\nSelect an option by ID or type '0' to go back:");
+            System.out.println("\nSelect an option by ID or type '0' to go back or 'Exit' to exit: ");
             System.out.println("\n1: Display all movies");
             System.out.println("2: Show by Genre");
             System.out.println("\nPlease select the options:");
@@ -120,7 +122,8 @@ public class CinemaUI {
                         showTheaterByGenre();
                         return; // Exit the method
                     default:
-                        System.out.println("Invalid option. Please select a valid option.");
+                        System.out.println(
+                                "Invalid option. Please select a valid option '0' to go back or 'Exit' to exit: ");
                 }
             } else {
                 String input = scanner.next(); // Get the next input
@@ -130,7 +133,7 @@ public class CinemaUI {
                 }
 
                 // If input is not an integer, show an error message
-                System.out.println("Invalid input. Please enter a valid numeric ID.");
+                System.out.println("Invalid input. Please enter a valid numeric ID '0' to go back or 'Exit' to exit: ");
             }
         }
         if (exitRequest == true) {
@@ -142,25 +145,31 @@ public class CinemaUI {
      * Display theater with genre
      */
     private void showTheaterByGenre() {
-        String genre;
         Set<String> availableGenres = cinema.availableGenresInCinema();
-
         scanner.nextLine(); // Clear input buffer
 
         while (true) {
-            System.out.println("\nPlease select the genre available:");
+            System.out.println("\nPlease select from the available genres:");
 
             for (String availableGenre : availableGenres) {
                 System.out.println(availableGenre);
             }
 
-            System.out.println("\nPlease type your genre or '0' to go back: ");
+            System.out.println("\nPlease type your genre or '0' to go back or 'Exit' to exit:");
 
-            genre = scanner.nextLine().trim(); // Avoid leading/trilling spaces
+            String genre = scanner.nextLine().trim(); // Avoid leading/trailing spaces
+
+            if (genre.equalsIgnoreCase("Exit")) {
+                exitRequest = true;
+                exitProgram(); // Exit the program
+                return;
+            } else if (genre.equals("0")) {
+                showTheaterOptions(); // Go back to theater options
+                return;
+            }
 
             // Check if the input genre is valid
             boolean isValidGenre = false;
-
             for (String availableGenre : availableGenres) {
                 if (availableGenre.equalsIgnoreCase(genre)) {
                     isValidGenre = true;
@@ -172,49 +181,53 @@ public class CinemaUI {
                 cinema.findTheatersByMovieGenre(genre);
 
                 // Select Theater
-                System.out.println("\nSelect a theater by ID or type '0' to go back:");
-
-                int theaterId;
-
+                System.out.println("\nSelect a theater by ID or type '0' to go back or 'Exit' to exit:");
                 System.out.println("----------------------------------------------");
                 System.out.println("----------------------------------------------");
 
                 while (true) {
                     if (scanner.hasNextInt()) {
-                        theaterId = scanner.nextInt();
+                        int theaterId = scanner.nextInt();
 
                         if (theaterId == 0) {
-                            showTheaterByGenre(); // Return to show theater options
+                            showTheaterByGenre(); // Return to genre selection
                             return;
                         }
 
                         try {
-                            // Select a theater
-                            while (cinema.isValidTheater(theaterId) == false) {
-                                System.out.println("Invalid option, Please select again: ");
-                                theaterId = scanner.nextInt();
+                            // Select a valid theater
+                            if (cinema.isValidTheater(theaterId)) {
+                                selectedTheater = cinema.selectTheater(theaterId);
+                                showMovies(); // Display movies for selected theater
+                                return; // Exit method after displaying movies
+                            } else {
+                                System.out.println(
+                                        "Invalid theater ID. Please select again or type '0' to go back or 'Exit' to exit:");
                             }
-                            selectedTheater = cinema.selectTheater(theaterId);
-                            // list the genres by the if statements
-                            showMovies();
 
                         } catch (TheaterNotFoundException e) {
                             System.out.println(e.getMessage());
                         }
 
-                        System.out.println("----------------------------------------------");
-                        System.out.println("----------------------------------------------");
-                        break;
                     } else {
-                        System.out.println("Invalid input. Please enter a valid numeric ID.");
-                        scanner.next(); // Consume the invalid input
+                        String input = scanner.next(); // Get the next input (non-integer)
+                        if (input.equalsIgnoreCase("Exit")) {
+                            exitRequest = true;
+                            exitProgram(); // Exit the program
+                            return;
+
+                        } else if (input.equals("0")) {
+                            showTheaterByGenre(); // Return to genre selection
+                            return;
+
+                        } else {
+                            System.out.println(
+                                    "Invalid input. Please enter a valid numeric ID, '0' to go back, or 'Exit' to exit.");
+                        }
                     }
                 }
 
             } else {
-                if (genre.equalsIgnoreCase("0")) {
-                    showTheaterOptions();
-                }
                 System.out.println("Invalid genre. Please try again.");
                 System.out.println("----------------------------------------------");
                 System.out.println("----------------------------------------------");
@@ -235,7 +248,7 @@ public class CinemaUI {
         System.out.println("----------------------------------------------");
         System.out.println("----------------------------------------------");
 
-        System.out.println("\nSelect a theater by ID or type '0' to go back:");
+        System.out.println("\nSelect a theater by ID or type '0' to go back or 'Exit' to exit:");
 
         int theaterId;
 
@@ -250,13 +263,14 @@ public class CinemaUI {
 
                 try {
                     // Select a theater
-                    while (cinema.isValidTheater(theaterId) == false) {
-                        System.out.println("Invalid option, Please select again: ");
-                        theaterId = scanner.nextInt();
+                    if (cinema.isValidTheater(theaterId)) {
+                        selectedTheater = cinema.selectTheater(theaterId);
+                        // Display movies for selected theater
+                        showMovies();
+                        return; // Exit the method after showing movies
+                    } else {
+                        System.out.println("Invalid option, Please select again or '0' to go back or 'Exit' to exit: ");
                     }
-                    selectedTheater = cinema.selectTheater(theaterId);
-                    // list the genres by the if statements
-                    showMovies();
 
                 } catch (TheaterNotFoundException e) {
                     System.out.println(e.getMessage());
@@ -267,11 +281,11 @@ public class CinemaUI {
                     exitRequest = true;
                     break;
                 }
-                System.out.println("Invalid input. Please enter a valid numeric ID.");
-                scanner.next(); // Consume invalid input
+                System.out
+                        .println("Invalid input. Please enter a valid numeric ID, '0' to go back, or 'Exit' to exit.");
             }
         }
-        if (exitRequest = true) {
+        if (exitRequest == true) {
             exitProgram();
         }
     }
@@ -284,7 +298,7 @@ public class CinemaUI {
         // Get movies from the selected theater
         selectedTheater.listMovies();
 
-        System.out.println("\nSelect a movie by ID or type '0' to go back:");
+        System.out.println("\nSelect a movie by ID or type '0' to go back or 'Exit' to exit:");
 
         int movieId;
 
@@ -306,12 +320,16 @@ public class CinemaUI {
                 }
 
                 try {
-                    while (selectedTheater.isValidMovie(movieId) == false) {
-                        System.out.println("Invalid option, Please select again: ");
-                        movieId = scanner.nextInt();
+                    if (selectedTheater.isValidMovie(movieId)) {
+                        selectedMovie = selectedTheater.selectMovie(movieId); // Select a movie
+                        // Display showtimes for the selected movie
+                        showShowtimes();
+                        return; // Exit the method after showing showtimes
+                    } else {
+                        System.out.println(
+                                "Invalid option. Please select a valid movie ID, '0' to go back, or 'Exit' to exit.");
                     }
-                    selectedMovie = selectedTheater.selectMovie(movieId); // Select a movie
-                    showShowtimes();
+
                 } catch (MovieNotFoundException e) {
                     System.out.println(e.getMessage());
                 }
@@ -321,8 +339,8 @@ public class CinemaUI {
                     exitRequest = true;
                     break;
                 }
-                System.out.println("Invalid input. Please enter a valid numeric ID.");
-                scanner.next(); // Consume the invalid input
+                System.out
+                        .println("Invalid input. Please enter a valid numeric ID, '0' to go back, or 'Exit' to exit.");
             }
         }
         if (exitRequest == true) {
@@ -340,7 +358,7 @@ public class CinemaUI {
         System.out.println("----------------------------------------------");
         selectedMovie.isShowtimeSoldOut(); // Check if showtime is sold out
         selectedMovie.listShowtimes();
-        System.out.println("\nSelect a showtime by ID or type '0' to go back:");
+        System.out.println("\nSelect a showtime by ID or type '0' to go back or 'Exit' to exit:");
 
         int showtimeId;
         System.out.println("----------------------------------------------");
@@ -357,12 +375,14 @@ public class CinemaUI {
                 }
 
                 try {
-                    while (selectedMovie.isValidShowtime(showtimeId) == false) {
-                        System.out.println("Invalid option, Please select again: ");
-                        showtimeId = scanner.nextInt();
+                    if (selectedMovie.isValidShowtime(showtimeId)) {
+                        selectedShowtime = selectedMovie.selectShowtime(showtimeId); // Select a showtime
+                        selectSeatType(); // Ask for seat type first
+                        return; // Exit method after select seat type
+
+                    } else {
+                        System.out.println("Invalid option, Please select again or '0' to go back or 'Exit' to exit: ");
                     }
-                    selectedShowtime = selectedMovie.selectShowtime(showtimeId); // Select a showtime
-                    selectSeatType(); // Ask for seat type first
                 } catch (ShowtimeNotFoundException e) {
                     System.out.println(e.getMessage());
                 }
@@ -372,8 +392,9 @@ public class CinemaUI {
                     exitRequest = true;
                     break;
                 }
-                System.out.println("Invalid input. Please enter a valid numeric ID");
-                scanner.next(); // Consume the invalid input
+                System.out
+                        .println(
+                                "Invalid input. Please enter a valid numeric ID or '0' to go back or 'Exit' to exit: ");
             }
         }
         if (exitRequest == true) {
@@ -390,7 +411,7 @@ public class CinemaUI {
         System.out.println("2. Premium ($" + SeatType.PREMIUM.getPrice() + ")");
         System.out.println("3. VIP ($" + SeatType.VIP.getPrice() + ")");
 
-        System.out.println("\nSelect a seat type by ID or type '0' to go back:");
+        System.out.println("\nSelect a seat type by ID or type '0'  or 'Exit' to exit:");
         int choice;
 
         System.out.println("----------------------------------------------");
@@ -417,7 +438,7 @@ public class CinemaUI {
                         showShowtimes();
                         break;
                     default:
-                        System.out.println("Invalid option, Please select again: ");
+                        System.out.println("Invalid option, Please select again or '0' to go back or 'Exit' to exit: ");
                         seatType = null;
                         break;
 
@@ -428,14 +449,15 @@ public class CinemaUI {
                     exitRequest = true;
                     break;
                 }
-                System.out.println("Invalid input. Please enter a valid numeric ID.");
-                scanner.next(); // Consume the invalid input
+                System.out
+                        .println("Invalid input. Please enter a valid numeric ID or '0' to go back or 'Exit to exit: ");
             }
         }
         if (exitRequest == true) {
             exitProgram();
         }
 
+        userChoice = seatType;
         showSeatAvailability(seatType); // Show seat availability based on the selected seat type
     }
 
@@ -448,7 +470,7 @@ public class CinemaUI {
         System.out.println("\nAvailable Seats (" + seatType + "): Price: $" + seatType.getPrice());
         displaySeatingChart(seatType.name()); // Show seating chart for the selected seat type
 
-        System.out.println("\nSelect a seat by entering seat number or type '0' to go back:");
+        System.out.println("\nSelect a seat by entering seat number or type '0' to go back or 'Exit' to exit:");
         int seatNumber;
         System.out.println("----------------------------------------------");
         System.out.println("----------------------------------------------");
@@ -456,10 +478,10 @@ public class CinemaUI {
         while (true) {
             if (scanner.hasNextInt()) {
                 seatNumber = scanner.nextInt();
+                seatNum = seatNumber;
 
                 if (seatNumber == 0) {
                     selectSeatType(); // Go back to select seat
-                    return;
                 }
 
                 // Check if the seat number is valid
@@ -483,7 +505,8 @@ public class CinemaUI {
                     selectFoodAndDrinks(); // Proceed to food selection
 
                 } else {
-                    System.out.println("Invalid or unavailable seat. Please try again.");
+                    System.out.println(
+                            "Invalid or unavailable seat. Please try again or '0' to go back or 'Exit' to exit: ");
                     showSeatAvailability(seatType); // Retry seat selection
                 }
             } else {
@@ -492,8 +515,8 @@ public class CinemaUI {
                     exitRequest = true;
                     break;
                 }
-                System.out.println("Invalid input. Please enter a valid numeric ID.");
-                scanner.next(); // Consume the invalid input
+                System.out.println(
+                        "Invalid input. Please enter a valid numeric ID or '0' to go back or 'Exit' to exit: ");
             }
         }
         if (exitRequest == true) {
@@ -547,14 +570,21 @@ public class CinemaUI {
         System.out.println("1. Adult");
         System.out.println("2. Child (20% discount)");
         System.out.println("3. Senior (20% discount)");
+        System.out.println(
+                "Please choose a valid option or '0' to go back or 'Exit' to exit: ");
 
-        int choice = 0;
+        int choice = 10;
 
         while (choice < 1 || choice > 3) {
             if (scanner.hasNextInt()) {
                 choice = scanner.nextInt();
+                if (choice == 0) {
+                    selectedShowtime.releaseSeat(seatNum);
+                    selectSeatType();
+                }
                 if (choice < 1 || choice > 3) {
-                    System.out.println("Please choose 1 for Adult, 2 for Child, or 3 for Senior.");
+                    System.out.println(
+                            "Please choose a valid option or '0' to go back or 'Exit' to exit: ");
                 }
             } else {
                 String input = scanner.next(); // Get the next input
@@ -562,8 +592,8 @@ public class CinemaUI {
                     exitRequest = true;
                     break;
                 }
-                System.out.println("Invalid input. Please choose 1 for Adult, 2 for Child, or 3 for Senior.");
-                scanner.next();
+                System.out.println(
+                        "Invalid input. Please choose a valid option or '0' to go back or 'Exit' to exit:");
             }
 
         }
@@ -574,6 +604,9 @@ public class CinemaUI {
         String ageCategory;
 
         switch (choice) {
+            case 1:
+                ageCategory = "Adult";
+                break;
             case 2:
                 ageCategory = "Child";
                 finalPrice = selectedTicket.applyDiscount(seatType.getPrice(), 20); // 20% discount for children
@@ -609,7 +642,7 @@ public class CinemaUI {
 
         System.out.println("\nSelect food and drink by ID or type '0' to skip:");
 
-        int itemId;
+        int itemId = 0;
 
         while ((itemId = getValidItemId()) != 0) {
             FoodAndDrink selectedItem = findItemById(foodAndDrinks, itemId);
@@ -623,7 +656,7 @@ public class CinemaUI {
 
             } else {
                 // Invalid selection
-                System.out.println("Invalid ID. Please try again.");
+                System.out.println("Invalid ID. Please try again or '0' to skip:");
             }
 
             System.out.println("\nSelect more food and drinks by ID or type '0' to skip:");
@@ -645,7 +678,7 @@ public class CinemaUI {
     private int getValidItemId() {
         int itemId;
         while (!scanner.hasNextInt()) {
-            System.out.println("Invalid input. Please enter a valid number.");
+            System.out.println("Invalid input. Please enter a valid number or '0' to go back or 'Exit' to exit: ");
             scanner.next(); // Clear the invalid input
         }
         itemId = scanner.nextInt();
@@ -744,18 +777,19 @@ public class CinemaUI {
                     case 2:
                         return "Credit Card";
                     default:
-                        System.out.println("Invalid input. Please select again: ");
+                        System.out.println("Invalid input. Please select again or '0' to go back or 'Exit' to exit: ");
                         break;
                 }
             } else {
-                System.out.println("Invalid input. Please enter a valid numeric ID.");
+                System.out
+                        .println("Invalid input. Please enter a valid numeric ID or '0' to go back or 'Exit' to exit:");
                 scanner.next(); // Consume the invalid input
             }
         }
     }
 
     private void cancelTicketReservation() {
-        System.out.println("Enter the ticket ID to cancel the reservation or '0' to go back: ");
+        System.out.println("Enter the ticket ID to cancel the reservation or '0' or 'Exit' to exit: ");
 
         while (true) {
             try {
@@ -780,7 +814,7 @@ public class CinemaUI {
 
                     } else {
                         System.out.println("Ticket with ID " + ticketId + " not found.");
-                        System.out.println("Please enter valid ID or '0' to go back:");
+                        System.out.println("Please enter valid ID or '0' to go back or 'Exit' to exit:");
                     }
                 } else {
                     String input = scanner.next(); // Get the next input
@@ -789,8 +823,8 @@ public class CinemaUI {
                         break;
                     }
                     // If input is not an integer, show an error message
-                    System.out.println("Invalid input, Please enter a valid numeric ID or '0' to go back.");
-                    scanner.next(); // Consume the invalid input
+                    System.out.println(
+                            "Invalid input, Please enter a valid numeric ID or '0' to go back or 'Exit' to exit");
                 }
             } catch (InputMismatchException e) {
                 System.out.println("Please enter a valid number.");
@@ -807,8 +841,13 @@ public class CinemaUI {
         scanner.nextLine();
 
         while (true) { // Loop until valid input or user decides to go back
-            System.out.println("Please enter customer phone number or '0' to go back: ");
+            System.out.println("Please enter customer phone number or '0' to go back or 'Exit' to exit: ");
             String phone = scanner.nextLine();
+
+            if (phone.equalsIgnoreCase("Exit")) {
+                exitRequest = true;
+                exitProgram();
+            }
 
             // Check if the input is "0" to go back
             if (phone.equals("0")) {
