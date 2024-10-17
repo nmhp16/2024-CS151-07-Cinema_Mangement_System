@@ -1,3 +1,7 @@
+// Use VS Code Terminal to run
+// Make sure in test folder
+// javac -cp "lib/*;." src/*.java testCases/*.java
+// java -cp "lib/*;.;src;testCases" org.junit.runner.JUnitCore testCases.TicketTest
 package testCases;
 
 import org.junit.Assert;
@@ -13,6 +17,7 @@ public class TicketTest {
     public void setUp() {
         // Initialize a ticket before each test case
         ticket = new Ticket("Economy", "Adult", 12, 100.0);
+
     }
 
     @Test
@@ -41,7 +46,7 @@ public class TicketTest {
     public void testReserveTicketAlreadyReserved() {
         try {
             ticket.reserveTicket(ticket);
-            ticket.reserveTicket(ticket);
+            ticket.reserveTicket(ticket); // Trying to reserve an already reserved ticket
             Assert.fail("Expected ReservationException");
         } catch (ReservationException e) {
             Assert.assertEquals("Ticket is already reserved.", e.getMessage());
@@ -58,19 +63,22 @@ public class TicketTest {
 
     @Test
     public void testCancelReservationNotReserved() {
-        ticket.cancelReservation(ticket);
+        ticket.cancelReservation(ticket); // Cancelling a ticket that was never reserved
         Assert.assertFalse(ticket.isReserved());
     }
 
     @Test
     public void testFindTicketById() {
+        ticket.setTicketId(1);
         int ticketId = ticket.getTicketId();
-        Assert.assertNotNull(Ticket.findTicketById(ticketId));
-        Assert.assertEquals(ticket, Ticket.findTicketById(ticketId));
+        ticket.reserveTicket(ticket);
+        Ticket foundTicket = Ticket.findTicketById(ticketId);
+        Assert.assertEquals(ticket, foundTicket); // Ensure the found ticket matches the original
     }
 
     @Test
     public void testTicketIdExists() {
+        ticket.setTicketId(1);
         int ticketId = ticket.getTicketId();
         Assert.assertTrue(Ticket.ticketIdExists(ticketId));
         Assert.assertFalse(Ticket.ticketIdExists(ticketId + 1)); // Non-existent ID
@@ -79,6 +87,6 @@ public class TicketTest {
     @Test
     public void testRemoveTicketId() {
         int currentId = ticket.getTicketId();
-        Assert.assertEquals(currentId - 1, ticket.removeTicketId());
+        Assert.assertEquals(currentId - 1, ticket.removeTicketId()); // Simulating ID removal
     }
 }
