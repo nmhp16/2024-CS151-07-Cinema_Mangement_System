@@ -69,7 +69,7 @@ public class ShowtimeTest {
         assertTrue(showtime.isSeatTaken(5, "VIP"));
     }
 
-    @Test
+@Test
     public void testGetAvailableSeats() {
         // Initially, all 30 seats should be available
         assertEquals(30, showtime.getAvailableSeats());
