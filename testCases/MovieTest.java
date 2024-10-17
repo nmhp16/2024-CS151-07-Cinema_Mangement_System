@@ -1,3 +1,7 @@
+// Use VS Code Terminal to run
+// Make sure in test folder
+// javac -cp "lib/*;." src/*.java testCases/*.java
+// java -cp "lib/*;.;src;testCases" org.junit.runner.JUnitCore testCases.MovieTest
 package testCases;
 
 import org.junit.Before;
@@ -23,7 +27,7 @@ public class MovieTest {
 
     @Test
     public void testAddShowtime() {
-        Showtime showtime = new Showtime(1, "10:00 AM", 50); // Example showtime with available seats
+        Showtime showtime = new Showtime(1, "10:00 AM"); // Example showtime with available seats
         movie.addShowtime(showtime);
         assertEquals(1, movie.getShowtimes().size()); // Ensure showtime is added
         System.out.println("Showtime added successfully. Total showtimes: " + movie.getShowtimes().size());
@@ -39,10 +43,10 @@ public class MovieTest {
         movie.listGenres(); // Test listing genres
 
         // Expected output
-        String expectedOutput = "Genre: Sci-Fi\n";
-        String actualOutput = outContent.toString();
+        String expectedOutput = "Genre: Sci-Fi\n"; // Ensure expected output has a newline
 
-        assertEquals(expectedOutput, actualOutput); // Check the output matches
+        String actualOutput = outContent.toString().trim(); // Use .trim() to remove any trailing spaces/newlines
+        assertEquals(expectedOutput.trim(), actualOutput); // Trim and compare outputs
 
         // Reset the output stream
         System.setOut(originalOut);
@@ -56,8 +60,8 @@ public class MovieTest {
         PrintStream originalOut = System.out; // Save original output stream
         System.setOut(new PrintStream(outContent)); // Redirect output
 
-        Showtime showtime1 = new Showtime(1, "10:00 AM", 50);
-        Showtime showtime2 = new Showtime(2, "1:00 PM", 0); // Sold out showtime
+        Showtime showtime1 = new Showtime(1, "10:00 AM");
+        Showtime showtime2 = new Showtime(2, "1:00 PM"); // Sold out showtime
         movie.addShowtime(showtime1);
         movie.addShowtime(showtime2);
         movie.listShowtimes(); // List showtimes
@@ -65,7 +69,9 @@ public class MovieTest {
         // Expected output
         String expectedOutput = "\nShowtimes for Inception:\n" +
                 "Genre: Sci-Fi\n\n" +
+                "Available Seats: 30\n" +
                 "Showtime ID: 1, Time: 10:00 AM\n\n" +
+                "Available Seats: 30\n" +
                 "Showtime ID: 2, Time: 1:00 PM\n\n";
 
         String actualOutput = outContent.toString().replace("\r\n", "\n"); // Normalize line endings
@@ -79,7 +85,7 @@ public class MovieTest {
 
     @Test
     public void testSelectShowtimeValid() throws ShowtimeNotFoundException {
-        Showtime showtime = new Showtime(1, "10:00 AM", 50);
+        Showtime showtime = new Showtime(1, "10:00 AM");
         movie.addShowtime(showtime);
         Showtime selected = movie.selectShowtime(1);
         assertEquals(showtime, selected); // Ensure the selected showtime is correct
@@ -88,14 +94,14 @@ public class MovieTest {
 
     @Test(expected = ShowtimeNotFoundException.class)
     public void testSelectShowtimeInvalid() throws ShowtimeNotFoundException {
-        Showtime showtime = new Showtime(1, "10:00 AM", 50);
+        Showtime showtime = new Showtime(1, "10:00 AM");
         movie.addShowtime(showtime);
         movie.selectShowtime(2); // Attempt to select a showtime that does not exist
     }
 
     @Test
     public void testRemoveShowtime() throws ShowtimeNotFoundException {
-        Showtime showtime = new Showtime(1, "10:00 AM", 50);
+        Showtime showtime = new Showtime(1, "10:00 AM");
         movie.addShowtime(showtime);
         movie.removeShowtime(1); // Remove the showtime
         assertEquals(0, movie.getShowtimes().size()); // Ensure no showtimes remain
@@ -109,7 +115,7 @@ public class MovieTest {
 
     @Test
     public void testIsValidShowtimeTrue() {
-        Showtime showtime = new Showtime(1, "10:00 AM", 50);
+        Showtime showtime = new Showtime(1, "10:00 AM");
         movie.addShowtime(showtime);
         assertTrue(movie.isValidShowtime(1)); // Should return true for valid showtime ID
         System.out.println("Valid showtime ID check passed for: " + showtime.getShowtimeId());
@@ -117,7 +123,7 @@ public class MovieTest {
 
     @Test
     public void testIsValidShowtimeFalse() {
-        Showtime showtime = new Showtime(1, "10:00 AM", 50);
+        Showtime showtime = new Showtime(1, "10:00 AM");
         movie.addShowtime(showtime);
         assertFalse(movie.isValidShowtime(2)); // Should return false for invalid showtime ID
         System.out.println("Invalid showtime ID check passed for ID: 2");
@@ -130,18 +136,20 @@ public class MovieTest {
         PrintStream originalOut = System.out; // Save original output stream
         System.setOut(new PrintStream(outContent)); // Redirect output
 
-        Showtime showtime = new Showtime(1, "10:00 AM", 50);
+        Showtime showtime = new Showtime(1, "10:00 AM");
         movie.addShowtime(showtime);
         movie.checkSeatOccupancy(showtime); // Check seat occupancy
 
         // Expected output
-        String expectedOutput = "Available Seats: 50\n";
-        String actualOutput = outContent.toString();
+        String expectedOutput = "Available Seats: 30\n"; // Ensure expected output includes a newline
 
-        assertEquals(expectedOutput, actualOutput); // Check the output matches
+        String actualOutput = outContent.toString().trim(); // Use .trim() to remove any trailing spaces/newlines
+
+        assertEquals(expectedOutput.trim(), actualOutput); // Trim and compare outputs
 
         // Reset the output stream
         System.setOut(originalOut);
         System.out.println("Check seat occupancy method tested successfully.");
     }
+
 }
