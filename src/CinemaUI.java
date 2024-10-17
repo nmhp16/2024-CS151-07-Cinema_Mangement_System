@@ -765,13 +765,25 @@ public class CinemaUI {
                     Ticket ticketToCancel = Ticket.findTicketById(ticketId);
 
                     if (ticketToCancel != null) {
-                        ticketToCancel.cancelReservation(ticketToCancel);
-                        ticketToCancel.getTransaction().processRefund();
+                        // ticketToCancel.cancelReservation(ticketToCancel);
+                        // Transaction ticketTransaction = ticketToCancel.getTransaction();
+                        //  if (ticketTransaction != null) {
+                        //     ticketTransaction.processRefund();
+                        //  } else {
+                        //     System.out.println("No transaction found.");
+                        //  }
+                        if (!ticketToCancel.isReserved()) {
+                            System.out.println("Ticket with ID " + ticketId + " is already canceled.");
+                        } else {
+                            ticketToCancel.cancelReservation();
+                            ticketToCancel.getTransaction().processRefund();
+                        }
                         displayMenu();
                         break;
 
                     } else if (ticketId == 0) {
                         displayMenu(); // Exit loop when user chooses to go back
+                        break;
 
                     } else {
                         System.out.println("Ticket with ID " + ticketId + " not found.");
