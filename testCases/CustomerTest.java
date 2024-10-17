@@ -1,11 +1,20 @@
-package src;
+// Use VS Code Terminal to run
+// Make sure in test folder
+// javac -cp "lib/*;." src/*.java testCases/*.java
+// java -cp "lib/*;.;src;testCases" org.junit.runner.JUnitCore testCases.CustomerTest
+package testCases;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import java.util.ArrayList;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.Assert;
+
 import java.util.List;
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.ArrayList;
 import java.util.Scanner;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
+import src.*;
 
 public class CustomerTest {
 
@@ -16,50 +25,56 @@ public class CustomerTest {
     private Movie movie;
     private Showtime showtime;
 
-    @BeforeEach
+    @Before
     public void setUp() {
         // Setup objects
         customer = new Customer("John Doe", "johndoe@example.com", "1234567890");
-        ticket = new Ticket("T001", 15.50, true); // Mocked Ticket
-        movie = new Movie("Avengers: Endgame"); // Mocked Movie
-        showtime = new Showtime("S001", "12:00 PM"); // Mocked Showtime
-        
-        transaction1 = new Transaction(movie, showtime, ticket);
-        transaction2 = new Transaction(movie, showtime, ticket);
+        ticket = new Ticket("VIP", "Adult", 1); // Mocked Ticket
+        movie = new Movie(1, "Movie A", "Action"); // Mocked Movie
+        showtime = new Showtime(1, "12:00 PM"); // Mocked Showtime
+
+        // Initialize selectedItems for food and drinks
+        List<FoodAndDrink> selectedItems = new ArrayList<>();
+        selectedItems.add(new FoodAndDrink("Popcorn", 5.00));
+        selectedItems.add(new FoodAndDrink("Drink", 3.00));
+
+        // Initialize transactions and set customer
+        transaction1 = new Transaction(movie, showtime, ticket, customer, selectedItems);
+        transaction2 = new Transaction(movie, showtime, ticket, customer, selectedItems);
     }
 
     @Test
     public void testConstructor_WithNameEmailPhone() {
         Customer c = new Customer("Alice", "alice@example.com", "0987654321");
-        assertEquals("Alice", c.getName());
-        assertEquals("alice@example.com", c.getEmail());
-        assertEquals("0987654321", c.getPhone());
+        Assert.assertEquals("Alice", c.getName());
+        Assert.assertEquals("alice@example.com", c.getEmail());
+        Assert.assertEquals("0987654321", c.getPhone());
     }
 
     @Test
     public void testConstructor_WithNameEmailOnly() {
         Customer c = new Customer("Bob", "bob@example.com");
-        assertEquals("Bob", c.getName());
-        assertEquals("bob@example.com", c.getEmail());
-        assertNull(c.getPhone());
+        Assert.assertEquals("Bob", c.getName());
+        Assert.assertEquals("bob@example.com", c.getEmail());
+        Assert.assertNull(c.getPhone());
     }
 
     @Test
     public void testValidatePhone_ValidPhone() {
-        assertTrue(customer.validatePhone("1234567890"));
+        Assert.assertTrue(customer.validatePhone("1234567890"));
     }
 
     @Test
     public void testValidatePhone_InvalidPhone() {
-        assertFalse(customer.validatePhone("12345")); // Invalid phone number
+        Assert.assertFalse(customer.validatePhone("12345")); // Invalid phone number
     }
 
     @Test
     public void testUpdateProfile() {
         customer.updateProfile("Jane Doe", "janedoe@example.com", "0987654321");
-        assertEquals("Jane Doe", customer.getName());
-        assertEquals("janedoe@example.com", customer.getEmail());
-        assertEquals("0987654321", customer.getPhone());
+        Assert.assertEquals("Jane Doe", customer.getName());
+        Assert.assertEquals("janedoe@example.com", customer.getEmail());
+        Assert.assertEquals("0987654321", customer.getPhone());
     }
 
     @Test
@@ -67,11 +82,11 @@ public class CustomerTest {
         customer.addTransaction(transaction1);
         customer.addTransaction(transaction2);
 
-        List<Transaction> transactions = customer.getTransactionHistory();
+        List<Transaction> transactions = customer.geTransactionsHistory();
 
-        assertEquals(2, transactions.size());
-        assertEquals(transaction1, transactions.get(0));
-        assertEquals(transaction2, transactions.get(1));
+        Assert.assertEquals(2, transactions.size());
+        Assert.assertEquals(transaction1, transactions.get(0));
+        Assert.assertEquals(transaction2, transactions.get(1));
     }
 
     @Test
@@ -85,7 +100,18 @@ public class CustomerTest {
         customer.addTransaction(transaction2);
 
         // Capture the output to verify the transaction history is displayed correctly
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+
         customer.displayTransactionHistory();
+
+        // Verify that transaction history and movie details are printed
+        String output = outContent.toString();
+        Assert.assertTrue(output.contains("Customer receipt:"));
+        Assert.assertTrue(output.contains("Movie A")); // Assuming "Movie A" appears in the receipt
+
+        // Reset the output stream
+        System.setOut(System.out);
     }
 
     @Test
@@ -97,14 +123,16 @@ public class CustomerTest {
 
     @Test
     public void testAddCustomer() {
-        String input = "Charlie\ncharlie@example.com\n1234567890\n";
+        // Adding a blank line to the input string to simulate the buffer clearing
+        String input = "\nCharlie\ncharlie@example.com\n1234567890\n";
         Scanner scanner = new Scanner(input);
 
         Customer newCustomer = new Customer();
         newCustomer.addCustomer(scanner);
 
-        assertEquals("Charlie", newCustomer.getName());
-        assertEquals("charlie@example.com", newCustomer.getEmail());
-        assertEquals("1234567890", newCustomer.getPhone());
+        Assert.assertEquals("Charlie", newCustomer.getName());
+        Assert.assertEquals("charlie@example.com", newCustomer.getEmail());
+        Assert.assertEquals("1234567890", newCustomer.getPhone());
     }
+
 }

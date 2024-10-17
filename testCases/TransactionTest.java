@@ -1,10 +1,13 @@
+// Use VS Code Terminal to run
+// Make sure in test folder
+// javac -cp "lib/*;." src/*.java testCases/*.java
+// java -cp "lib/*;.;src;testCases" org.junit.runner.JUnitCore testCases.TransactionTest
 package testCases;
 
 import org.junit.Before;
 import org.junit.Test;
 import src.*;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,11 +25,11 @@ public class TransactionTest {
     @Before
     public void setUp() {
         // Create mock data for testing
-        movie = new Movie("Inception", "Sci-Fi", 148);
-        showtime = new Showtime(1, LocalDateTime.now().plusHours(2));
-        ticket = new Ticket(1, 12.99, "Regular");
+        movie = new Movie(1, "Movie A", "Action");
+        showtime = new Showtime(1, "12:00 PM"); // Mocked Showtime
+        ticket = new Ticket("VIP", "Adult", 1); // Mocked Ticket
         customer = new Customer("John Doe", "john@example.com", "123-456-7890");
-        
+
         selectedItems = new ArrayList<>();
         selectedItems.add(new FoodAndDrink("Popcorn", 5.99));
         selectedItems.add(new FoodAndDrink("Soda", 2.99));
@@ -49,7 +52,7 @@ public class TransactionTest {
     public void testCalculateTotalCost() {
         double totalCost = transaction.calculateTotalCost();
         double expectedCost = ticket.getPrice() + selectedItems.get(0).getPrice() + selectedItems.get(1).getPrice();
-        
+
         assertEquals("Total cost should be calculated correctly", expectedCost, totalCost, 0.01);
     }
 
@@ -80,8 +83,9 @@ public class TransactionTest {
     @Test
     public void testPrintReceipt() {
         transaction.printReceipt();
-        
-        // This test would check the output manually since printing to console is involved.
+
+        // This test would check the output manually since printing to console is
+        // involved.
         // You can redirect output stream to capture and verify the output.
     }
 
