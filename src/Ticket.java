@@ -47,7 +47,7 @@ public class Ticket implements Reservable {
             System.out.println("Ticket " + ticket.getTicketId() + " is not reserved.");
             return;
         }
-        ticket.cancelReservation();
+        this.reserved = false;
         System.out.println("Reservation for ticket " + ticket.getTicketId() + " canceled.");
     }
 
@@ -93,14 +93,15 @@ public class Ticket implements Reservable {
     }
 
     public boolean isReserved() {
-        for (Ticket ticket : tickets) {
-            if (ticketId == ticket.getTicketId()) {
-                reserved = true;
-                return reserved;
-            }
-        }
-        reserved = false;
-        return reserved;
+        // for (Ticket ticket : tickets) {
+        //     if (ticketId == ticket.getTicketId()) {
+        //         reserved = true;
+        //         return reserved;
+        //     }
+        // }
+        // reserved = false;
+        // return reserved;
+        return this.reserved;
     }
 
     public int generateTicketId() {
