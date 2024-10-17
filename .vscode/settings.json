@@ -4,5 +4,6 @@
     ],
     "cSpell.words": [
         "ASAN",
-    ]
+    ],
+    "java.debug.settings.onBuildFailureProceed": true
 }
