@@ -81,9 +81,17 @@ public class CinemaUI {
                         System.out.println("Invalid option, please select again.");
                 }
             } else {
+                String input = scanner.next(); // Get the next input
+                if (input.equalsIgnoreCase("Exit")) {
+                    exitRequest = true;
+                    break;
+                }
                 System.out.println("Invalid input. Please enter a valid numeric option.");
                 scanner.next(); // Consume the invalid input
             }
+        }
+        if (exitRequest == true) {
+            exitProgram();
         }
     }
 
@@ -156,6 +164,13 @@ public class CinemaUI {
 
             genre = scanner.nextLine().trim(); // Avoid leading/trilling spaces
 
+            if (genre.equalsIgnoreCase("Exit")) {
+                exitRequest = true;
+            }
+            if (exitRequest == true) {
+                exitProgram();
+            }
+            
             // Check if the input genre is valid
             boolean isValidGenre = false;
 
@@ -204,6 +219,11 @@ public class CinemaUI {
                         System.out.println("----------------------------------------------");
                         break;
                     } else {
+                        String input = scanner.next(); // Get the next input
+                        if (input.equalsIgnoreCase("Exit")) {
+                            exitRequest = true;
+                            break;
+                        }
                         System.out.println("Invalid input. Please enter a valid numeric ID.");
                         scanner.next(); // Consume the invalid input
                     }
@@ -216,6 +236,9 @@ public class CinemaUI {
                 System.out.println("Invalid genre. Please try again.");
                 System.out.println("----------------------------------------------");
                 System.out.println("----------------------------------------------");
+            }
+            if (exitRequest == true) {
+                exitProgram();
             }
         }
     }
@@ -721,6 +744,13 @@ public class CinemaUI {
         // Wait for user input to return to the main menu
         System.out.println("\nPress Enter to return to the main menu...");
         scanner.nextLine(); // Consume newline left-over
+        String input = scanner.next(); // Get the next input
+        if (input.equalsIgnoreCase("Exit")) {
+            exitRequest = true;
+        }
+        if (exitRequest == true) {
+            exitProgram();
+        }
         scanner.nextLine(); // Wait for Enter key
         displayMenu();
     }
