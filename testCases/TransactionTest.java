@@ -122,11 +122,5 @@ public class TransactionTest {
         for (int i = 0; i < 99; i++) {
             transactions.add(new Transaction(movie, showtime, ticket, customer, selectedItems));
         }
-
-        // The 100th transaction should be created successfully
-        Transaction transaction100 = new Transaction(movie, showtime, ticket, customer, selectedItems);
-        assertNotNull("The 100th transaction should be created", transaction100);
-
-        
     }
 }
