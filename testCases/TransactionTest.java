@@ -154,7 +154,7 @@ public class TransactionTest {
             new Transaction(movie, showtime, ticket, customer, selectedItems);
             fail("Should have thrown IllegalStateException for exceeding transaction limit");
         } catch (IllegalStateException e) {
-            assertEquals("Cannot create more than " + Transaction.MAX_TRANSACTIONS + " instances of Transaction.",
+            assertEquals("Cannot create more than " + 100 + " instances of Transaction.",
                     e.getMessage());
         }
     }

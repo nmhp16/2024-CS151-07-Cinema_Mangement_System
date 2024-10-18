@@ -16,6 +16,7 @@ public class ShowtimeTest {
 
     @Before
     public void setUp() {
+        Showtime.resetShowtimeCount();
         // Initialize a Showtime instance before each test case
         showtime = new Showtime(1, "18:00");
     }
@@ -88,18 +89,27 @@ public class ShowtimeTest {
 
         // Reserve a few seats
         showtime.selectSeat(1, "VIP");
+        showtime.selectSeat(2, "VIP");
+
+        // Check available seats after reservation
+        Assert.assertEquals(28, showtime.getAvailableSeats()); // Two seats should be taken
     }
+
     @Test
     public void testShowtimeInstanceLimit() {
         List<Showtime> showtimes = new ArrayList<>();
 
         // Create 100 showtimes successfully
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 99; i++) { // + 1 from set up
             showtimes.add(new Showtime(i + 1, "12:00 PM"));
         }
 
-        // Create the 101st showtime and verify it fails (prints the message but doesn't create)
-        Showtime excessShowtime = new Showtime(101, "12:00 PM");
-        Assert.assertNull("The 101st showtime should not be created", excessShowtime.getTime());
+        // Try to create the 101st showtime and expect it to throw an exception
+        try {
+            new Showtime(101, "12:00 PM");
+            Assert.fail("Expected IllegalStateException to be thrown for creating more than 100 showtimes.");
+        } catch (IllegalStateException e) {
+            Assert.assertEquals("Cannot create more than 100 showtimes.", e.getMessage());
+        }
     }
 }
