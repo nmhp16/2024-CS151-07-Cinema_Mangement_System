@@ -775,7 +775,7 @@ public class CinemaUI {
                     case 2:
                         return "Credit Card";
                     default:
-                        System.out.println("Invalid input. Please select again or '0' to go back");
+                        System.out.println("Invalid input. Please select again: ");
                         break;
                 }
             } else {
@@ -784,8 +784,7 @@ public class CinemaUI {
                     exitProgram();
                     return null;
                 }
-                System.out.println("Invalid input. Please enter a valid numeric ID or '0'");
-                scanner.next(); // Consume the invalid input
+                System.out.println("Invalid input. Please enter a valid numeric ID: ");
             }
         }
     }
