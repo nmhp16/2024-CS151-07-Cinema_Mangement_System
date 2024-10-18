@@ -8,12 +8,24 @@ public class Customer extends Person {
     private String phone;
     private List<Transaction> transactionHistory = new ArrayList<>();
 
+    private static int instanceCount = 0;  // Class-level variable to track instances
+    private static final int MAX_INSTANCES = 100;  // Maximum allowed instances
+
+
     // Constructor
     public Customer() {
+        if (instanceCount >= MAX_INSTANCES) {
+            throw new IllegalStateException("Maximum number of Customer instances (" + MAX_INSTANCES + ") reached.");
+        }
+        instanceCount++;  // Increment the instance count on successful creation
     }
 
     public Customer(String name, String email, String phone) {
         super(name, email);
+        if (instanceCount >= MAX_INSTANCES) {
+            throw new IllegalStateException("Maximum number of Customer instances (" + MAX_INSTANCES + ") reached.");
+        }
+        instanceCount++;  // Increment the instance count on successful creation
         this.phone = phone;
         this.transactionHistory = new ArrayList<>();
     }
@@ -21,6 +33,7 @@ public class Customer extends Person {
     public Customer(String name, String email) {
         this(name, email, null); // Default phone to null if not provided
     }
+
 
     // Methods
     // Implementing abstract method from Person
