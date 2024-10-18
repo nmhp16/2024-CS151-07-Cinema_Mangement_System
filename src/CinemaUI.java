@@ -168,6 +168,13 @@ public class CinemaUI {
                 return;
             }
 
+            if (genre.equalsIgnoreCase("Exit")) {
+                exitRequest = true;
+            }
+            if (exitRequest == true) {
+                exitProgram();
+            }
+            
             // Check if the input genre is valid
             boolean isValidGenre = false;
             for (String availableGenre : availableGenres) {
@@ -231,6 +238,9 @@ public class CinemaUI {
                 System.out.println("Invalid genre. Please try again.");
                 System.out.println("----------------------------------------------");
                 System.out.println("----------------------------------------------");
+            }
+            if (exitRequest == true) {
+                exitProgram();
             }
         }
     }
@@ -757,6 +767,13 @@ public class CinemaUI {
         // Wait for user input to return to the main menu
         System.out.println("\nPress Enter to return to the main menu...");
         scanner.nextLine(); // Consume newline left-over
+        String input = scanner.next(); // Get the next input
+        if (input.equalsIgnoreCase("Exit")) {
+            exitRequest = true;
+        }
+        if (exitRequest == true) {
+            exitProgram();
+        }
         scanner.nextLine(); // Wait for Enter key
         displayMenu();
     }
