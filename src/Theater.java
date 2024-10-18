@@ -6,8 +6,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Theater {
-    private static int instanceCount = 0;  
-    private static final int MAX_INSTANCES = 100;  
+    private static int instanceCount = 0;
+    public static final int MAX_INSTANCES = 100;
 
     private int theaterId;
     private String address;
@@ -15,22 +15,21 @@ public class Theater {
     private List<Ticket> tickets = new ArrayList<>();
     private List<FoodAndDrink> menu = new ArrayList<>();
 
-
     // Constructor
     public Theater() {
         if (instanceCount >= MAX_INSTANCES) {
             System.out.println("Cannot create more than " + MAX_INSTANCES + " theaters.");
             // Exit constructor if the limit is reached
-            return;  
+            return;
         }
         // Increment instance count when a new theater is created
-        instanceCount++;  
+        instanceCount++;
     }
 
     public Theater(int theaterId, String address) {
         if (instanceCount >= MAX_INSTANCES) {
             System.out.println("Cannot create more than " + MAX_INSTANCES + " theaters.");
-            return;  // Exit constructor if the limit is reached
+            return; // Exit constructor if the limit is reached
         }
         this.theaterId = theaterId;
         this.address = address;
@@ -42,7 +41,7 @@ public class Theater {
         if (instanceCount >= MAX_INSTANCES) {
             System.out.println("Cannot create more than " + MAX_INSTANCES + " theaters.");
             // Exit constructor if the limit is reached
-            return;  
+            return;
         }
         this.theaterId = theaterId;
         this.address = address;
@@ -58,7 +57,7 @@ public class Theater {
     public Theater(int theaterId, String address, List<Movie> movies, List<FoodAndDrink> menu) {
         if (instanceCount >= MAX_INSTANCES) {
             System.out.println("Cannot create more than " + MAX_INSTANCES + " theaters.");
-            return;  
+            return;
         }
         this.theaterId = theaterId;
         this.address = address;
@@ -73,6 +72,11 @@ public class Theater {
             this.menu = menu;
         }
         instanceCount++;
+    }
+
+    // Method to reset the theater count (for testing purposes)
+    public static void resetTheaterCount() {
+        instanceCount = 0;
     }
 
     // Methods
