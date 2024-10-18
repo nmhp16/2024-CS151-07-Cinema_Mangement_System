@@ -120,4 +120,14 @@ public class TheaterTest {
         Assert.assertEquals(1, theater.getMovies().size());
         Assert.assertTrue(theater.getMovies().contains(movie3));
     }
+    @Test
+    public void testInstanceLimitUnderMax() {
+        for (int i = 0; i < 99; i++) {
+            Theater newTheater = new Theater(i, "Test Theater " + i);
+        }
+        // Should still be able to create the 100th theater
+        Theater theater100 = new Theater(100, "Theater 100");
+        Assert.assertNotNull(theater100);
+    }
+
 }
