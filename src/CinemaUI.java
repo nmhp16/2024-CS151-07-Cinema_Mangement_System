@@ -493,13 +493,6 @@ public class CinemaUI {
                     // After selecting age pricing, set the correct age category
                     selectedTicket.setAgePricing(agePricing); // Update ticket's age pricing
 
-                    // Try to reserve the ticket
-                    try {
-                        selectedTicket.reserveTicket(selectedTicket);
-                    } catch (ReservationException e) {
-                        System.out.println("Reservation failed: " + e.getMessage());
-                    }
-
                     selectFoodAndDrinks(); // Proceed to food selection
 
                 } else {
@@ -627,7 +620,7 @@ public class CinemaUI {
         return ageCategory;
     }
 
-    // SELECT FOOD AND
+    // SELECT FOOD AND DRINKS
     private void selectFoodAndDrinks() {
         List<FoodAndDrink> foodAndDrinks = selectedTheater.getMenu(); // Get available food and drinks from the selected
                                                                       // theater
@@ -638,7 +631,7 @@ public class CinemaUI {
             System.out.printf("ID: %d, Item: %-10s, Price: $%.2f%n", item.getId(), item.getName(), item.getPrice());
         }
 
-        System.out.println("\nSelect food and drink by ID or type '0' to skip:");
+        System.out.println("\nSelect food and drink by ID or type '0' to skip or 'Exit' to exit:");
 
         int itemId = 0;
 
@@ -654,14 +647,21 @@ public class CinemaUI {
 
             } else {
                 // Invalid selection
-                System.out.println("Invalid ID. Please try again or '0' to skip:");
+                System.out.println("Invalid ID. Please try again or '0' to skip or 'Exit' to exit:");
             }
 
-            System.out.println("\nSelect more food and drinks by ID or type '0' to skip:");
+            System.out.println("\nSelect more food and drinks by ID or type '0' to skip or 'Exit' to exit:");
         }
 
         System.out.println("----------------------------------------------");
         System.out.println("----------------------------------------------");
+
+        // Try to reserve the ticket
+        try {
+            selectedTicket.reserveTicket(selectedTicket);
+        } catch (ReservationException e) {
+            System.out.println("Reservation failed: " + e.getMessage());
+        }
 
         // Collect customer information
         collectCustomerInfo();
@@ -674,13 +674,26 @@ public class CinemaUI {
      * Get valid item ID input from the user.
      */
     private int getValidItemId() {
-        int itemId;
-        while (!scanner.hasNextInt()) {
-            System.out.println("Invalid input. Please enter a valid number or '0' to go back or 'Exit' to exit: ");
-            scanner.next(); // Clear the invalid input
+        String input;
+
+        while (true) {
+            input = scanner.next().trim(); // Read input and trim whitespace
+            if (input.equalsIgnoreCase("Exit")) {
+                exitRequest = true; // Set exit flag
+                exitProgram(); // Handle exit
+                return -1;
+            }
+            if (input.isEmpty()) { // Handle empty input
+                System.out.println("Invalid input. Please enter a valid number or '0' to skip or 'Exit' to exit:");
+                continue; // Ask for input again
+            }
+            try {
+                int itemId = Integer.parseInt(input);
+                return itemId; // Return the valid item ID
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid number or '0' to go back or 'Exit' to exit: ");
+            }
         }
-        itemId = scanner.nextInt();
-        return itemId;
     }
 
     /**
