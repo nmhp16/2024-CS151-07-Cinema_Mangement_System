@@ -878,6 +878,7 @@ public class CinemaUI {
             scanner.close();
         }
         System.out.println("Exiting... Thanks for visiting ASAN Cinema!");
+        System.out.println();
         System.exit(0);
     }
 
