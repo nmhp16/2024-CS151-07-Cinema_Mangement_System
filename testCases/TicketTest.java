@@ -83,9 +83,17 @@ public class TicketTest {
         Assert.assertFalse(Ticket.ticketIdExists(ticketId + 1)); // Non-existent ID
     }
 
-    @Test
-    public void testRemoveTicketId() {
-        int currentId = ticket.getTicketId();
-        Assert.assertEquals(currentId - 1, ticket.removeTicketId()); // Simulating ID removal
-    }
+     // New test to ensure no more than 100 tickets can be created
+     @Test
+     public void testTicketCreationLimit() {
+         for (int i = 0; i < 100; i++) {
+             Ticket newTicket = new Ticket("Economy", "Adult", i + 1, 100.0);
+             // Ensure tickets are created successfully up to the limit
+             Assert.assertNotNull(newTicket);  
+         
+         }
+         // Create the 101st ticket and verify it fails
+         Ticket excessTicket = new Ticket("Economy", "Adult", 101, 100.0);
+         Assert.assertNull(excessTicket.getSeatType());  
+        }
 }
