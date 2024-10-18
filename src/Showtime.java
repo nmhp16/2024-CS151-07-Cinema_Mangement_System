@@ -1,7 +1,7 @@
 package src;
 
 public class Showtime {
-    private static int instanceCount = 0; 
+    private static int instanceCount = 0;
     private static final int MAX_INSTANCES = 100;
 
     private int showtimeId;
@@ -11,8 +11,7 @@ public class Showtime {
     // Constructor
     public Showtime(int showtimeId, String time) {
         if (instanceCount >= MAX_INSTANCES) {
-            System.out.println("Cannot create more than " + MAX_INSTANCES + " showtimes.");
-            return;  
+            throw new IllegalStateException("Cannot create more than " + MAX_INSTANCES + " showtimes.");
         }
         this.showtimeId = showtimeId;
         this.time = time;
@@ -20,6 +19,11 @@ public class Showtime {
 
         initializeSeatAvailability();
         instanceCount++;
+    }
+
+    // Method to reset the showtime count (for testing purposes)
+    public static void resetShowtimeCount() {
+        instanceCount = 0;
     }
 
     // Method

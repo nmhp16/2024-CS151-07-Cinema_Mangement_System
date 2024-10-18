@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class Theater {
     private static int instanceCount = 0;
-    public static final int MAX_INSTANCES = 100;
+    private static final int MAX_INSTANCES = 100;
 
     private int theaterId;
     private String address;

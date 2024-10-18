@@ -9,7 +9,7 @@ public class Transaction implements Billable {
 
     // the 100 instances of the class
     private static int instanceCount = 0;
-    public static final int MAX_TRANSACTIONS = 100;
+    private static final int MAX_TRANSACTIONS = 100;
 
     private String transactionType;
     private boolean holdStatus;
