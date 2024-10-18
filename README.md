@@ -21,26 +21,26 @@ The system is built using several classes to simulate different entities within 
 
 ### Additional classes and enums include:
 
-- **Person**: (`Abstract class`) that provides basic information like name and email for inheriting classes (such as `Customer`).
+- **Person**: (`Abstract`) class that provides basic information like name and email for inheriting classes (such as `Customer`).
 - **SeatType**: (`Enum`) for managing seat categories (`Regular, VIP, Premium`) with associated prices.
 - **AgePricing**: (`Enum`) that defines age-based pricing (`Adult, Child, Senior`).
 - **Reservable**: (`Interface`) that enforces reservation-related methods (`reserve()` and `cancelReservation()`) (for `Ticket`).
 - **Billable**: (`Interface`) that enforces billing-related methods (`processTransaction()` and `printReceipt()`) (for `Transaction`).
 
 ## Installation Instructions
-1. Clone the repository from GitHub:
+1. **Clone the repository from GitHub:**
 ```bash
 git clone https://github.com/nmhp16/2024-CS151-07-Cinema_Mangement_System
 ```
-2. Navigate into the project directory:
+2. **Navigate into the project directory:**
 ```bash
 cd 2024-CS151-07-Cinema_Mangement_System
 ```
-3. Compile the java files:
+3. **Compile the Java files:**
 ```bash
 javac -d bin src/*.java
 ```
-4. Run the application:
+4. **Run the application:**
 ```bash
 java -cp bin src/Main
 ```
