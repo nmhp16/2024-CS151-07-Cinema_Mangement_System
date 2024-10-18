@@ -6,6 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Transaction implements Billable {
+
+    // the 100 instances of the class
+    private static int instanceCount = 0;
+    private static final int MAX_INSTANCES = 100;
+
     private String transactionType;
     private boolean holdStatus;
     private Ticket ticket;
@@ -18,8 +23,13 @@ public class Transaction implements Billable {
 
     // Constructor
     public Transaction() {
+        // Exception for passing the 100 instance
+        if (instanceCount >= MAX_INSTANCES) {
+            throw new IllegalStateException("Cannot create more than " + MAX_INSTANCES + " instances of Transaction.");
+        }
         this.transactionTime = LocalDateTime.now();
         this.selectedItems = new ArrayList<>();
+        instanceCount++;
     }
 
     public Transaction(Movie movie, Showtime showtime, Ticket ticket, Customer customer,
@@ -30,12 +40,21 @@ public class Transaction implements Billable {
     }
 
     public Transaction(Movie movie, Showtime showtime, Ticket ticket) {
+        if (instanceCount >= MAX_INSTANCES) {
+            throw new IllegalStateException("Cannot create more than " + MAX_INSTANCES + " instances of Transaction.");
+        }
         this.ticket = ticket;
         this.movie = movie;
         this.showtime = showtime;
         this.transactionTime = LocalDateTime.now();
+        instanceCount++;
     }
 
+     // Method to display error message when max instances exceeded
+     public static void displayInstanceLimitError() {
+        System.out.println("Cannot create more than " + MAX_INSTANCES + " instances of Transaction.");
+    }
+    
     // Implementing Billable interface methods
     @Override
     public void processTransaction(Customer customer, Movie movie, Showtime showtime, Ticket ticket,
