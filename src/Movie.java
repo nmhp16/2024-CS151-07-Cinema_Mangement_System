@@ -10,14 +10,26 @@ public class Movie {
     private List<Showtime> showtimes = new ArrayList<>();
     private boolean isSoldOut;
 
+    private static final int MAX_INSTANCES = 100;  // Maximum number of allowed instances
+    private static int instanceCount = 0;          // Track the current instance count
+
+
     // Constructors
     public Movie() {
+        if (instanceCount >= MAX_INSTANCES) {
+            throw new IllegalStateException("Cannot create more than " + MAX_INSTANCES + " instances of Movie.");
+        }
+        instanceCount++;
     }
 
     public Movie(int movieId, String title, String genre) {
+        if (instanceCount >= MAX_INSTANCES) {
+            throw new IllegalStateException("Cannot create more than " + MAX_INSTANCES + " instances of Movie.");
+        }
         this.movieId = movieId;
         this.title = title;
         this.genre = genre;
+        instanceCount++;
     }
 
     // Methods
