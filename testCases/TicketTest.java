@@ -94,4 +94,5 @@ public void testTicketCreationLimit() {
     // Create the 101st ticket and verify it fails
     Ticket excessTicket = new Ticket("Economy", "Adult", 101, 100.0);
     Assert.assertNull(excessTicket.getSeatType());
+    }
 }
