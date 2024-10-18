@@ -114,6 +114,20 @@ public class CinemaTest {
     }
 
     @Test
+    public void testCinemaCreationLimit() {
+        List<Cinema> cinemas = new ArrayList<>();
+
+        // Create 100 Cinema instances successfully
+        for (int i = 0; i < 98; i++) { // + 1 from set up
+            cinemas.add(new Cinema());
+        }
+
+        // Ensure we can still create the 100th transaction
+        Cinema hundredthCinema = new Cinema();
+        assertNotNull("100th Cinema should be created successfully", hundredthCinema);
+    }
+
+    @Test
     public void testCinemaInstanceLimit() {
         List<Cinema> cinemas = new ArrayList<>();
 

@@ -5,12 +5,14 @@ package testCases;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import src.Movie;
 import src.Showtime;
 import src.ShowtimeNotFoundException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -20,6 +22,8 @@ public class MovieTest {
 
     @Before
     public void setUp() {
+        Movie.resetMovieCount();
+
         movie = new Movie(1, "Inception", "Sci-Fi"); // Initialize a new Movie instance before each test
         System.out.println("Movie setup completed.");
     }
@@ -149,6 +153,38 @@ public class MovieTest {
         // Reset the output stream
         System.setOut(originalOut);
         System.out.println("Check seat occupancy method tested successfully.");
+    }
+
+    @Test
+    public void testFoodAndDrinkCreationLimit() {
+        List<Movie> movies = new ArrayList<>();
+
+        // Create 100 instances successfully
+        for (int i = 0; i < 98; i++) { // + 1 from set up
+            movies.add(new Movie());
+        }
+
+        // Ensure we can still create the 100th transaction
+        Movie hundredthMovie = new Movie();
+        assertNotNull("100th Movie should be created successfully", hundredthMovie);
+    }
+
+    @Test
+    public void testFoodAndDrinkInstanceLimit() {
+        List<Movie> movies = new ArrayList<>();
+
+        // Create 100 instances successfully
+        for (int i = 0; i < 99; i++) { // + 1 from set up
+            movies.add(new Movie());
+        }
+
+        // Try to create the 101st instance and expect an IllegalStateException
+        try {
+            new Movie();
+            fail("Expected IllegalStateException for creating more than 100 Movie instances.");
+        } catch (IllegalStateException e) {
+            assertEquals("Maximum number of Movie instances (100) reached.", e.getMessage());
+        }
     }
 
 }

@@ -3,12 +3,16 @@
 // java -cp "lib/*;.;src;testCases" org.junit.runner.JUnitCore testCases.ShowtimeTest
 package testCases;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import src.Cinema;
 import src.Showtime;
 
 public class ShowtimeTest {
@@ -93,6 +97,20 @@ public class ShowtimeTest {
 
         // Check available seats after reservation
         Assert.assertEquals(28, showtime.getAvailableSeats()); // Two seats should be taken
+    }
+
+    @Test
+    public void testShowtimeCreationLimit() {
+        List<Showtime> showtimes = new ArrayList<>();
+
+        // Create 100 Cinema instances successfully
+        for (int i = 0; i < 98; i++) { // + 1 from set up
+            showtimes.add(new Showtime());
+        }
+
+        // Ensure we can still create the 100th transaction
+        Showtime hundredthShowtime = new Showtime();
+        assertNotNull("100th Showtime should be created successfully", hundredthShowtime);
     }
 
     @Test
