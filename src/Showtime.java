@@ -1,17 +1,25 @@
 package src;
 
 public class Showtime {
+    private static int instanceCount = 0; 
+    private static final int MAX_INSTANCES = 100;
+
     private int showtimeId;
     private String time;
     private boolean[] seatArray;
 
     // Constructor
     public Showtime(int showtimeId, String time) {
+        if (instanceCount >= MAX_INSTANCES) {
+            System.out.println("Cannot create more than " + MAX_INSTANCES + " showtimes.");
+            return;  
+        }
         this.showtimeId = showtimeId;
         this.time = time;
         this.seatArray = new boolean[31];
 
         initializeSeatAvailability();
+        instanceCount++;
     }
 
     // Method
@@ -27,11 +35,7 @@ public class Showtime {
     }
 
     public boolean isSeatTaken(int seatNumber, String seatType) {
-        if (seatArray[seatNumber] == false) {
-            return true;
-        } else {
-            return false;
-        }
+        return !seatArray[seatNumber];
     }
 
     // Initialize seat availability for this showtime

@@ -101,7 +101,7 @@ public class Ticket implements Reservable {
     public void cancelReservation() {
         this.reserved = false;
         tickets.remove(this);
-        // Adjsut the instance count when the ticket is removed
+        // Adjust the instance count when the ticket is removed
         if (instanceCount > 0) {
             instanceCount--;
         }
@@ -122,13 +122,6 @@ public class Ticket implements Reservable {
         idCounter++;
         return idCounter;
     }
-
-    // redundant
-    // public int removeTicketId() {
-    //     idCounter--;
-    //     ticketId = idCounter;
-    //     return ticketId;
-    // }
 
     // Getters and Setters
     public double getPrice() {
