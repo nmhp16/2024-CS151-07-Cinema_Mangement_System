@@ -8,7 +8,7 @@ The project utilizes Object-Oriented Programming (OOP) principles and is designe
 
 ## Design
 The system is built using several classes to simulate different entities within a cinema environment:
-# Key Classes:
+### Key Classes:
 - **Customer**: Manages customer data such as name, email, phone, and transaction history.
 - **Movie**: Represents the movie entity with attributes like title, duration, and genre.
 - **Showtime**: Handles movie showtimes and manages available seating for different showtimes.
@@ -19,7 +19,7 @@ The system is built using several classes to simulate different entities within 
 - **Theater**: Represents a cinema theater, which includes information like available seating, movie listings, and the theater's food and drink menu.
 - **Cinema**: Core class of the system that contains the theaters, manages showtimes, and processes customer interactions.
 
-# Additional classes and enums include:
+### Additional classes and enums include:
 
 - **Person**: (`Abstract class`) that provides basic information like name and email for inheriting classes (such as `Customer`).
 - **SeatType**: (`Enum`) for managing seat categories (`Regular, VIP, Premium`) with associated prices.
