@@ -1,3 +1,6 @@
+// Use VS Code Terminal to run
+// javac -cp "lib/*;." src/*.java testCases/*.java
+// java -cp "lib/*;.;src;testCases" org.junit.runner.JUnitCore testCases.FoodAndDrinkTest
 package testCases;
 
 import org.junit.Assert;
