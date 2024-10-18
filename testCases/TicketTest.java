@@ -1,5 +1,4 @@
 // Use VS Code Terminal to run
-// Make sure in test folder
 // javac -cp "lib/*;." src/*.java testCases/*.java
 // java -cp "lib/*;.;src;testCases" org.junit.runner.JUnitCore testCases.TicketTest
 package testCases;
@@ -84,16 +83,15 @@ public class TicketTest {
         Assert.assertFalse(Ticket.ticketIdExists(ticketId + 1)); // Non-existent ID
     }
 
-    @Test
-    public void testTicketCreationLimit() {
-        for (int i = 0; i < 100; i++) {
-            Ticket newTicket = new Ticket("Economy", "Adult", i + 1, 100.0);
-            // Ensure tickets are created successfully up to the limit
-            Assert.assertNotNull(newTicket);  
-        }
-
-        // Try to create the 101st ticket and verify it fails (prints the message but doesn't create)
-        Ticket excessTicket = new Ticket("Economy", "Adult", 101, 100.0);
-        Assert.assertNull(excessTicket.getSeatType()); 
+@Test
+public void testTicketCreationLimit() {
+    for (int i = 0; i < 100; i++) {
+        Ticket newTicket = new Ticket("Economy", "Adult", i + 1, 100.0);
+        // Ensure tickets are created successfully up to the limit
+        Assert.assertNotNull(newTicket);
     }
+
+    // Create the 101st ticket and verify it fails
+    Ticket excessTicket = new Ticket("Economy", "Adult", 101, 100.0);
+    Assert.assertNull(excessTicket.getSeatType());
 }
