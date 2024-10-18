@@ -8,7 +8,7 @@ public class Ticket implements Reservable {
     private static List<Ticket> tickets = new ArrayList<>();
 
     // Track the number of instances
-    private static int instanceCount = 0;  
+    private static int instanceCount = 0;
     private static final int MAX_INSTANCES = 100;
 
     private int ticketId;
@@ -21,13 +21,16 @@ public class Ticket implements Reservable {
 
     // Constructor
     public Ticket() {
+        if (instanceCount >= MAX_INSTANCES) {
+            throw new IllegalStateException("Maximum number of Ticket instances (" + MAX_INSTANCES + ") reached.");
+        }
+        instanceCount++;
     }
 
     public Ticket(String seatType, String agePricing, int seatNumber) {
         // Exit constructor if the limit is reached
         if (instanceCount >= MAX_INSTANCES) {
-            System.out.println("Cannot create more than " + MAX_INSTANCES + " tickets.");
-            return;  
+            throw new IllegalStateException("Maximum number of Ticket instances (" + MAX_INSTANCES + ") reached.");
         }
         this.seatType = seatType;
         this.agePricing = agePricing;
@@ -40,6 +43,11 @@ public class Ticket implements Reservable {
     public Ticket(String seatType, String agePricing, int seatNumber, double price) {
         this(seatType, agePricing, seatNumber);
         this.price = price;
+    }
+
+    // Method to reset the ticket count (for testing purposes)
+    public static void resetTicketCount() {
+        instanceCount = 0;
     }
 
     // Implementing Reservable interface methods

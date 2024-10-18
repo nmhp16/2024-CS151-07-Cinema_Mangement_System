@@ -7,12 +7,15 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import src.Movie;
 import src.Theater;
 import src.MovieNotFoundException;
+import src.Showtime;
 
 public class TheaterTest {
     private Theater theater;
@@ -122,6 +125,20 @@ public class TheaterTest {
         theater.setMovies(newMovies);
         Assert.assertEquals(1, theater.getMovies().size());
         Assert.assertTrue(theater.getMovies().contains(movie3));
+    }
+
+    @Test
+    public void testTheaterCreationLimit() {
+        List<Theater> theaters = new ArrayList<>();
+
+        // Create 100 Cinema instances successfully
+        for (int i = 0; i < 98; i++) { // + 1 from set up
+            theaters.add(new Theater());
+        }
+
+        // Ensure we can still create the 100th transaction
+        Theater hundredthTheater = new Theater();
+        assertNotNull("100th Theater should be created successfully", hundredthTheater);
     }
 
     @Test

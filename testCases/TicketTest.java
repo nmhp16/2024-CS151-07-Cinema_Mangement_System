@@ -3,17 +3,26 @@
 // java -cp "lib/*;.;src;testCases" org.junit.runner.JUnitCore testCases.TicketTest
 package testCases;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import src.Ticket;
 import src.ReservationException;
 
+import java.util.List;
+import java.util.ArrayList;
+
 public class TicketTest {
     private Ticket ticket;
 
     @Before
     public void setUp() {
+        Ticket.resetTicketCount();
+
         // Initialize a ticket before each test case
         ticket = new Ticket("Economy", "Adult", 12, 100.0);
 
@@ -85,14 +94,33 @@ public class TicketTest {
 
     @Test
     public void testTicketCreationLimit() {
-        for (int i = 0; i < 100; i++) {
-            Ticket newTicket = new Ticket("Economy", "Adult", i + 1, 100.0);
-            // Ensure tickets are created successfully up to the limit
-            Assert.assertNotNull(newTicket);
+        List<Ticket> tickets = new ArrayList<>();
+
+        // Create 100 instances successfully
+        for (int i = 0; i < 98; i++) { // + 1 from set up
+            tickets.add(new Ticket());
         }
 
-        // Create the 101st ticket and verify it fails
-        Ticket excessTicket = new Ticket("Economy", "Adult", 101, 100.0);
-        Assert.assertNull(excessTicket.getSeatType());
+        // Ensure we can still create the 100th
+        Ticket hundredthTicket = new Ticket();
+        assertNotNull("100th Ticket should be created successfully", hundredthTicket);
+    }
+
+    @Test
+    public void testTicketInstanceLimit() {
+        List<Ticket> tickets = new ArrayList<>();
+
+        // Create 100 instances successfully
+        for (int i = 0; i < 99; i++) { // + 1 from set up
+            tickets.add(new Ticket());
+        }
+
+        // Try to create the 101st instance and expect an IllegalStateException
+        try {
+            new Ticket();
+            fail("Expected IllegalStateException for creating more than 100 Ticket instances.");
+        } catch (IllegalStateException e) {
+            assertEquals("Maximum number of Ticket instances (100) reached.", e.getMessage());
+        }
     }
 }

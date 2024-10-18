@@ -10,6 +10,11 @@ import org.junit.Assert;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
@@ -26,6 +31,8 @@ public class CustomerTest {
 
     @Before
     public void setUp() {
+        Customer.resetCustomerCount();
+
         // Setup objects
         customer = new Customer("John Doe", "johndoe@example.com", "1234567890");
         ticket = new Ticket("VIP", "Adult", 1); // Mocked Ticket
@@ -134,4 +141,35 @@ public class CustomerTest {
         Assert.assertEquals("1234567890", newCustomer.getPhone());
     }
 
+    @Test
+    public void testCustomerCreationLimit() {
+        List<Customer> customers = new ArrayList<>();
+
+        // Create 100 Customer instances successfully
+        for (int i = 0; i < 98; i++) { // + 1 from set up
+            customers.add(new Customer());
+        }
+
+        // Ensure we can still create the 100th transaction
+        Customer hundredthCustomer = new Customer();
+        assertNotNull("100th Customer should be created successfully", hundredthCustomer);
+    }
+
+    @Test
+    public void testCustomerInstanceLimit() {
+        List<Customer> customers = new ArrayList<>();
+
+        // Create 100 Customer instances successfully
+        for (int i = 0; i < 99; i++) { // + 1 from set up
+            customers.add(new Customer());
+        }
+
+        // Try to create the 101st instance and expect an IllegalStateException
+        try {
+            new Customer();
+            fail("Expected IllegalStateException for creating more than 100 Customer instances.");
+        } catch (IllegalStateException e) {
+            assertEquals("Maximum number of Customer instances (100) reached.", e.getMessage());
+        }
+    }
 }

@@ -3,9 +3,16 @@
 // java -cp "lib/*;.;src;testCases" org.junit.runner.JUnitCore testCases.FoodAndDrinkTest
 package testCases;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.*;
+
 import src.FoodAndDrink;
 
 public class FoodAndDrinkTest {
@@ -14,6 +21,8 @@ public class FoodAndDrinkTest {
 
     @Before
     public void setUp() {
+        FoodAndDrink.resetFoodAndDrinkCount();
+
         // Initialize instances of FoodAndDrink before each test case
         foodAndDrink1 = new FoodAndDrink("Popcorn", 5.50);
         foodAndDrink2 = new FoodAndDrink(1, "Soda", 2.75);
@@ -64,5 +73,37 @@ public class FoodAndDrinkTest {
 
         String expectedString2 = "FoodAndDrink [name=Soda, price=2.75]";
         Assert.assertEquals(expectedString2, foodAndDrink2.toString());
+    }
+
+    @Test
+    public void testFoodAndDrinkCreationLimit() {
+        List<FoodAndDrink> items = new ArrayList<>();
+
+        // Create 100 FoodAndDrink instances successfully
+        for (int i = 0; i < 97; i++) { // + 2 from set up
+            items.add(new FoodAndDrink());
+        }
+
+        // Ensure we can still create the 100th transaction
+        FoodAndDrink hundredthItem = new FoodAndDrink();
+        assertNotNull("100th FoodAndDrink should be created successfully", hundredthItem);
+    }
+
+    @Test
+    public void testFoodAndDrinkInstanceLimit() {
+        List<FoodAndDrink> items = new ArrayList<>();
+
+        // Create 100 FoodAndDrink instances successfully
+        for (int i = 0; i < 98; i++) { // + 2 from set up
+            items.add(new FoodAndDrink());
+        }
+
+        // Try to create the 101st instance and expect an IllegalStateException
+        try {
+            new FoodAndDrink();
+            fail("Expected IllegalStateException for creating more than 100 FoodAndDrink instances.");
+        } catch (IllegalStateException e) {
+            assertEquals("Maximum number of FoodAndDrink instances (100) reached.", e.getMessage());
+        }
     }
 }

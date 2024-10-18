@@ -4,21 +4,22 @@ public class FoodAndDrink {
     private int id; // Unique ID for the item
     private String name;
     private double price;
-    private static final int MAX_INSTANCES = 100;  // Maximum number of allowed instances
-    private static int instanceCount = 0;          // Track the current instance count
-
+    private static final int MAX_INSTANCES = 100; // Maximum number of allowed instances
+    private static int instanceCount = 0; // Track the current instance count
 
     // Constructor
     public FoodAndDrink() {
         if (instanceCount >= MAX_INSTANCES) {
-            throw new IllegalStateException("Cannot create more than " + MAX_INSTANCES + " instances of FoodAndDrink.");
+            throw new IllegalStateException(
+                    "Maximum number of FoodAndDrink instances (" + MAX_INSTANCES + ") reached.");
         }
         instanceCount++;
     }
 
     public FoodAndDrink(String name, double price) {
         if (instanceCount >= MAX_INSTANCES) {
-            throw new IllegalStateException("Cannot create more than " + MAX_INSTANCES + " instances of FoodAndDrink.");
+            throw new IllegalStateException(
+                    "Maximum number of FoodAndDrink instances (" + MAX_INSTANCES + ") reached.");
         }
         this.name = name;
         this.price = price;
@@ -27,12 +28,18 @@ public class FoodAndDrink {
 
     public FoodAndDrink(int id, String name, double price) {
         if (instanceCount >= MAX_INSTANCES) {
-            throw new IllegalStateException("Cannot create more than " + MAX_INSTANCES + " instances of FoodAndDrink.");
+            throw new IllegalStateException(
+                    "Maximum number of FoodAndDrink instances (" + MAX_INSTANCES + ") reached.");
         }
         this.id = id;
         this.name = name;
         this.price = price;
         instanceCount++;
+    }
+
+    // Method to reset the FoodAndDrink count (for testing purposes)
+    public static void resetFoodAndDrinkCount() {
+        instanceCount = 0;
     }
 
     // Getters and Setters

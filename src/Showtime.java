@@ -9,6 +9,13 @@ public class Showtime {
     private boolean[] seatArray;
 
     // Constructor
+    public Showtime() {
+        if (instanceCount >= MAX_INSTANCES) {
+            throw new IllegalStateException("Cannot create more than " + MAX_INSTANCES + " showtimes.");
+        }
+        instanceCount++;
+    }
+
     public Showtime(int showtimeId, String time) {
         if (instanceCount >= MAX_INSTANCES) {
             throw new IllegalStateException("Cannot create more than " + MAX_INSTANCES + " showtimes.");
