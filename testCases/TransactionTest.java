@@ -115,6 +115,15 @@ public class TransactionTest {
         assertEquals("Total items should match the selected items list size", 2, totalItems);
     }
     @Test
+
+    public void testTransactionInstanceLimit() {
+        List<Transaction> transactions = new ArrayList<>();
+
+        // Create 99 transactions successfully
+        for (int i = 0; i < 99; i++) {
+            transactions.add(new Transaction(movie, showtime, ticket, customer, selectedItems));
+        }
+
     public void testTransactionCreationLimit() {
         // Create 100 transactions and verify they are created successfully
         for (int i = 0; i < 100; i++) {
@@ -125,5 +134,6 @@ public class TransactionTest {
         // Try to create the 101st transaction and verify it fails (prints the message and doesn't create)
         Transaction excessTransaction = new Transaction(movie, showtime, ticket, customer, selectedItems);
         assertNull("The 101st transaction should not be created", excessTransaction.getCustomer());
+
     }
 }
