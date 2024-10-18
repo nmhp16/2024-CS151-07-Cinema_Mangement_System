@@ -7,35 +7,30 @@ import java.util.Set;
 
 public class Cinema {
     private List<Theater> theaters;
-    private static int instanceCount = 0;  // Class-level variable to track instances
-    private static final int MAX_INSTANCES = 100;  // Maximum allowed instances
+    private static int instanceCount = 0; // Class-level variable to track instances
+    private static final int MAX_INSTANCES = 100; // Maximum allowed instances
 
-
-    //constructor
+    // constructor
     public Cinema() {
         if (instanceCount >= MAX_INSTANCES) {
             throw new IllegalStateException("Maximum number of Cinema instances (" + MAX_INSTANCES + ") reached.");
         }
-        instanceCount++;  // Increment the instance count on successful creation
+        instanceCount++; // Increment the instance count on successful creation
         this.theaters = new ArrayList<>();
     }
-    
+
     public Cinema(List<Theater> theaters) {
         if (instanceCount >= MAX_INSTANCES) {
             throw new IllegalStateException("Maximum number of Cinema instances (" + MAX_INSTANCES + ") reached.");
         }
-        instanceCount++;  // Increment the instance count on successful creation
+        instanceCount++; // Increment the instance count on successful creation
         this.theaters = theaters;
     }
-    
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        if (instanceCount > 0) {
-            instanceCount--;  // Decrement the count when an object is garbage collected
-        }
-    }
 
+    // Method to reset the cinema count (for testing purposes)
+    public static void resetCinemaCount() {
+        instanceCount = 0;
+    }
 
     // Methods
     /**
@@ -51,6 +46,7 @@ public class Cinema {
 
     /**
      * Add theater to cinema
+     * 
      * @param theater Theater to add to cinema
      */
     public void addTheater(Theater theater) {
@@ -68,6 +64,7 @@ public class Cinema {
 
     /**
      * Select and return Theater from list based on ID
+     * 
      * @param theaterId The ID for theater
      * @return Theater matches with ID
      * @throws TheaterNotFoundException
@@ -85,6 +82,7 @@ public class Cinema {
 
     /**
      * Return all available genres in Cinema
+     * 
      * @return Set of genres available
      */
     public Set<String> availableGenresInCinema() {
@@ -98,6 +96,7 @@ public class Cinema {
 
     /**
      * Find all theaters with specified genre by customer
+     * 
      * @param genre Genre that the customer want
      */
     public void findTheatersByMovieGenre(String genre) {
@@ -118,6 +117,7 @@ public class Cinema {
 
     /**
      * Get total number of theater inside a cinema
+     * 
      * @return Number of theaters
      */
     public int getTotalTheaters() {

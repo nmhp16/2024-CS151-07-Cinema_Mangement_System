@@ -12,6 +12,8 @@ import src.TheaterNotFoundException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.List;
+import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
@@ -21,6 +23,8 @@ public class CinemaTest {
 
     @Before
     public void setUp() {
+        Cinema.resetCinemaCount();
+
         cinema = new Cinema(); // Initialize a new Cinema instance before each test
         System.out.println("Cinema setup completed.");
     }
@@ -107,5 +111,23 @@ public class CinemaTest {
         // Reset the output stream
         System.setOut(originalOut);
         System.out.println("List theaters method tested successfully.");
+    }
+
+    @Test
+    public void testCinemaInstanceLimit() {
+        List<Cinema> cinemas = new ArrayList<>();
+
+        // Create 100 Cinema instances successfully
+        for (int i = 0; i < 99; i++) { // + 1 from set up
+            cinemas.add(new Cinema());
+        }
+
+        // Try to create the 101st Cinema instance and expect an IllegalStateException
+        try {
+            new Cinema();
+            fail("Expected IllegalStateException for creating more than 100 Cinema instances.");
+        } catch (IllegalStateException e) {
+            assertEquals("Maximum number of Cinema instances (100) reached.", e.getMessage());
+        }
     }
 }
