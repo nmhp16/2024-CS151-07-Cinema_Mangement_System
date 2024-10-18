@@ -3,6 +3,9 @@
 // java -cp "lib/*;.;src;testCases" org.junit.runner.JUnitCore testCases.ShowtimeTest
 package testCases;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -85,5 +88,18 @@ public class ShowtimeTest {
 
         // Reserve a few seats
         showtime.selectSeat(1, "VIP");
+    }
+    @Test
+    public void testShowtimeInstanceLimit() {
+        List<Showtime> showtimes = new ArrayList<>();
+
+        // Create 100 showtimes successfully
+        for (int i = 0; i < 100; i++) {
+            showtimes.add(new Showtime(i + 1, "12:00 PM"));
+        }
+
+        // Create the 101st showtime and verify it fails (prints the message but doesn't create)
+        Showtime excessShowtime = new Showtime(101, "12:00 PM");
+        Assert.assertNull("The 101st showtime should not be created", excessShowtime.getTime());
     }
 }
