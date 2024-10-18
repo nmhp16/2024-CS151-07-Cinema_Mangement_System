@@ -22,6 +22,9 @@ public class TheaterTest {
 
     @Before
     public void setUp() {
+        // Reset instance count
+        Theater.resetTheaterCount();
+
         // Initialize some movies
         movie1 = new Movie(1, "Inception", "Sci-Fi");
         movie2 = new Movie(2, "The Dark Knight", "Action");
@@ -52,6 +55,7 @@ public class TheaterTest {
     @Test
     public void testSelectMovieValidId() throws MovieNotFoundException {
         Movie foundMovie = theater.selectMovie(1);
+        System.out.println(foundMovie.getTitle());
         Assert.assertEquals("Inception", foundMovie.getTitle());
     }
 
@@ -119,6 +123,7 @@ public class TheaterTest {
         Assert.assertEquals(1, theater.getMovies().size());
         Assert.assertTrue(theater.getMovies().contains(movie3));
     }
+
     @Test
     public void testTheaterInstanceLimit() {
         List<Theater> theaters = new ArrayList<>();
@@ -128,7 +133,8 @@ public class TheaterTest {
             theaters.add(new Theater(i + 1, "Address " + i));
         }
 
-        // Create the 101st theater and verify it fails (prints the message but doesn't create)
+        // Create the 101st theater and verify it fails (prints the message but doesn't
+        // create)
         Theater excessTheater = new Theater(101, "Excess Theater");
         Assert.assertNull("The 101st theater should not be created", excessTheater.getAddress());
     }

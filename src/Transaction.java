@@ -9,7 +9,7 @@ public class Transaction implements Billable {
 
     // the 100 instances of the class
     private static int instanceCount = 0;
-    private static final int MAX_INSTANCES = 100;
+    public static final int MAX_TRANSACTIONS = 100;
 
     private String transactionType;
     private boolean holdStatus;
@@ -24,8 +24,9 @@ public class Transaction implements Billable {
     // Constructor
     public Transaction() {
         // Exception for passing the 100 instance
-        if (instanceCount >= MAX_INSTANCES) {
-            throw new IllegalStateException("Cannot create more than " + MAX_INSTANCES + " instances of Transaction.");
+        if (instanceCount >= MAX_TRANSACTIONS) {
+            throw new IllegalStateException(
+                    "Cannot create more than " + MAX_TRANSACTIONS + " instances of Transaction.");
         }
         this.transactionTime = LocalDateTime.now();
         this.selectedItems = new ArrayList<>();
@@ -40,8 +41,9 @@ public class Transaction implements Billable {
     }
 
     public Transaction(Movie movie, Showtime showtime, Ticket ticket) {
-        if (instanceCount >= MAX_INSTANCES) {
-            throw new IllegalStateException("Cannot create more than " + MAX_INSTANCES + " instances of Transaction.");
+        if (instanceCount >= MAX_TRANSACTIONS) {
+            throw new IllegalStateException(
+                    "Cannot create more than " + MAX_TRANSACTIONS + " instances of Transaction.");
         }
         this.ticket = ticket;
         this.movie = movie;
@@ -50,11 +52,16 @@ public class Transaction implements Billable {
         instanceCount++;
     }
 
-     // Method to display error message when max instances exceeded
-     public static void displayInstanceLimitError() {
-        System.out.println("Cannot create more than " + MAX_INSTANCES + " instances of Transaction.");
+    // Method to display error message when max instances exceeded
+    public static void displayInstanceLimitError() {
+        System.out.println("Cannot create more than " + MAX_TRANSACTIONS + " instances of Transaction.");
     }
-    
+
+    // Method to reset the transaction count (for testing purposes)
+    public static void resetTransactionCount() {
+        instanceCount = 0;
+    }
+
     // Implementing Billable interface methods
     @Override
     public void processTransaction(Customer customer, Movie movie, Showtime showtime, Ticket ticket,
