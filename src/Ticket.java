@@ -6,6 +6,11 @@ import java.util.List;
 public class Ticket implements Reservable {
     private static int idCounter = 0;
     private static List<Ticket> tickets = new ArrayList<>();
+
+    // Track the number of instances
+    private static int instanceCount = 0;  
+    private static final int MAX_INSTANCES = 100;
+
     private int ticketId;
     private String seatType;
     private String agePricing;
@@ -19,11 +24,17 @@ public class Ticket implements Reservable {
     }
 
     public Ticket(String seatType, String agePricing, int seatNumber) {
+        // Exit constructor if the limit is reached
+        if (instanceCount >= MAX_INSTANCES) {
+            System.out.println("Cannot create more than " + MAX_INSTANCES + " tickets.");
+            return;  
+        }
         this.seatType = seatType;
         this.agePricing = agePricing;
         this.seatNumber = seatNumber;
         this.reserved = false;
         this.ticketId = generateTicketId();
+        instanceCount++;
     }
 
     public Ticket(String seatType, String agePricing, int seatNumber, double price) {
@@ -90,6 +101,10 @@ public class Ticket implements Reservable {
     public void cancelReservation() {
         this.reserved = false;
         tickets.remove(this);
+        // Adjsut the instance count when the ticket is removed
+        if (instanceCount > 0) {
+            instanceCount--;
+        }
     }
 
     public boolean isReserved() {
@@ -108,11 +123,12 @@ public class Ticket implements Reservable {
         return idCounter;
     }
 
-    public int removeTicketId() {
-        idCounter--;
-        ticketId = idCounter;
-        return ticketId;
-    }
+    // redundant
+    // public int removeTicketId() {
+    //     idCounter--;
+    //     ticketId = idCounter;
+    //     return ticketId;
+    // }
 
     // Getters and Setters
     public double getPrice() {
