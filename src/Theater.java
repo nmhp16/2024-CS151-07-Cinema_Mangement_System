@@ -6,23 +6,44 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Theater {
+    private static int instanceCount = 0;  
+    private static final int MAX_INSTANCES = 100;  
+
     private int theaterId;
     private String address;
     private List<Movie> movies = new ArrayList<>();
     private List<Ticket> tickets = new ArrayList<>();
     private List<FoodAndDrink> menu = new ArrayList<>();
 
+
     // Constructor
     public Theater() {
+        if (instanceCount >= MAX_INSTANCES) {
+            System.out.println("Cannot create more than " + MAX_INSTANCES + " theaters.");
+            // Exit constructor if the limit is reached
+            return;  
+        }
+        // Increment instance count when a new theater is created
+        instanceCount++;  
     }
 
     public Theater(int theaterId, String address) {
+        if (instanceCount >= MAX_INSTANCES) {
+            System.out.println("Cannot create more than " + MAX_INSTANCES + " theaters.");
+            return;  // Exit constructor if the limit is reached
+        }
         this.theaterId = theaterId;
         this.address = address;
         this.movies = new ArrayList<>();
+        instanceCount++;
     }
 
     public Theater(int theaterId, String address, List<Movie> movies) {
+        if (instanceCount >= MAX_INSTANCES) {
+            System.out.println("Cannot create more than " + MAX_INSTANCES + " theaters.");
+            // Exit constructor if the limit is reached
+            return;  
+        }
         this.theaterId = theaterId;
         this.address = address;
         if (movies == null) {
@@ -31,9 +52,14 @@ public class Theater {
             this.movies = movies;
         }
         this.menu = new ArrayList<>(); // Initialize menu to avoid null
+        instanceCount++;
     }
 
     public Theater(int theaterId, String address, List<Movie> movies, List<FoodAndDrink> menu) {
+        if (instanceCount >= MAX_INSTANCES) {
+            System.out.println("Cannot create more than " + MAX_INSTANCES + " theaters.");
+            return;  
+        }
         this.theaterId = theaterId;
         this.address = address;
         if (movies == null) {
@@ -46,6 +72,7 @@ public class Theater {
         } else {
             this.menu = menu;
         }
+        instanceCount++;
     }
 
     // Methods
