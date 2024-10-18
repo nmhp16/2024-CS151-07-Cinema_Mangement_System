@@ -171,8 +171,7 @@ public class Transaction implements Billable {
 
     public void addHoldStatus() {
         holdStatus = true;
-        System.out.println("Invalid card number.");
-        System.out.println("Transaction is on hold.");
+        System.out.println("Invalid card number. Transaction is on hold.");
         System.out.println();
     }
 
