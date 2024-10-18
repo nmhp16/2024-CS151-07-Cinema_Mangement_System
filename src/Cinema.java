@@ -1,21 +1,41 @@
 package src;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Cinema {
     private List<Theater> theaters;
+    private static int instanceCount = 0;  // Class-level variable to track instances
+    private static final int MAX_INSTANCES = 100;  // Maximum allowed instances
 
-    // Constructor
+
+    //constructor
     public Cinema() {
+        if (instanceCount >= MAX_INSTANCES) {
+            throw new IllegalStateException("Maximum number of Cinema instances (" + MAX_INSTANCES + ") reached.");
+        }
+        instanceCount++;  // Increment the instance count on successful creation
         this.theaters = new ArrayList<>();
     }
-
+    
     public Cinema(List<Theater> theaters) {
+        if (instanceCount >= MAX_INSTANCES) {
+            throw new IllegalStateException("Maximum number of Cinema instances (" + MAX_INSTANCES + ") reached.");
+        }
+        instanceCount++;  // Increment the instance count on successful creation
         this.theaters = theaters;
     }
+    
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        if (instanceCount > 0) {
+            instanceCount--;  // Decrement the count when an object is garbage collected
+        }
+    }
+
 
     // Methods
     /**
