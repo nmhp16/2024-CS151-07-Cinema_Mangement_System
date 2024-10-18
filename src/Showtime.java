@@ -19,6 +19,7 @@ public class Showtime {
         this.seatArray = new boolean[31];
 
         initializeSeatAvailability();
+        instanceCount++;
     }
 
     // Method
@@ -34,11 +35,7 @@ public class Showtime {
     }
 
     public boolean isSeatTaken(int seatNumber, String seatType) {
-        if (seatArray[seatNumber] == false) {
-            return true;
-        } else {
-            return false;
-        }
+        return !seatArray[seatNumber];
     }
 
     // Initialize seat availability for this showtime
