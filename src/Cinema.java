@@ -5,6 +5,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Represents a Cinema that manages multiple theaters.
+ */
 public class Cinema {
     private List<Theater> theaters;
     private static int instanceCount = 0; // Class-level variable to track instances
@@ -34,7 +37,7 @@ public class Cinema {
 
     // Methods
     /**
-     * Display theaters in cinema
+     * Display theaters in cinema.
      */
     public void listTheaters() {
         for (Theater theater : theaters) {
@@ -45,7 +48,7 @@ public class Cinema {
     }
 
     /**
-     * Add theater to cinema
+     * Add theater to cinema.
      * 
      * @param theater Theater to add to cinema
      */
@@ -54,7 +57,7 @@ public class Cinema {
     }
 
     /**
-     * Display all movies in all theater
+     * Display all movies in all theaters.
      */
     public void listMoviesInAllTheater() {
         for (Theater theater : theaters) {
@@ -63,11 +66,11 @@ public class Cinema {
     }
 
     /**
-     * Select and return Theater from list based on ID
+     * Select and return a theater by its ID.
      * 
-     * @param theaterId The ID for theater
-     * @return Theater matches with ID
-     * @throws TheaterNotFoundException
+     * @param theaterId The ID of the theater
+     * @return Theater that matches with the ID
+     * @throws TheaterNotFoundException if no theater matches the given ID
      */
     public Theater selectTheater(int theaterId) throws TheaterNotFoundException {
 
@@ -81,9 +84,9 @@ public class Cinema {
     }
 
     /**
-     * Return all available genres in Cinema
+     * Return all available genres in the cinema.
      * 
-     * @return Set of genres available
+     * @return Set of available genres
      */
     public Set<String> availableGenresInCinema() {
         Set<String> genres = new HashSet<>();
@@ -95,9 +98,9 @@ public class Cinema {
     }
 
     /**
-     * Find all theaters with specified genre by customer
+     * Find all theaters showing movies of the specified genre.
      * 
-     * @param genre Genre that the customer want
+     * @param genre The genre to search for
      */
     public void findTheatersByMovieGenre(String genre) {
         List<Theater> theatersWithMovie = new ArrayList<>();
@@ -116,7 +119,7 @@ public class Cinema {
     }
 
     /**
-     * Get total number of theater inside a cinema
+     * Get total number of theaters in the cinema.
      * 
      * @return Number of theaters
      */
@@ -124,6 +127,12 @@ public class Cinema {
         return theaters.size();
     }
 
+    /**
+     * Check if a theater ID is valid.
+     * 
+     * @param theaterId The ID of the theater
+     * @return true if valid, false otherwise
+     */
     public boolean isValidTheater(int theaterId) {
         for (Theater theater : theaters) {
             if (theater.getTheaterId() == theaterId) {
@@ -146,5 +155,4 @@ public class Cinema {
 
         return sb.toString();
     }
-
 }

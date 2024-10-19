@@ -3,17 +3,26 @@ package src;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The Movie class represents a movie with its ID, title, genre, showtimes, and sold-out status.
+ * It also enforces a limit on the number of movie instances.
+ */
 public class Movie {
-    private int movieId;
-    private String title;
-    private String genre;
-    private List<Showtime> showtimes = new ArrayList<>();
-    private boolean isSoldOut;
+    private int movieId; // ID of the movie
+    private String title; // Title of the movie
+    private String genre; // Genre of the movie
+    private List<Showtime> showtimes = new ArrayList<>(); // List of showtimes for the movie
+    private boolean isSoldOut; // Whether the movie is sold out
 
     private static final int MAX_INSTANCES = 100; // Maximum number of allowed instances
     private static int instanceCount = 0; // Track the current instance count
 
     // Constructors
+
+    /**
+     * Default constructor for the Movie class.
+     * Ensures that the number of instances does not exceed the defined limit.
+     */
     public Movie() {
         if (instanceCount >= MAX_INSTANCES) {
             throw new IllegalStateException("Maximum number of Movie instances (" + MAX_INSTANCES + ") reached.");
@@ -21,6 +30,12 @@ public class Movie {
         instanceCount++;
     }
 
+    /**
+     * Constructor that initializes the movie with an ID, title, and genre.
+     * @param movieId The ID of the movie.
+     * @param title The title of the movie.
+     * @param genre The genre of the movie.
+     */
     public Movie(int movieId, String title, String genre) {
         if (instanceCount >= MAX_INSTANCES) {
             throw new IllegalStateException("Maximum number of Movie instances (" + MAX_INSTANCES + ") reached.");
@@ -31,21 +46,33 @@ public class Movie {
         instanceCount++;
     }
 
-    // Method to reset the Movie count (for testing purposes)
+    /**
+     * Resets the Movie instance count. Useful for testing purposes.
+     */
     public static void resetMovieCount() {
         instanceCount = 0;
     }
 
     // Methods
+
+    /**
+     * Adds a showtime to the movie's list of showtimes.
+     * @param showtime The showtime to add.
+     */
     public void addShowtime(Showtime showtime) {
         showtimes.add(showtime);
     }
 
-    // Implement into CinemaUI or Figure out better methods
+    /**
+     * Prints the genre of the movie.
+     */
     public void listGenres() {
         System.out.println("Genre: " + this.genre);
     }
 
+    /**
+     * Lists all showtimes for the movie, along with seat availability.
+     */
     public void listShowtimes() {
         System.out.println("\nShowtimes for " + this.title + ":");
         listGenres();
@@ -60,6 +87,12 @@ public class Movie {
         }
     }
 
+    /**
+     * Selects a showtime by its ID.
+     * @param showtimeId The ID of the showtime to select.
+     * @return The showtime matching the provided ID.
+     * @throws ShowtimeNotFoundException If the showtime is not found.
+     */
     public Showtime selectShowtime(int showtimeId) throws ShowtimeNotFoundException {
         for (Showtime showtime : showtimes) {
             if (showtime.getShowtimeId() == showtimeId) {
@@ -69,10 +102,19 @@ public class Movie {
         throw new ShowtimeNotFoundException("Showtime not found with ID: " + showtimeId);
     }
 
+    /**
+     * Prints the available seats for a given showtime.
+     * @param showtime The showtime to check for seat occupancy.
+     */
     public void checkSeatOccupancy(Showtime showtime) {
         System.out.println("Available Seats: " + showtime.getAvailableSeats());
     }
 
+    /**
+     * Checks if a given showtime ID is valid.
+     * @param showtimeId The ID of the showtime to check.
+     * @return True if the showtime is valid, otherwise false.
+     */
     public boolean isValidShowtime(int showtimeId) {
         for (Showtime showtime : showtimes) {
             if (showtime.getShowtimeId() == showtimeId) {
@@ -82,7 +124,9 @@ public class Movie {
         return false;
     }
 
-    // Check if Showtime is sold out
+    /**
+     * Removes all sold-out showtimes from the list.
+     */
     public void isShowtimeSoldOut() {
         List<Showtime> soldOutShowtimes = new ArrayList<>();
 
@@ -102,7 +146,11 @@ public class Movie {
         }
     }
 
-    // Remove showtime with ID
+    /**
+     * Removes a showtime by its ID.
+     * @param showtimeId The ID of the showtime to remove.
+     * @throws ShowtimeNotFoundException If the showtime is not found.
+     */
     public void removeShowtime(int showtimeId) throws ShowtimeNotFoundException {
         Showtime showtimeToRemove = selectShowtime(showtimeId);
         showtimes.remove(showtimeToRemove);
@@ -110,6 +158,7 @@ public class Movie {
     }
 
     // Getters and Setters
+
     public int getMovieId() {
         return movieId;
     }
