@@ -1,4 +1,6 @@
+
 # Cinema Management System
+![Cinema Management System UML Diagram](https://github.com/user-attachments/assets/dd972412-4ee6-43f5-987d-2e2be3d12f4f)
 
 ## Overview
 
