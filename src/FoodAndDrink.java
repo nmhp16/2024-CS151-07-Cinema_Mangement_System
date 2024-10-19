@@ -15,7 +15,7 @@ public class FoodAndDrink {
         }
         instanceCount++;
     }
-
+    // Constructor
     public FoodAndDrink(String name, double price) {
         if (instanceCount >= MAX_INSTANCES) {
             throw new IllegalStateException(
@@ -26,6 +26,7 @@ public class FoodAndDrink {
         instanceCount++;
     }
 
+    // Constructor
     public FoodAndDrink(int id, String name, double price) {
         if (instanceCount >= MAX_INSTANCES) {
             throw new IllegalStateException(
