@@ -8,7 +8,7 @@ public class Showtime {
     private String time;
     private boolean[] seatArray;
 
-    // Constructor
+    // Default Constructor
     public Showtime() {
         if (instanceCount >= MAX_INSTANCES) {
             throw new IllegalStateException("Cannot create more than " + MAX_INSTANCES + " showtimes.");
@@ -16,6 +16,7 @@ public class Showtime {
         instanceCount++;
     }
 
+    // Overloaded Constructor
     public Showtime(int showtimeId, String time) {
         if (instanceCount >= MAX_INSTANCES) {
             throw new IllegalStateException("Cannot create more than " + MAX_INSTANCES + " showtimes.");
@@ -33,10 +34,11 @@ public class Showtime {
         instanceCount = 0;
     }
 
-    // Method
+    // Method to get the number of available seats
     public int getAvailableSeats() {
-        int count = 30;
+        int count = 30; // 30 seats available
 
+        // If seat taken - 1 from count
         for (int i = 1; i < 31; i++) {
             if (seatArray[i] == false) {
                 count--;
@@ -45,6 +47,7 @@ public class Showtime {
         return count;
     }
 
+    // Method to check if a specific seat is taken
     public boolean isSeatTaken(int seatNumber, String seatType) {
         return !seatArray[seatNumber];
     }
