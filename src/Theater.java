@@ -15,7 +15,7 @@ public class Theater {
     private List<Ticket> tickets = new ArrayList<>();
     private List<FoodAndDrink> menu = new ArrayList<>();
 
-    // Constructor
+    // Default Constructor
     public Theater() {
         if (instanceCount >= MAX_INSTANCES) {
             System.out.println("Cannot create more than " + MAX_INSTANCES + " theaters.");
@@ -26,6 +26,7 @@ public class Theater {
         instanceCount++;
     }
 
+    // Overloaded Constructor
     public Theater(int theaterId, String address) {
         if (instanceCount >= MAX_INSTANCES) {
             System.out.println("Cannot create more than " + MAX_INSTANCES + " theaters.");
@@ -37,6 +38,7 @@ public class Theater {
         instanceCount++;
     }
 
+    // Overloaded Constructor
     public Theater(int theaterId, String address, List<Movie> movies) {
         if (instanceCount >= MAX_INSTANCES) {
             System.out.println("Cannot create more than " + MAX_INSTANCES + " theaters.");
@@ -54,6 +56,7 @@ public class Theater {
         instanceCount++;
     }
 
+    // Overloaded Constructor
     public Theater(int theaterId, String address, List<Movie> movies, List<FoodAndDrink> menu) {
         if (instanceCount >= MAX_INSTANCES) {
             System.out.println("Cannot create more than " + MAX_INSTANCES + " theaters.");
@@ -79,11 +82,12 @@ public class Theater {
         instanceCount = 0;
     }
 
-    // Methods
+    // Method to add movie to the theater's movie list
     public void addMovie(Movie movie) {
         movies.add(movie);
     }
 
+    // Method to list all movies currently in the theater
     public void listMovies() {
         System.out.println("\nMovies in " + this.address + ":");
         System.out.println();
@@ -93,21 +97,24 @@ public class Theater {
         }
     }
 
+    // Method to select a movie based on its ID
     public Movie selectMovie(int movieId) throws MovieNotFoundException {
         for (Movie movie : movies) {
-            if (movie.getMovieId() == movieId) {
+            if (movie.getMovieId() == movieId) { // Check for matching movie ID
                 return movie;
             }
         }
         throw new MovieNotFoundException("Movie not found with ID: " + movieId);
     }
 
+    // Method to list all food and drink items available in the theater
     public void listFoodAndDrink() {
         for (FoodAndDrink item : menu) {
             System.out.println("Food/Drink: " + item.getName() + ", Price: $" + item.getPrice());
         }
     }
 
+    // Method to show all movies currently available in the theater
     public void showAllMovieInTheater() {
         if (movies.isEmpty()) {
             System.out.println("No movies currently available in this theater.");
@@ -119,6 +126,7 @@ public class Theater {
         }
     }
 
+    // Method to show movies of a specific genre currently available in the theater
     public void showAllMovieInTheater(String genre) {
         for (Movie movie : movies) {
             if (movie.getGenre().equalsIgnoreCase(genre)) {
@@ -128,6 +136,7 @@ public class Theater {
         }
     }
 
+    // Method to check if a movie with the specified ID is valid
     public boolean isValidMovie(int movieId) {
         for (Movie movie : movies) {
             if (movie.getMovieId() == movieId) {
@@ -147,6 +156,7 @@ public class Theater {
         return false;
     }
 
+    // Method to get a set of unique genres available in the theater
     public Set<String> availableGenresInTheater() {
         Set<String> genres = new HashSet<>();
 

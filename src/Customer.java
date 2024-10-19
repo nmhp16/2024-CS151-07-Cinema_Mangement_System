@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+// The Customer class extends the Person class and handles customer-specific details
 public class Customer extends Person {
     private String phone;
     private List<Transaction> transactionHistory = new ArrayList<>();
@@ -39,7 +40,8 @@ public class Customer extends Person {
     }
 
     // Methods
-    // Implementing abstract method from Person
+    // Implementing abstract method from Person class, overridden to display
+    // customer details
     @Override
     public void displayInfo() {
         System.out.println(
@@ -48,9 +50,10 @@ public class Customer extends Person {
 
     // Validate the phone number
     public boolean validatePhone(String phone) {
-        return phone != null && phone.matches("\\d{10}");
+        return phone != null && phone.matches("\\d{10}"); // Check if phone number not null and contain 10 digits
     }
 
+    // Method to update customer profile details
     public void updateProfile(String newName, String newEmail, String newPhone) {
         this.name = newName;
         this.email = newEmail;
@@ -58,44 +61,48 @@ public class Customer extends Person {
         System.out.println("Profile updated successfully.");
     }
 
+    // Search customer transaction history
     public void searchTransactionHistory() {
-        displayInfo();
+        displayInfo(); // Display customer information
 
         System.out.println();
-        displayReservedTickets();
+        displayReservedTickets(); // Display reserved tickets
 
-        displayTransactionHistory();
+        displayTransactionHistory(); // Display transaction history
     }
 
+    // Display customer transaction history
     public void displayTransactionHistory() {
-        if (transactionHistory.isEmpty()) {
+        if (transactionHistory.isEmpty()) { // Check if there are any transaction
             System.out.println("No transaction history available.");
             return;
         }
-
+        // Display the number of transactions and the transaction receipts
         System.out.println(transactionHistory.size() + " Transaction History: ");
         System.out.println("\nCustomer receipt: ");
         for (Transaction transaction : transactionHistory) {
-            transaction.printReceipt();
+            transaction.printReceipt(); // Print transaction receipt
         }
     }
 
     // Method to check reserved tickets
     public void displayReservedTickets() {
         for (Transaction transaction : transactionHistory) {
-            Ticket ticket = transaction.getTicket();
+            Ticket ticket = transaction.getTicket(); // Get ticket associated with transaction
 
-            if (ticket.isReserved()) {
+            if (ticket.isReserved()) { // If reserved display detail
                 System.out.println("Reserved Ticket: ");
-                ticket.getSummary();
+                ticket.getSummary(); // Get ticket summary
             }
         }
     }
 
+    // Add transaction to customer transaction history
     public void addTransaction(Transaction transaction) {
         transactionHistory.add(transaction);
     }
 
+    // Get customer information and add it using scanner
     public void addCustomer(Scanner scanner) {
         scanner.nextLine(); // Clear Input Buffer
 

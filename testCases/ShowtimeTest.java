@@ -12,7 +12,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import src.Cinema;
 import src.Showtime;
 
 public class ShowtimeTest {

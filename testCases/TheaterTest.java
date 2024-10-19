@@ -15,7 +15,6 @@ import java.util.Set;
 import src.Movie;
 import src.Theater;
 import src.MovieNotFoundException;
-import src.Showtime;
 
 public class TheaterTest {
     private Theater theater;

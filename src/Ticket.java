@@ -19,7 +19,7 @@ public class Ticket implements Reservable {
     private double price;
     private Transaction transaction;
 
-    // Constructor
+    // Default Constructor
     public Ticket() {
         if (instanceCount >= MAX_INSTANCES) {
             throw new IllegalStateException("Maximum number of Ticket instances (" + MAX_INSTANCES + ") reached.");
@@ -27,6 +27,7 @@ public class Ticket implements Reservable {
         instanceCount++;
     }
 
+    // Overloaded Constructor
     public Ticket(String seatType, String agePricing, int seatNumber) {
         // Exit constructor if the limit is reached
         if (instanceCount >= MAX_INSTANCES) {
@@ -40,6 +41,7 @@ public class Ticket implements Reservable {
         instanceCount++;
     }
 
+    // Overloaded Constructor
     public Ticket(String seatType, String agePricing, int seatNumber, double price) {
         this(seatType, agePricing, seatNumber);
         this.price = price;
@@ -51,6 +53,7 @@ public class Ticket implements Reservable {
     }
 
     // Implementing Reservable interface methods
+    // Method to reserve ticket
     @Override
     public void reserveTicket(Ticket ticket) throws ReservationException {
         if (ticket.isReserved()) {
@@ -60,6 +63,7 @@ public class Ticket implements Reservable {
         System.out.println("Ticket " + ticket.getTicketId() + " reserved.");
     }
 
+    // Method to cancel reservation
     @Override
     public void cancelReservation(Ticket ticket) {
         if (!ticket.isReserved()) {
@@ -70,11 +74,12 @@ public class Ticket implements Reservable {
         System.out.println("Reservation for ticket " + ticket.getTicketId() + " canceled.");
     }
 
-    // Other methods
+    // Method to apply discount based on discount percentage
     public double applyDiscount(double price, int discountPercentage) {
         return price - (price * discountPercentage / 100.0);
     }
 
+    // Method to get summary of ticket
     public void getSummary() {
         System.out.println("Ticket ID: " + getTicketId());
         System.out.println("Seat: " + this.seatNumber + ", Type: " + this.seatType + ", Pricing: "
@@ -92,6 +97,7 @@ public class Ticket implements Reservable {
         return null;
     }
 
+    // Method to check if ticket ID exists
     public static boolean ticketIdExists(int ticketId) {
         for (Ticket ticket : tickets) {
             if (ticketId == ticket.getTicketId()) {
@@ -101,11 +107,13 @@ public class Ticket implements Reservable {
         return false; // Ticket ID not found
     }
 
+    // Method to add ticket to list to track
     public void reserve() {
         this.reserved = true;
         tickets.add(this);
     }
 
+    // Method to remove ticket from list
     public void cancelReservation() {
         this.reserved = false;
         tickets.remove(this);
@@ -115,6 +123,7 @@ public class Ticket implements Reservable {
         }
     }
 
+    // Method to set reserved status if ticket is reserved
     public boolean isReserved() {
         for (Ticket ticket : tickets) {
             if (ticketId == ticket.getTicketId()) {
@@ -126,6 +135,7 @@ public class Ticket implements Reservable {
         return reserved;
     }
 
+    // Method to generate ticket ID by increasing it by 1 every time ticket created
     public int generateTicketId() {
         idCounter++;
         return idCounter;

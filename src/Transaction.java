@@ -21,7 +21,7 @@ public class Transaction implements Billable {
     private List<FoodAndDrink> selectedItems;
     private LocalDateTime transactionTime;
 
-    // Constructor
+    // Default Constructor
     public Transaction() {
         // Exception for passing the 100 instance
         if (instanceCount >= MAX_TRANSACTIONS) {
@@ -33,6 +33,7 @@ public class Transaction implements Billable {
         instanceCount++;
     }
 
+    // Overloaded Constructor
     public Transaction(Movie movie, Showtime showtime, Ticket ticket, Customer customer,
             List<FoodAndDrink> selectedItems) {
         this(movie, showtime, ticket);
@@ -40,6 +41,7 @@ public class Transaction implements Billable {
         this.selectedItems = new ArrayList<>(selectedItems);
     }
 
+    // Overloaded Constructor
     public Transaction(Movie movie, Showtime showtime, Ticket ticket) {
         if (instanceCount >= MAX_TRANSACTIONS) {
             throw new IllegalStateException(
@@ -63,6 +65,7 @@ public class Transaction implements Billable {
     }
 
     // Implementing Billable interface methods
+    // Method to process transaction by getting required details
     @Override
     public void processTransaction(Customer customer, Movie movie, Showtime showtime, Ticket ticket,
             List<FoodAndDrink> selectedItems) {
@@ -81,6 +84,7 @@ public class Transaction implements Billable {
         }
     }
 
+    // Method to print transaction receipt
     @Override
     public void printReceipt() {
         // Print customer details
@@ -107,12 +111,13 @@ public class Transaction implements Billable {
         System.out.println("----------------------------------------------");
     }
 
-    // Other methods
+    // Method to list types of Transaction available
     public void listTransactionTypes() {
         // List available transaction types
         System.out.println("Transaction types: ID: 1, Card; ID: 2, Cash");
     }
 
+    // Method to get the total cost for transaction
     public double calculateTotalCost() {
         double totalCost = ticket.getPrice(); // Start with ticket price
 
@@ -124,15 +129,18 @@ public class Transaction implements Billable {
         return totalCost;
     }
 
+    // Method to get total number of items
     public int getTotalItems() {
         return selectedItems.size();
     }
 
+    // Method to select transaction type
     public void selectTransactionType(String type) {
         this.transactionType = type;
         System.out.println("Selected transaction type: " + type);
     }
 
+    // Method to input card number for transaction
     public boolean inputTransactionInfo(String cardNumber) {
         this.cardNumber = cardNumber;
 
@@ -148,11 +156,13 @@ public class Transaction implements Billable {
 
     }
 
+    // Method to get formatted transaction time
     public String getFormattedTransactionTime() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
         return transactionTime.format(formatter);
     }
 
+    // Method to process refund, show ticket ID, and card number refunded to
     public void processRefund() {
         if (transactionType.equalsIgnoreCase("Credit Card")) {
             System.out.println(
@@ -163,6 +173,7 @@ public class Transaction implements Billable {
 
     }
 
+    // Method to ensure card number not null and 10 digits
     public void validateCard() {
         if (cardNumber == null || !cardNumber.matches("\\d{10}")) {
             addHoldStatus();
@@ -171,11 +182,13 @@ public class Transaction implements Billable {
         }
     }
 
+    // Method to remind customer to pay at the counter if selected Cash option
     public void remindCashTransaction() {
         // Remind the user about cash transaction rules
         System.out.println("Cash transactions must be processed at the counter.\n");
     }
 
+    // Method to hold transaction if card number is wrong
     public void addHoldStatus() {
         holdStatus = true;
         System.out.println("Invalid card number. Transaction is on hold.");
